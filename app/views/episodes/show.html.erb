@@ -28,7 +28,14 @@ function main() {
       const [ts, e] = item;
       const elem = $(e).parent();
       if (ts !== activeTimestamp) {
-        elem.find('span:first').get(0).scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (elem.height() > $('#content').height()) {
+          console.log("big")
+          elem.get(0).scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        else {
+          console.log("small")
+          elem.get(0).scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
         $(".current").removeClass("current");
         $(elem).addClass("current");
         activeTimestamp = ts;
