@@ -1,0 +1,40 @@
+<div id="player-page">
+  <figure>
+    <audio controls src="<%= @audio_url %>">
+      Your browser does not support the <code>audio</code> element.
+    </audio>
+  </figure>
+
+
+  <div id="content" style="overflow: auto; height: 400px">
+    <%= @processed_html.html_safe %>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+<script>
+function main() {
+  const media = document.querySelector('audio');
+  const timestampElements = $('.timestamp').toArray().map((x) => [parseInt(x.dataset['timestamp']), x])
+
+  function timeupdate(e) {
+    const eventTs = media.currentTime;
+    const item = timestampElements.find(([t1, e], index) => {
+      const nextPair = timestampElements[index + 1];
+      const t2 = nextPair ? nextPair[0] : null;
+      return eventTs >= t1 && (!t2 || eventTs < t2);
+    })
+    if (item) {
+      const elem = $(item[1]).parent()
+      elem.get(0).scrollIntoView({ behavior: 'smooth', block: 'center' })
+      $(".current").removeClass("current")
+      $(elem).addClass("current")
+    }
+    else {
+      $(".current").removeClass("current");
+    }
+  }
+  media.addEventListener('timeupdate', timeupdate);
+}
+main();
+</script>

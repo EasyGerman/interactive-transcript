@@ -1,0 +1,7 @@
+<h1>Episodes</h1>
+
+<ul>
+  <% @xml.css('item').each_with_index do |item, index| %>
+    <li><%= link_to item.css('title').text, episode_path(index + 1) %></li>
+  <% end %>
+</ul>

@@ -1,0 +1,15 @@
+body { font-family: sans-serif; line-height: 1.5; }
+
+#player-page {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  display: flex; flex-direction: column;
+  background: #333; color: #DDD;
+}
+
+audio { width: 100%; }
+
+#content { background: #DDD; color: #555; flex: 1; font-size: large; }
+#content > * { margin-left: 1em; margin-right: 1em; }
+#content > p { margin-left: 0; margin-right: 0; padding-left: 1em; padding-right: 1em; }
+.current { background: white; color: black; }
