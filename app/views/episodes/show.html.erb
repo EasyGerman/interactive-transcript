@@ -15,7 +15,7 @@
 function main() {
   const media = document.querySelector('audio');
   const timestampElements = $('.timestamp').toArray().map((x) => [parseInt(x.dataset['timestamp']), x])
-  let activeElement = null;
+  let activeTimestamp = null;
 
   function timeupdate(e) {
     const eventTs = media.currentTime;
@@ -25,17 +25,18 @@ function main() {
       return eventTs >= t1 && (!t2 || eventTs < t2);
     })
     if (item) {
-      const elem = $(item[1]).parent();
-      if (elem !== activeElement) {
-        elem.get(0).scrollIntoView({ block: 'center' });
+      const [ts, e] = item;
+      const elem = $(e).parent();
+      if (ts !== activeTimestamp) {
+        elem.find('span:first').get(0).scrollIntoView({ behavior: 'smooth', block: 'center' });
         $(".current").removeClass("current");
         $(elem).addClass("current");
-        activeElement = elem;
+        activeTimestamp = ts;
       }
     }
     else {
       $(".current").removeClass("current");
-      activeElement = null;
+      activeTimestamp = null;
     }
   }
   media.addEventListener('timeupdate', timeupdate);
