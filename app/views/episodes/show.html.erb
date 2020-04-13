@@ -49,8 +49,11 @@ function main() {
 
   $('.timestamp').parent().addClass('timestampedEntry')
   $('.timestamp').parent().click(function(event) {
-    media.currentTime = parseInt($(event.target).find('.timestamp').data('timestamp'))
-    media.play();
+    let timestamp = $(event.target).find('.timestamp');
+    if (timestamp.length) {
+      media.currentTime = parseInt(timestamp.data('timestamp'));
+      media.play();
+    }
   });
 
   $(window).keypress(function(event) {
@@ -86,7 +89,7 @@ function main() {
         }
         break;
       case 40: // down
-          e = $('.current').nextAll('.timestampedEntry').get(0);
+        e = $('.current').nextAll('.timestampedEntry').get(0);
           if (e) {
           media.currentTime = parseInt($(e).find('.timestamp').data('timestamp'))
           event.preventDefault();
@@ -94,6 +97,31 @@ function main() {
         break;
     }
   });
+
+  $('.timestampedEntry').append($('<button>').addClass("translateButton").text("Translate"))
+
+  $('.translateButton').click(function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    let $button = $(event.target);
+    $button.hide();
+    $button.html("");
+    console.log($button.parent().text());
+    $.ajax({
+      url: "/translate.json",
+      method: 'post',
+      data: {
+        text: $button.parent().text()
+      },
+      headers: {
+        'X-CSRF-Token': document.getElementsByName('csrf-token')[0].content
+      }
+
+    }).done(function(resp) {
+      console.log(resp.text);
+      $button.replaceWith($('<p>').addClass('translation').text(resp.text))
+    });
+  })
 }
 main();
 </script>

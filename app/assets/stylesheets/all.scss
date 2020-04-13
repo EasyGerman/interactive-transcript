@@ -13,3 +13,10 @@ audio { width: 100%; }
 #content > * { margin-left: 1em; margin-right: 1em; }
 #content > p { margin-left: 0; margin-right: 0; padding-left: 1em; padding-right: 1em; }
 .current { background: white; color: black; }
+
+.translation {
+  color: #390;
+  background: #F8FDF0;
+  padding: 0.5em;
+  border-radius: 0.25em;
+}
