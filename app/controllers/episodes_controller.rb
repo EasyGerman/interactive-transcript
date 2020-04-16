@@ -7,7 +7,7 @@ class EpisodesController < ApplicationController
     # - if any of these is present in the description => pick that episode
     identifier_strings = [
       "_transkript_#{episode_key}.html",
-      "https://easygermanpodcastplayer.herokuapp.com/episodes/#{episode_key}.html",
+      "https://easygermanpodcastplayer.herokuapp.com/episodes/#{episode_key}",
       episode_url(episode_key),
     ].uniq
 
