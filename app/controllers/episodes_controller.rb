@@ -6,6 +6,7 @@ class EpisodesController < ApplicationController
   def show
     @xml = Nokogiri::XML(rss)
     @episode = @xml.css('item')[params[:id].to_i - 1]
+    @title = @episode.css('title').first.text
     @html = Nokogiri::HTML(@episode.css('description').text)
 
     @audio_url = @episode.css('enclosure').first["url"]

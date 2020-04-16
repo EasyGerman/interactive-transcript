@@ -6,6 +6,7 @@
   </figure>
 
   <div id="content" style="overflow: auto; height: 400px">
+    <h1><%= @title %></h1>
     <%= @processed_html.html_safe %>
   </div>
 </div>
@@ -104,8 +105,8 @@ function main() {
     event.preventDefault();
     event.stopPropagation();
     let $button = $(event.target);
-    $button.hide();
-    $button.html("");
+    $button.html("Translating...");
+    $button.attr("disabled", "disabled");
     console.log($button.parent().text());
     $.ajax({
       url: "/translate.json",
