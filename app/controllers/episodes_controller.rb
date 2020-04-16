@@ -1,8 +1,4 @@
 class EpisodesController < ApplicationController
-  def index
-    @xml = Nokogiri::XML(rss)
-  end
-
   def show
     # Find episode
 
