@@ -6,7 +6,12 @@
   </figure>
 
   <div id="content" style="overflow: auto; height: 400px">
-    <h1><%= @title %></h1>
+    <header>
+      <h1><%= @title %></h1>
+      <p>The Easy German Podcast</p>
+      <a target="_blank" href="http://www.easygerman.fm">www.easygerman.fm</a>
+    </header>
+
     <%= @processed_html.html_safe %>
   </div>
 </div>

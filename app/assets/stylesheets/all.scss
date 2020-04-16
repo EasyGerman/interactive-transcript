@@ -7,6 +7,10 @@ body {
   color: #20292e;
   font-size: 16px;
 }
+header { text-align: center; margin: 4em 0; }
+header > a { color: #008d1c; }
+header > p { margin: 0; }
+
 h1 {
   color: #008f1d;
   font-family: 'Rubik', sans-serif;
@@ -50,6 +54,10 @@ a:hover { opacity: 0.7; }
   background: #F7F7F7;
   color: black;
   border-left-color: #008d1c !important;
+  margin-top: -.66rem;
+  margin-bottom: -.66rem;
+  padding-top: .66rem;
+  padding-bottom: .66rem;
 }
 
 .translation {
