@@ -15,14 +15,23 @@ class Episode
     node.css('description').text
   end
 
+  def access_key
+    if html =~ %r{egp(\w+)_transkript(_(\w{12,}))?.html}
+      code, _, secret = $1, $2, $3
+      secret || code
+    end
+  end
+
   memoize def html_node
     Nokogiri::HTML(html)
   end
 
-  def processed_html
-    modified_html = Timestamp.tag_in_html(html)
+  memoize def html_with_timestamps_tagged
+    Timestamp.tag_in_html(html)
+  end
 
-    nokogiri_html = Nokogiri::HTML(modified_html)
+  def processed_html
+    nokogiri_html = Nokogiri::HTML(html_with_timestamps_tagged)
     nokogiri_html.css('p').each do |node|
       if node.css('.timestamp').length > 0
         node['class'] = "timestampedEntry"
@@ -39,8 +48,11 @@ class Episode
   end
 
   def paragraphs
-    Nokogiri::HTML(html).css('p').to_a
-      .select { |node| node.css('.timestamp') }
+    Nokogiri::HTML(html_with_timestamps_tagged).css('p').to_a
+      .select { |node|
+        # require 'pry'; binding.pry
+        node.css('.timestamp').length > 0
+      }
       .map { |node| Paragraph.new(node) }
   end
 end
