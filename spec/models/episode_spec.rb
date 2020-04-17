@@ -35,8 +35,16 @@ describe Episode do
 
   describe "#processed_html" do
     it "contains tags for timestamps" do
-      expect(subject.processed_html).to include "<span class='timestamp' data-timestamp='953'>[15:53]</span> Da würde"
-      expect(subject.processed_html).to include "<span class='timestamp' data-timestamp='956'>[15:56]</span> Naja"
+      expect(subject.processed_html).to include %[<span class="timestamp" data-timestamp="953">[15:53]</span> Da würde]
+      expect(subject.processed_html).to include %[<span class="timestamp" data-timestamp="956">[15:56]</span> Naja]
+    end
+
+    it "contains timestampedEntry classes" do
+      expect(subject.processed_html).to include %[<p class="timestampedEntry"]
+    end
+
+    it "contains data-translation-id" do
+      expect(subject.processed_html).to match %r{<p .* data-translation-id="#{Digest::SHA1.hexdigest("Da würde ich aber … Sag du mal.")}"}
     end
   end
 

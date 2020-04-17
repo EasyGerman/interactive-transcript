@@ -20,7 +20,16 @@ class Episode
   end
 
   def processed_html
-    Timestamp.tag_in_html(html)
+    modified_html = Timestamp.tag_in_html(html)
+
+    nokogiri_html = Nokogiri::HTML(modified_html)
+    nokogiri_html.css('p').each do |node|
+      if node.css('.timestamp').length > 0
+        node['class'] = "timestampedEntry"
+        node['data-translation-id'] = Digest::SHA1.hexdigest Paragraph.new(node).text
+      end
+    end
+    nokogiri_html.css('body').children.to_html.html_safe
   end
 
   def audio_url
