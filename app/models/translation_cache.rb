@@ -23,14 +23,22 @@ class TranslationCache < ApplicationRecord
     translations[lang]
   end
 
-  def self.with_key_cache(key, lang)
-    record = find_by!(key: key)
-    record.get_translation(lang) ||
+  def self.with_key_cache(key, lang, &block)
+    find_by!(key: key).with_this_cache(lang, &block)
+  end
+
+  def self.with_cache(original, lang, &block)
+    add_original_nx(original).with_this_cache(lang, &block)
+  end
+
+  def with_this_cache(lang)
+    get_translation(lang) ||
       begin
-        result = yield(record.original, lang)
-        record.add_translation(lang, result)
-        record.save!
+        result = yield(original, lang)
+        add_translation(lang, result)
+        save!
         result
       end
   end
+
 end
