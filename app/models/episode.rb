@@ -20,10 +20,7 @@ class Episode
   end
 
   def processed_html
-    html.gsub(%r{\[((\d{1,2}:)?\d{1,2}:\d{2})\]}) do |m|
-      sec = $1.split(":").reverse.to_enum.with_index.map { |x, i| x.to_i * (60 ** i) }.sum
-      "<span class='timestamp' data-timestamp='#{sec}'>[#{$1}]</span>"
-    end.html_safe
+    Timestamp.tag_in_html(html)
   end
 
   def audio_url
