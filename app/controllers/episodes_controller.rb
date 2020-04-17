@@ -1,4 +1,6 @@
 class EpisodesController < ApplicationController
+  caches_page :show
+
   def show
     access_key = params[:id].presence or raise "access key missing"
 
@@ -9,14 +11,5 @@ class EpisodesController < ApplicationController
       raise ActionController::RoutingError.new('Episode not found')
     end
     @title = @episode.title
-  end
-
-  private
-
-  def rss
-    Rails.cache.fetch("feed", expires_in: 5.minutes) do
-      require 'open-uri'
-      open(ENV.fetch('PODCAST_URL')).read
-    end
   end
 end

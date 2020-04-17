@@ -28,6 +28,7 @@ gem 'redis'
 gem 'faraday'
 gem 'virtus'
 gem 'memoist'
+gem "actionpack-page_caching"
 
 group :test do
   gem 'rspec-rails'
