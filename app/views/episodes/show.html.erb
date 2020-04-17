@@ -112,19 +112,18 @@ function main() {
     let $button = $(event.target);
     $button.html("Translating...");
     $button.attr("disabled", "disabled");
-    console.log($button.parent().text());
+    window.button = $button
     $.ajax({
       url: "/translate.json",
       method: 'post',
       data: {
-        text: $button.parent().text()
+        key: $button.parent().data('translationId')
       },
       headers: {
         'X-CSRF-Token': document.getElementsByName('csrf-token')[0].content
       }
 
     }).done(function(resp) {
-      console.log(resp.text);
       $button.replaceWith($('<p>').addClass('translation').text(resp.text))
     });
   })

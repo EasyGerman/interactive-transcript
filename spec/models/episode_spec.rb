@@ -46,6 +46,10 @@ describe Episode do
     it "contains data-translation-id" do
       expect(subject.processed_html).to match %r{<p .* data-translation-id="#{Digest::SHA1.hexdigest("Da würde ich aber … Sag du mal.")}"}
     end
+
+    it "populates translation cache (without translations)" do
+      expect { subject.processed_html }.to change { TranslationCache.count }.by(2)
+    end
   end
 
   describe "#paragraphs" do

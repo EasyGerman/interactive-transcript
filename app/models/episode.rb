@@ -26,7 +26,9 @@ class Episode
     nokogiri_html.css('p').each do |node|
       if node.css('.timestamp').length > 0
         node['class'] = "timestampedEntry"
-        node['data-translation-id'] = Digest::SHA1.hexdigest Paragraph.new(node).text
+        text = Paragraph.new(node).text
+        translation_cache = TranslationCache.add_original_nx(text)
+        node['data-translation-id'] = translation_cache.key
       end
     end
     nokogiri_html.css('body').children.to_html.html_safe
