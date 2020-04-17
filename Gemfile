@@ -36,6 +36,9 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'dotenv-rails'
+  gem "guard"
+  gem 'guard-rspec', require: false
+  gem 'guard-bundler', require: false
 end
 
 group :development do
