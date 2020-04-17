@@ -33,3 +33,5 @@ data/
 
 *.local
 .env.development
+
+/public/episodes/

@@ -1,4 +1,6 @@
 class TranslateController < ApplicationController
+  skip_before_action :verify_authenticity_token
+
   def translate
     respond_to do |format|
       format.json do

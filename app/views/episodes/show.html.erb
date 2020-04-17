@@ -118,11 +118,7 @@ function main() {
       method: 'post',
       data: {
         key: $button.parent().data('translationId')
-      },
-      headers: {
-        'X-CSRF-Token': document.getElementsByName('csrf-token')[0].content
       }
-
     }).done(function(resp) {
       $button.replaceWith($('<p>').addClass('translation').text(resp.text))
     });
