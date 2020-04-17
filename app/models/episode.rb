@@ -26,4 +26,10 @@ class Episode
   def audio_url
     node.css('enclosure').first["url"]
   end
+
+  def paragraphs
+    Nokogiri::HTML(html).css('p').to_a
+      .select { |node| node.css('.timestamp') }
+      .map { |node| Paragraph.new(node) }
+  end
 end

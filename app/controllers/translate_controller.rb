@@ -20,8 +20,4 @@ class TranslateController < ApplicationController
       end
     end
   end
-
-  private
-
-
 end

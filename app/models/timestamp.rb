@@ -12,4 +12,15 @@ class Timestamp
   def self.convert_string_to_seconds(string)
     string.split(":").reverse.to_enum.with_index.map { |x, i| x.to_i * (60 ** i) }.sum
   end
+
+  attr_reader :string
+  alias to_s string
+
+  def initialize(string)
+    @string = string
+  end
+
+  def to_seconds
+    self.class.convert_string_to_seconds(string)
+  end
 end
