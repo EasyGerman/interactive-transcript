@@ -14,7 +14,7 @@ class EpisodesController < ApplicationController
     @xml = Nokogiri::XML(rss)
 
     # - search through all episodes
-    @episode = @xml.css('item').find do |episode_node|
+    episode_node = @xml.css('item').find do |episode_node|
       description_html = episode_node.css('description').text
 
       identifier_strings.any? do |identifier_string|
@@ -22,20 +22,12 @@ class EpisodesController < ApplicationController
       end
     end
 
-    if @episode.blank?
+    if episode_node.blank?
       raise ActionController::RoutingError.new('Episode not found')
     end
 
-    @title = @episode.css('title').first.text
-    @html = Nokogiri::HTML(@episode.css('description').text)
-
-    @audio_url = @episode.css('enclosure').first["url"]
-
-    html = @episode.css('description').text
-    @processed_html = html.gsub(%r{\[((\d{1,2}:)?\d{1,2}:\d{2})\]}) do |m|
-      sec = $1.split(":").reverse.to_enum.with_index.map { |x, i| x.to_i * (60 ** i) }.sum
-      "<span class='timestamp' data-timestamp='#{sec}'>[#{$1}]</span>"
-    end
+    @episode = Episode.new(episode_node)
+    @title = @episode.title
   end
 
   private
