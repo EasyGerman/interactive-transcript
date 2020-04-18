@@ -21,4 +21,21 @@ describe Paragraph do
   it "knows the label" do
     expect(subject.label.to_s).to eq "Manuel:"
   end
+
+  context "when the timestamp contains hours" do
+    let(:html) {
+      <<~HTML
+        <p><strong>Manuel:</strong><br>[1:00:11] Da würde ich aber … Sag du mal.<br></p>
+      HTML
+    }
+
+    it "finds the correct timestamp" do
+      expect(subject.timestamp.to_seconds).to eq 3611
+    end
+
+    it "finds the correct text" do
+      expect(subject.text).to eq "Da würde ich aber … Sag du mal."
+    end
+
+  end
 end

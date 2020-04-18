@@ -1,28 +1,12 @@
 class Paragraph
   extend Memoist
 
-  attr_reader :node
+  attr_reader :node, :timestamp, :label, :text
 
   def initialize(node)
     @node = node
+    ts = node.text[Timestamp::REGEX] or raise "Could not find timestamp in #{node.text}"
+    @timestamp = Timestamp.new(ts[1..-2])
+    @label, @text = node.text.split(ts).map(&:strip)
   end
-
-  def label
-    label_timestamp_text_trio[0]
-  end
-
-  def timestamp
-    Timestamp.new(label_timestamp_text_trio[1])
-  end
-
-  def text
-    label_timestamp_text_trio[2].strip
-  end
-
-  private
-
-  memoize def label_timestamp_text_trio
-    node.text.split(Timestamp::REGEX)
-  end
-
 end
