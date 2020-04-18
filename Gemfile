@@ -29,6 +29,7 @@ gem 'faraday'
 gem 'virtus'
 gem 'memoist'
 gem "actionpack-page_caching"
+gem 'rollbar'
 
 group :test do
   gem 'rspec-rails'
