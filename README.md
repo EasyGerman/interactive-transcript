@@ -1,24 +1,67 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Installation
 
-Things you may want to cover:
+### Requirements
 
-* Ruby version
+* Ruby - best to install it with [rbenv](https://github.com/rbenv/rbenv) or [rvm](https://rvm.io/).
+* Node.js
+* PostgreSQL
+* EasyGerman private podcast URL (from Patreon)
+* DeepL API key (for translations)
+* Rollbar (for error reporting)
 
-* System dependencies
+### Application setup
 
-* Configuration
+```sh
+gem install bundler
+bundle install
+cp .env.development.sample .env.development
+cp config/database.yml.example config/database.yml
+```
 
-* Database creation
+Customize .env.development and database.yml.
 
-* Database initialization
+Set up the database:
 
-* How to run the test suite
+```sh
+rails db:setup
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+### Starting the server
 
-* Deployment instructions
+```sh
+./bin/run
+```
 
-* ...
+## Running the tests
+
+```sh
+bundle exec rspec
+```
+
+or use guard to run tests as files change:
+
+```sh
+guard
+```
+
+## Deployment to Heroku
+
+On Heroku Dashboard:
+
+* create app
+* add PostgreSQL and Redis add-ons
+* set environment variables (refer to .env.development - ignore DATABASE_URL & REDIS_URL, these are set automatically by Heroku)
+
+On the CLI:
+
+```sh
+git remote add heroku https://git.heroku.com/<appname>.git
+git push heroku master
+```
+
+## Rake tasks
+
+- `rake feed:stats` - print stats about all episodes
+- `rake translations:prepopulate` - pre-translate all transcripts
