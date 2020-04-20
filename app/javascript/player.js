@@ -33,13 +33,6 @@ $(document).ready(() => {
   media.addEventListener('timeupdate', timeupdate);
 
   $('.timestamp').parent().addClass('timestampedEntry')
-  $('.timestamp').parent().click(function(event) {
-    let timestamp = $(event.target).find('.timestamp');
-    if (timestamp.length) {
-      media.currentTime = parseInt(timestamp.data('timestamp'));
-      media.play();
-    }
-  });
 
   $(window).keypress(function(event) {
     switch (event.key) {
@@ -83,22 +76,40 @@ $(document).ready(() => {
     }
   });
 
-  $('.timestampedEntry').append($('<button>').addClass("translateButton").text("Translate"))
+  let playButton = $('<button>').addClass("paragraphButton").addClass("playButton").text("Play")
+  let translateButton = $('<button>').addClass("paragraphButton").addClass("translateButton").text("Translate");
+  $('.timestampedEntry').append(
+    $('<div>').addClass('controls').append(playButton).append(translateButton)
+  );
+
+  $('.playButton').click(function(event) {
+    let timestamp = $(event.target).closest('.timestampedEntry').find('.timestamp');
+    if (timestamp.length) {
+      media.currentTime = parseInt(timestamp.data('timestamp'));
+      media.play();
+    }
+  });
 
   $('.translateButton').click(function(event) {
     event.preventDefault();
     event.stopPropagation();
     let $button = $(event.target);
+    let $entry = $button.closest('.timestampedEntry');
+
     $button.html("Translating...");
     $button.attr("disabled", "disabled");
+
     $.ajax({
       url: "/translate.json",
       method: 'post',
       data: {
-        key: $button.parent().data('translationId')
+        key: $entry.data('translationId')
       }
     }).done(function(resp) {
-      $button.replaceWith($('<p>').addClass('translation').text(resp.text))
+      let $translation = $('<p>').addClass('translation').text(resp.text)
+      let $controls = $button.closest('.controls')
+      $entry.append($translation);
+      $button.remove();
     });
   })
 });
