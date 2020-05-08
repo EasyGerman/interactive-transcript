@@ -33,5 +33,9 @@ module Player
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    ENV.fetch('HOSTS', '').split(',').each do |host|
+      config.hosts << host
+    end
   end
 end

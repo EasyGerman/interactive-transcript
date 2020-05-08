@@ -35,3 +35,4 @@ data/
 .env.development
 
 /public/episodes/
+/public/tmp

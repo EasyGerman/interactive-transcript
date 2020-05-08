@@ -1,4 +1,5 @@
- @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@700&display=swap');
+@import 'colors';
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@700&display=swap');
 
 body {
   font-family: "proxima-nova","Helvetica Neue",Helvetica,Arial,sans-serif;
@@ -8,33 +9,16 @@ body {
   font-size: 16px;
 }
 header { text-align: center; margin: 4em 0; }
-header > a { color: #008d1c; }
+header > a { color: $green; }
 header > p { margin: 0; }
 
 h1 {
-  color: #008f1d;
+  color: $green;
   font-family: 'Rubik', sans-serif;
 }
 
-#player-page {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  display: flex; flex-direction: column;
-  background: #333;
-  color: #DDD;
-}
-
-audio { width: 100%; }
-
 a { color: #586f7c; }
 a:hover { opacity: 0.7; }
-
-#content {
-  background: white;
-  color: #555;
-  flex: 1;
-  overflow: auto;
-}
 
 #content > * {
   margin-left: 2rem;
@@ -51,9 +35,9 @@ a:hover { opacity: 0.7; }
 
 /* Highlighted paragraph */
 .current {
-  background: #F7F7F7;
+  background: $lightGray;
   color: black;
-  border-left-color: #008d1c !important;
+  border-left-color: $green !important;
   margin-top: -.66rem;
   margin-bottom: -.66rem;
   padding-top: .66rem;
@@ -61,7 +45,7 @@ a:hover { opacity: 0.7; }
 }
 
 .translation {
-  color: #008d1c;
+  color: $green;
   background: #daefde;
   padding: 0.5em;
   border-radius: 0.25em;
@@ -77,3 +61,25 @@ a:hover { opacity: 0.7; }
 }
 .paragraphButton { color: #586f7c; }
 .paragraphButton:hover { opacity: 0.7; }
+
+#transcript {
+  color: #777;
+}
+
+.word-highlight {
+  color: #060;
+  text-shadow: 0px 0px 2px #0F0;
+  transition: all 1s ease;
+}
+.remove-word-highlight {
+  color: inherit;
+  text-shadow: none;
+  transition: all 3s ease;
+}
+
+.notice {
+  color: green;
+}
+.error {
+  color: red;
+}

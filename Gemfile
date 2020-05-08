@@ -30,6 +30,10 @@ gem 'virtus'
 gem 'memoist'
 gem "actionpack-page_caching"
 gem 'rollbar'
+gem 'ruby-rtf'
+gem 'colorize'
+gem 'ruby-mp3info'
+gem 'mp3info'
 
 group :test do
   gem 'rspec-rails'

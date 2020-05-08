@@ -22,4 +22,7 @@ class Feed
     end
   end
 
+  def cover_url
+    node.css('image > url').text
+  end
 end

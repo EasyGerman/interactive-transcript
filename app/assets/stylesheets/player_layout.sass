@@ -1,0 +1,58 @@
+@import colors
+
+body
+  margin: 0
+  padding: 0
+
+#player-page
+  align-items: center
+  overflow: auto
+
+#content
+  background: white
+  color: #555
+  position: fixed
+  overflow: auto
+  z-index: 0
+  top: 0px
+  right: 0px
+  bottom: 0px
+  left: 0px
+
+#vocab-helper
+  display: none
+  position: fixed
+  z-index: 2
+  top: 0px
+  left: 0px
+  text-align: center
+  img
+    width: 400px
+    height: 400px
+    margin: auto
+    display: inline-block
+#player-page.vocab-on
+  #vocab-helper
+    display: block
+
+#control
+  position: fixed
+  bottom: 0px
+  left: 0px
+  right: 0px
+  z-index: 9
+
+  figure
+    width: 100%
+    height: 100%
+    margin: 0px
+    audio
+      width: 100%
+
+  #buttons
+    height: 1px
+    text-align: right
+
+@import layout/large
+@import layout/tall
+@import layout/wide

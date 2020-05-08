@@ -10,10 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_17_183430) do
+ActiveRecord::Schema.define(version: 2020_05_01_191832) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "episode_records", force: :cascade do |t|
+    t.string "access_key"
+    t.string "slug"
+    t.text "transcript"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["access_key"], name: "index_episode_records_on_access_key"
+    t.index ["slug"], name: "index_episode_records_on_slug"
+  end
 
   create_table "translation_caches", force: :cascade do |t|
     t.string "key", limit: 40, null: false

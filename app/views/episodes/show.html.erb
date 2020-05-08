@@ -1,17 +1,34 @@
 <div id="player-page">
-  <figure>
-    <audio controls src="<%= @episode.audio_url %>">
-      Your browser does not support the <code>audio</code> element.
-    </audio>
-  </figure>
+  <div id="control">
+    <div id="buttons">
+      <button id="vocab-button">Vocab</button>
+    </div>
+    <figure>
+      <audio controls src="<%= @episode.audio_url %>">
+        Your browser does not support the <code>audio</code> element.
+      </audio>
+    </figure>
+  </div>
 
-  <div id="content">
-    <header>
-      <h1><%= @title %></h1>
-      <p>The Easy German Podcast</p>
-      <a target="_blank" href="http://www.easygerman.fm">www.easygerman.fm</a>
-    </header>
+  <div id="rest">
+    <div id="vocab-helper" class="unpreferred" ><img id="vocab-helper-img" src="<%= @feed.cover_url %>" /></div>
 
-    <%= @episode.processed_html %>
+    <div id="content"
+      data-access-key="<%= @episode.access_key %>"
+      data-chapters="<%= @chapters_data.to_json %>"
+      data-mode="<%= @mode %>"
+    >
+      <header>
+        <h1><%= @title %></h1>
+        <p>The Easy German Podcast</p>
+        <a target="_blank" href="http://www.easygerman.fm">www.easygerman.fm</a>
+      </header>
+
+      <% if @mode == :word %>
+        <%= @episode.transcript_editor_html %>
+      <% else %>
+        <%= @episode.processed_html %>
+      <% end %>
+    </div>
   </div>
 </div>

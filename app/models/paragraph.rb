@@ -9,4 +9,8 @@ class Paragraph
     @timestamp = Timestamp.new(ts[1..-2])
     @label, @text = node.text.split(ts).map(&:strip)
   end
+
+  def sentences
+    text.split(%r{(?<=[\.?!] )})
+  end
 end

@@ -19,4 +19,39 @@ namespace :feed do
     puts "Total timestamped paragraphs: #{total_para_count}"
     puts "Total timestamped characters: #{total_text_length}"
   end
+
+  desc "Create local files for each episode (for easier experimentation)"
+  task :import_to_files => :environment do
+    feed = Feed.new
+    write feed.content, to: 'feed.xml'
+
+    feed.episodes.map do |episode|
+      puts [
+        episode.slug,
+        episode.vocab_url,
+
+      ].join(" ")
+      write episode.pretty_html, to: ['episodes', episode.slug, 'description.html']
+      if (vocab = episode.vocab).present?
+        write vocab.plain_text_content, to: ['episodes', episode.slug, "vocab.txt"]
+        analize_vocab(episode)
+      end
+    end
+  end
+
+  def write(content, to:)
+    path = Rails.root.join('data', *Array(to))
+    FileUtils.mkdir_p(File.dirname(path))
+    File.open(path, 'w') { |f| f.write(content) }
+  end
+
+  def analize_vocab(episode)
+    episode.vocab.entries.each do |entry|
+      puts
+      puts entry.to_s
+      WordMatch.new(entry.de, episode.sentences).matches.each do |text|
+        puts "- #{text.green}"
+      end
+    end
+  end
 end
