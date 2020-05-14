@@ -28,7 +28,7 @@ gem 'redis'
 gem 'faraday'
 gem 'virtus'
 gem 'memoist'
-gem "actionpack-page_caching"
+gem "actionpack-page_caching", "~> 1.2.1"
 gem 'rollbar'
 gem 'ruby-rtf'
 gem 'colorize'
