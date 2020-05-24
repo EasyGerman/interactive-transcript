@@ -175,7 +175,7 @@ $(document).ready(() => {
     $button.html("Translating...");
     $button.attr("disabled", "disabled");
 
-    $.ajax({
+    $.get({
       url: "/translate.json",
       method: 'post',
       data: {
@@ -186,6 +186,13 @@ $(document).ready(() => {
       let $controls = $button.closest('.controls')
       $entry.append($translation);
       $button.remove();
+    }).catch(function(err) {
+      let jsonr = err.responseJSON;
+      console.error("Error while fetching translation:", jsonr)
+      let errorMessage = jsonr.error ? jsonr.error.message : "Error"
+      let $controls = $button.closest('.controls')
+      $button.text(errorMessage);
+      $button.addClass('error')
     });
   })
 

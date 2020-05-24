@@ -10,4 +10,9 @@ class TranslateController < ApplicationController
       end
     end
   end
+
+  rescue_from Translator::Error do |error|
+    Rollbar.error(error)
+    render json: { error: { message: "Translation failed" } }, status: 500
+  end
 end
