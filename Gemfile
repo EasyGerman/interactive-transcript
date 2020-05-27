@@ -34,6 +34,7 @@ gem 'ruby-rtf'
 gem 'colorize'
 gem 'ruby-mp3info'
 gem 'mp3info'
+gem 'levenshtein'
 
 group :test do
   gem 'rspec-rails'

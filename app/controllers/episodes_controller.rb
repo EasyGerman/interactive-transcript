@@ -1,27 +1,12 @@
 class EpisodesController < ApplicationController
   caches_page :show
 
+  before_action :prepare_feed_and_episode
+  before_action :prepare_experimental, only: [:a, :dev_compare]
+
   def show
-    access_key = params[:id].presence or raise "access key missing"
-
-    if access_key == 'blank'
-      @feed = OpenStruct.new
-      @episode = OpenStruct.new
-      @chapters = []
-      return
-    end
-
-    @feed = Feed.new
-
-    @episode = @feed.episodes.find { |ep| ep.access_key == access_key }
-    if @episode.blank?
-      raise ActionController::RoutingError.new('Episode not found')
-    end
-    @title = @episode.title
-
-    @chapters = @episode.audio.chapters
     @chapters_data =
-      @chapters.to_enum.with_index.map { |chapter, index|
+      @episode.audio.chapters.to_enum.with_index.map { |chapter, index|
         if chapter.picture.present?
           local_path = Rails.root.join('public', 'episodes', @episode.access_key, 'chapters', chapter.id, 'picture.jpg')
           FileUtils.mkdir_p(File.dirname(local_path))
@@ -35,7 +20,31 @@ class EpisodesController < ApplicationController
           has_picture: chapter.picture.present?,
         }
       }
+  end
 
-    @mode = :word if @episode.transcript_editor_html && params[:experiment].present?
+  private
+
+  def prepare_feed_and_episode
+    @access_key = params[:id].presence or raise "access key missing"
+
+    @feed = Feed.new
+
+    @episode = @feed.episodes.find { |ep| ep.access_key == @access_key }
+    if @episode.blank?
+      raise ActionController::RoutingError.new('Episode not found')
+    end
+    @title = @episode.title
+  end
+
+
+  def prepare_experimental
+    @chapters = filter_by_param(:c, @episode.chapters)
+  end
+
+  def filter_by_param(param_name, items)
+    value = params[param_name]
+    return items unless value
+
+    [items[value.to_i]]
   end
 end

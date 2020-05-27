@@ -1,0 +1,68 @@
+<style>
+  .lanes { display: flex; flex-direction: row; }
+  .lane { flex: 1; margin: 0; padding: .5em; box-sizing: border-box; height: 100vh;
+    overflow: auto; border-right: solid 1px #CCC }
+  .sentence { margin: 0.5em 0 }
+  .paragraph { border-bottom: solid 1px #4A8; margin-bottom: 1em; padding-bottom: 1em }
+  .side-by-side { display: flex; flex-direction: row; }
+  .side-by-side > * { flex: 1 }
+  .warn { background: #FC9; }
+  .levenshtein { background: #900; color: white; padding: .2em .4em }
+</style>
+<div class="lanes">
+
+  <div class="lane">
+    <%= @episode_description.processed_html %>
+  </div>
+
+  <div class="lane" style="flex: 3">
+    <% @episode_description.chapters.each do |chapter| %>
+      <div class="chapter">
+
+        <h3><%= chapter.title %></h3>
+        <% chapter.paragraphs.each do |paragraph| %>
+          <% timed_paragraph = paragraph.timed_paragraph %>
+          <% warn = timed_paragraph&.text != paragraph.text %>
+
+          <div class="paragraph <%= "warn" if warn %>">
+            <div class="side-by-side">
+
+              <div><!-- Left side -->
+                <p><%= paragraph.text.inspect %></p>
+
+                <% if timed_paragraph && (dist = Levenshtein.normalized_distance(paragraph.text, timed_paragraph.text)) > 0 %>
+                  <p class="levenshtein">Levenshtein: <%= dist %></p>
+                <% end %>
+
+                <div class="speaker"><%= paragraph.speaker.name %>:</div>
+                <span class="timestamp">[<%= paragraph.timestamp %>]</span>
+
+                <% paragraph.sentences.each do |sentence| %>
+                  <div class="sentence"><%= sentence %></div>
+                <% end %>
+
+                <% paragraph.segments.each do |segment| %>
+                  <div class="segment">[<%= segment.timestamp.to_s %>] <%= segment.text %></div>
+                <% end %>
+              </div>
+
+              <div><!-- Right side -->
+                <p><%= timed_paragraph&.text.inspect %></p>
+
+                <% (timed_paragraph&.segments || []).each do |segment| %>
+                  <div class="segment"><%= segment.text %></div>
+                <% end %>
+              </div>
+
+            </div><!-- /side-by-side -->
+          </div><!-- /paragraph -->
+        <% end %>
+      </div><!-- /chapter -->
+
+    <% end %>
+  </div>
+
+  <div class="lane">
+    <%= @timed_script.preprocessed_html.html_safe %>
+  </div>
+</div>

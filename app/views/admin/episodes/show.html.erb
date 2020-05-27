@@ -1,0 +1,7 @@
+<h1>Episode: <%= @episode.title %></h1>
+
+<%= link_to "Go to Player", episode_path(@episode.access_key) %>
+
+<% @episode.chapters.each do |chapter| %>
+  <%= render 'admin/chapters/summary', chapter: chapter, episode: @episode %>
+<% end %>

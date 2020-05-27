@@ -2,6 +2,10 @@ class Feed
   extend Memoist
 
   memoize def content
+    if Rails.env.development?
+      return File.read(Rails.root.join('data', 'feed.xml'))
+    end
+
     Rails.cache.fetch("feed", expires_in: 5.minutes) do
       get_content
     end

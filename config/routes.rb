@@ -1,12 +1,20 @@
 Rails.application.routes.draw do
   resources :episodes, only: [:show] do
+    member do
+      get :a
+      get :dev_compare
+    end
     resources :chapters, only: [] do
       resource :picture, only: [:show]
     end
   end
 
   namespace :admin do
-    resources :episodes, only: [:index, :create]
+    root to: 'main#show'
+    resources :episodes do
+      resources :paragraphs
+    end
+    resources :transcripts
   end
 
   post :translate, to: 'translate#translate'

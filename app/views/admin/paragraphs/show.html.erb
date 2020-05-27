@@ -1,0 +1,50 @@
+<h1>Paragraph <%= @paragraph.timestamp %> from <%= @episode.title %></h1>
+
+<div><%= link_to "Back to episode", admin_episode_path(@episode.slug) %></div>
+<div><%= link_to "Next paragraph ❯", admin_episode_paragraph_path(@episode.slug, @paragraph.next_paragraph.slug) %></div>
+
+<% Bench.m("render-paragraph-#{@paragraph.slug}") do %>
+
+  <p><%= render 'admin/shared/timespan', item: @paragraph %></p>
+  <p>Speaker: <%= @paragraph.speaker.name %></p>
+
+  <blockquote>
+    <%= @paragraph.text %>
+  </blockquote>
+
+  <% if @paragraph.timed_paragraph %>
+    <div id="content" data-mode="word">
+      <p class="timestampedEntry"">
+        <span class="timestamp"  data-timestamp="<%= @paragraph.timestamp.to_seconds %>">[<%= @paragraph.timestamp.to_s %>]</span>
+        <% (@paragraph.segments || []).each do |segment| %><span
+          class="segment"
+          title="<%= segment.timestamp.to_s %>"><%= segment.text %></span><% end %>
+      </p>
+    </div>
+
+    <figure>
+      <audio controls src="<%= @paragraph.episode.audio_url %>"></audio>
+    </figure>
+
+    <div class="side-by-side tiny">
+
+      <div class="pre"><%= @paragraph.timed_paragraph.body.gsub("<span", "\n<span").gsub("</span>", "</span>\n").gsub(/\n\s*\n/, "\n") %></div>
+
+      <div>
+        <% Bench.m("render-paragraph-segments") do %>
+          <% (@paragraph.segments || []).each do |segment| %>
+            <div>
+              [<%= segment.timestamp_string %>] <%= segment.text.inspect %>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+
+    </div>
+
+    <p class="tiny"><%= @paragraph.timed_paragraph.body %></p>
+  <% else %>
+    No word timings found.
+  <% end %>
+
+<% end %>
