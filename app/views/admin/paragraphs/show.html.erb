@@ -5,7 +5,8 @@
 
 <% Bench.m("render-paragraph-#{@paragraph.slug}") do %>
 
-  <p><%= render 'admin/shared/timespan', item: @paragraph %></p>
+  <p><%= rescue_and_show_errors { render 'admin/shared/timespan', item: @paragraph } %></p>
+
   <p>Speaker: <%= @paragraph.speaker.name %></p>
 
   <blockquote>
@@ -13,9 +14,10 @@
   </blockquote>
 
   <% if @paragraph.timed_paragraph %>
+    <h3>Player</h3>
     <div id="content" data-mode="word">
       <p class="timestampedEntry"">
-        <span class="timestamp"  data-timestamp="<%= @paragraph.timestamp.to_seconds %>">[<%= @paragraph.timestamp.to_s %>]</span>
+        <span class="timestamp" data-timestamp="<%= @paragraph.timestamp.to_seconds %>">[<%= @paragraph.timestamp.to_s %>]</span>
         <% (@paragraph.segments || []).each do |segment| %><span
           class="segment"
           title="<%= segment.timestamp.to_s %>"><%= segment.text %></span><% end %>
@@ -26,13 +28,22 @@
       <audio controls src="<%= @paragraph.episode.audio_url %>"></audio>
     </figure>
 
+    <h3>Timed paragraph text</h3>
+    <p><%= @paragraph.timed_paragraph.text %></p>
+
     <div class="side-by-side tiny">
 
-      <div class="pre"><%= @paragraph.timed_paragraph.body.gsub("<span", "\n<span").gsub("</span>", "</span>\n").gsub(/\n\s*\n/, "\n") %></div>
+      <div class="">
+        <h3>Slices</h3>
+        <% @paragraph.timed_paragraph.slices.each do |slice| %>
+          <%= slice.inspect %><br/>
+        <% end %>
+      </div>
 
       <div>
+        <h3>Segments</h3>
         <% Bench.m("render-paragraph-segments") do %>
-          <% (@paragraph.segments || []).each do |segment| %>
+          <% (@paragraph.timed_paragraph.segments || []).each do |segment| %>
             <div>
               [<%= segment.timestamp_string %>] <%= segment.text.inspect %>
             </div>
@@ -40,11 +51,41 @@
         <% end %>
       </div>
 
+      <div>
+        <% a, b = [@paragraph.timed_paragraph.text, @paragraph.text].map { |s| s.split(' ').join("\n") } %>
+        <div class="side-by-side tiny diff">
+          <div>
+            <h4>From timed to final transcript</h4>
+            <%= Diffy::Diff.new(a, b).to_s(:html).html_safe %>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <% a, b = [@paragraph.timed_paragraph.segments.map(&:text).map(&:strip), @paragraph.text.split(' ')].map { |words| words.join("\n") } %>
+        <div class="side-by-side tiny diff">
+          <div>
+            <h4>From segments to final transcript</h4>
+            <%= Diffy::Diff.new(a, b).to_s(:html).html_safe %>
+          </div>
+        </div>
+      </div>
+
     </div>
 
-    <p class="tiny"><%= @paragraph.timed_paragraph.body %></p>
   <% else %>
-    No word timings found.
+    <p>No word timings found.</p>
+
+    <% if @paragraph.episode.timed_script %>
+
+      <p>
+        Match by time:
+        <%= @paragraph.episode.timed_script.paragraphs.find { |tp| @paragraph.timestamp.to_s == tp.timestamp.to_s }&.text %>
+      </p>
+
+    <% end %>
+
+
   <% end %>
 
 <% end %>

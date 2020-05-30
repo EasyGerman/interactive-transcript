@@ -10,13 +10,15 @@ class Paragraph
     @node = node
     @chapter = chapter
     @index = index
-    ts = node.text[Timestamp::REGEX] or raise "Could not find timestamp in #{node.text}"
-    @timestamp = Timestamp.new(ts[1..-2])
-    @label, @text = node.text.split(ts).map(&:strip)
+    @timestamp_string = node.text[%r{\[[\d:]+\]}]
+    if ts = @timestamp_string[Timestamp::REGEX]
+      @timestamp = Timestamp.new(ts[1..-2])
+    end
+    @label, @text = node.text.split(@timestamp_string, 2).map(&:strip)
   end
 
   def slug
-    Digest::SHA1.hexdigest("#{timestamp.to_seconds} #{text}")
+    Digest::SHA1.hexdigest("#{timestamp&.to_seconds} #{text}")
   end
 
   def sentences

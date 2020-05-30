@@ -11,7 +11,7 @@
   </div>
 
   <div id="rest">
-    <div id="vocab-helper" class="unpreferred" ><img id="vocab-helper-img" src="<%= @feed.cover_url %>" /></div>
+    <div id="vocab-helper"><img id="vocab-helper-img" src="<%= @feed.cover_url %>" /></div>
 
     <div id="content"
       data-access-key="<%= @episode.access_key %>"
@@ -39,7 +39,7 @@
               <% Bench.m("render-paragraph-#{paragraph.slug}") do %>
 
 <strong class="speaker"><%= paragraph.speaker.name %>:</strong><br/>
-<span class="timestamp" data-timestamp="<%= paragraph.timestamp.to_seconds %>">[<%= paragraph.timestamp %>]</span>
+<span class="timestamp" data-timestamp="<%= paragraph.timestamp&.to_seconds %>">[<%= paragraph.timestamp %>]</span>
 
 <% if paragraph.segments %>
   <% paragraph.segments.each do |segment| %><span

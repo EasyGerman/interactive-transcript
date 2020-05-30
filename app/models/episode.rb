@@ -12,6 +12,10 @@ class Episode
     url[%r{^https://www.patreon.com/posts/(.*)$}, 1] || raise("Cannot find slug in #{url}")
   end
 
+  def number
+    slug[/^\d+/]&.to_i
+  end
+
   def title
     node.css('title').first.text
   end
@@ -34,12 +38,12 @@ class Episode
     if Rails.env.development?
       episode_path = Rails.root.join("data", "episodes", slug)
       path = episode_path.join("transcript_editor.html")
-      File.read(path) if File.exists?(path)
-    else
-      return if record.blank?
-      doc = Nokogiri::HTML(record.transcript)
-      transcript_html = doc.css('#transcript').to_html
+      return File.read(path) if File.exists?(path)
     end
+
+    file_contents = DropboxAdapter.new.transcript_for(number)
+    doc = Nokogiri::HTML(file_contents)
+    doc.css('#transcript').to_html
   end
 
   def transcript

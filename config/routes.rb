@@ -13,6 +13,9 @@ Rails.application.routes.draw do
     root to: 'main#show'
     resources :episodes do
       resources :paragraphs
+      member do
+        get :timed_script
+      end
     end
     resources :transcripts
   end

@@ -10,21 +10,8 @@ class TimedScript
     @html = html
   end
 
-  memoize def preprocessed_html
-    h = html.dup
-    h.gsub!('background-color: white;', '')
-    h.gsub!('background-position: initial initial;', '')
-    h.gsub!('background-repeat: initial initial;', '')
-    h.gsub!(/background(\-color)?: rgba\(\d+, \d+, \d+, 0.\d+\);/, '');
-    h.gsub!(/background(\-color)?: rgb\(\d+, \d+, \d+\);/, '');
-    h.gsub!(/ style="\s*"/, '')
-    h.gsub!('&nbsp;', ' ')
-    h.gsub!("\u00A0", ' ')
-    h
-  end
-
   memoize def doc
-    Nokogiri::HTML(preprocessed_html)
+    Nokogiri::HTML(html)
   end
 
   def inner_node
@@ -33,22 +20,17 @@ class TimedScript
 
   memoize def paragraphs
     Bench.m("#{self.class.name}##{__method__}") do
-      paragraphs = []
-
-      current_speaker = nil
-
-      inner_node.to_html.split("\n").each do |line|
-        case line
-        when %r{^<b data-spk="(\d+)" title="">(\w+):</b><br>$}
-          speaker_number, speaker_name = $1, $2
-          current_speaker = Speaker.new($1, $2)
-        when %r{^<small style="opacity: 0.5;">\[([\d:]+)\]</small>\s*(.*)$}
-          timestamp, rest = $1, $2
-          paragraphs << paragraph = Paragraph.new($1, current_speaker, $2)
-        end
+      paras.map do |para|
+        Paragraph.new(
+          para[:time],
+          Speaker.new(*para[:speaker]),
+          para[:items],
+        )
       end
-
-      paragraphs
     end
+  end
+
+  def paras
+    TimedScript::Iterator.new(doc).paragraphs
   end
 end

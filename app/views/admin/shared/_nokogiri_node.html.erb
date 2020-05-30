@@ -1,0 +1,32 @@
+
+<ul>
+<% node.children.each do |child| %>
+  <% if child.name.in?(%w[br]) || child.text.strip.blank? %>
+  <% else %>
+    <li class="indent">
+      <sup>(<%= level %>)</sup>
+      <% if child.name == "h2" %>
+        <big style="background: #333; color: white">h2: <%= child.text %></big>
+      <% elsif child.name == "b" %>
+        <big style="background: #8C9">speaker: <%= child.text %></big>
+      <% elsif child.name == "small" && child.attribute("style").value.include?("opacity: 0.5;") %>
+        <big style="background: #AEB">timestamp: <%= child.text %></big>
+      <% elsif child.name == "span" && child.attribute("data-start").present? && child.attribute("data-end").present? %>
+        <big style="background: #9AC">time-span (<%= child.attribute("data-start").value %> - <%= child.attribute("data-end").value %>)</big>
+        <%= render 'admin/shared/nokogiri_node', node: child, level: level + 1 %>
+      <% elsif child.name == "span" && child.attribute("title").present? %>
+        <big style="background: #ADE">timed-segment (<%= child.attribute("title").value %>) = <i><%= child.text.inspect %></i></big>
+      <% else %>
+        <div style="background: pink">
+          <code><%= child.name %></code>
+          <code><%= child.attributes.map { |k, a| [k, a.value] }.to_h.to_json if child.attributes.any? %></code>
+          <i><%= child.text&.first(50).inspect || "nil" %></i>
+          <% if level < 10 %>
+            <%= render 'admin/shared/nokogiri_node', node: child, level: level + 1 %>
+          <% end %>
+        </div>
+      <% end %>
+    </li>
+  <% end %>
+<% end %>
+</ul>

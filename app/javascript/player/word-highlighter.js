@@ -1,7 +1,7 @@
 import scroller from 'player/scroller';
 
-const WORD_HIGHLIGHT_START_AHEAD_IN_SECONDS = 0.5;
-const SCROLL_THRESHOLD_IN_SECONDS = 2;
+const WORD_HIGHLIGHT_START_AHEAD_IN_SECONDS = 1;
+
 let lastHighlightedTs = null;
 
 function secondsToStringTimestamp(x) {
