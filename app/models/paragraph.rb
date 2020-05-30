@@ -1,5 +1,6 @@
 class Paragraph
   extend Memoist
+  include ErrorHandling
 
   attr_reader :node, :timestamp, :label, :text, :segments, :chapter, :index
 
@@ -68,8 +69,10 @@ class Paragraph
 
   memoize def timed_paragraph
     return if episode.timed_script.nil?
-    Bench.m("#{self.class.name}##{__method__}") do
-      episode.timed_script.paragraphs.find { |tp| match?(tp) }
+    hide_and_report_errors do
+      Bench.m("#{self.class.name}##{__method__}") do
+        episode.timed_script.paragraphs.find { |tp| match?(tp) }
+      end
     end
   end
 

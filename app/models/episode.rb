@@ -1,5 +1,6 @@
 class Episode
   extend Memoist
+  include ErrorHandling
 
   attr_reader :node
 
@@ -41,17 +42,17 @@ class Episode
       return File.read(path) if File.exists?(path)
     end
 
-    file_contents = DropboxAdapter.new.transcript_for(number)
-    doc = Nokogiri::HTML(file_contents)
-    doc.css('#transcript').to_html
-  end
-
-  def transcript
-    Transcript.new(transcript_editor_html) if transcript_editor_html.present?
+    hide_and_report_errors do
+      file_contents = DropboxAdapter.new.transcript_for(number)
+      doc = Nokogiri::HTML(file_contents)
+      doc.css('#transcript').to_html
+    end
   end
 
   memoize def timed_script
-    TimedScript.new(transcript_editor_html) if transcript_editor_html
+    hide_and_report_errors do
+      TimedScript.new(transcript_editor_html) if transcript_editor_html
+    end
   end
 
   def audio_url
