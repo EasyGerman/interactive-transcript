@@ -4,7 +4,7 @@ namespace :enhanced_transcript do
     slug = "28-in-bonus-35983611"
     transcript_editor_html = File.read(Rails.root.join("data", "episodes", slug, "transcript_editor.html"))
 
-    t = Transcript.new(transcript_editor_html)
+    t = TimedScript.new(transcript_editor_html)
     t.analyze
   end
 end

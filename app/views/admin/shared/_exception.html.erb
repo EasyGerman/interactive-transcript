@@ -1,0 +1,8 @@
+<details class="error" style="display: inline-block;">
+  <summary><%= "#{error.class.name}: #{error.message}" %></summary>
+  <span style="display: block; font-size: 12px; line-height: 1em">
+    <% error.backtrace.each_with_index do |line, i| %>
+      <span style="display: block;"><%= line %></span>
+    <% end %>
+  </span>
+</details>

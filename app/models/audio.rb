@@ -23,6 +23,10 @@ class Audio
       end
   end
 
+  def end_time
+    chapters.last.end_time
+  end
+
   class Chapter
     attr_reader :id, :start_time, :end_time, :props, :picture
 

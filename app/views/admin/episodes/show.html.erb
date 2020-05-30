@@ -1,0 +1,15 @@
+<h1>Episode: <%= @episode.title %></h1>
+
+<%= link_to "Go to Player", episode_path(@episode.access_key) %>
+
+<p>
+  <% if @episode.transcript_editor_html.present? %>
+    <%= link_to "Transcript with timestamps", timed_script_admin_episode_path(@episode.slug) %>
+  <% else %>
+    Transcript with timestamps not found.
+  <% end %>
+</p>
+
+<% @episode.chapters.each do |chapter| %>
+  <%= render 'admin/chapters/summary', chapter: chapter, episode: @episode %>
+<% end %>

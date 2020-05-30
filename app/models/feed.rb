@@ -1,9 +1,19 @@
 class Feed
   extend Memoist
 
+  LOCAL_FILE = Rails.root.join('data', 'feed.xml')
+
   memoize def content
+    if Rails.env.development?
+      return File.read(LOCAL_FILE)
+    end
+
     Rails.cache.fetch("feed", expires_in: 5.minutes) do
-      get_content
+      content = get_content
+      if Rails.env.development?
+        File.open(LOCAL_FILE, "w") { |f| f.write(content) }
+      end
+      content
     end
   end
 

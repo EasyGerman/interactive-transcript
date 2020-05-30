@@ -25,7 +25,7 @@ gem 'pg'
 
 gem 'nokogiri'
 gem 'redis'
-gem 'faraday'
+gem 'faraday', '~> 1.0.1'
 gem 'virtus'
 gem 'memoist'
 gem "actionpack-page_caching", "~> 1.2.1"
@@ -34,6 +34,8 @@ gem 'ruby-rtf'
 gem 'colorize'
 gem 'ruby-mp3info'
 gem 'mp3info'
+gem 'levenshtein'
+gem 'diffy'
 
 group :test do
   gem 'rspec-rails'

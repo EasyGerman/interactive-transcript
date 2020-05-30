@@ -1,0 +1,23 @@
+@import 'colors'
+
+#content
+  > *
+    margin-left: 0
+    margin-right: 0
+    padding-left: 2rem
+    padding-right: 2rem
+
+  .paragraph
+    margin-left: -2rem
+    border-left: solid .5rem white
+    padding-left: 1.5rem
+
+    // Highlighted paragraph
+    &.current
+      background: $lightGray
+      color: black
+      border-left-color: $green !important
+      margin-top: -.66rem
+      margin-bottom: -.66rem
+      padding-top: .66rem
+      padding-bottom: .66rem

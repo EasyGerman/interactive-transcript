@@ -1,0 +1,75 @@
+#admin-layout
+  padding: .5em
+
+  h2
+    margin-top: 2em
+  a
+    text-decoration: none
+
+  .paragraph-summary
+    background: #EEE
+
+    &.speaker-cari
+      background: #ECA
+    &.speaker-manuel
+      background: #ADE
+    &.speaker-janusz
+      background: #CDC
+    &.speaker-isi
+      background: #FDD
+
+    &.with-timings
+      border-bottom: solid 4px green
+    &.no-timings
+      border-bottom: solid 4px red
+
+  .tiny
+    font-size: 11px
+    line-height: 11px
+
+  .side-by-side
+    display: flex
+    flex-direction: row
+    > *
+      flex: 1
+
+  .pre
+    white-space: pre
+
+  .field
+    margin: 1rem 0
+
+  .guide
+    font-size: smaller
+
+  input[type=submit]
+    font-size: larger
+    border-radius: .5em
+    border: solid 1px #CCC
+    background: #DED
+    padding: .25em 1em
+
+  table.bordered
+    border: solid 1px #DDD
+    border-collapse: collapse
+    td, th
+      border: solid 1px #DDD
+      padding: 0 .5em
+
+  .diff
+    ul
+      margin: 0
+      padding: 0
+      list-style-type: none
+    li
+      font-family: Menlo, monospace
+      line-height: 1.25em
+      padding: 0 1em
+      &.del
+        background: #F99
+        del
+          text-decoration: none
+      &.ins
+        background: #9F9
+        ins
+          text-decoration: none

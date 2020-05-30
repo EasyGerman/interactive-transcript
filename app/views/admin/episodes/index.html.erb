@@ -1,23 +1,5 @@
-<% flash.each do |type, msg| %>
-  <div class="<%= type %>">
-    <%= msg %>
-  </div>
-<% end %>
+<h1>Episodes</h1>
 
-
-<h2>Upload transcript</h2>
-<%= form_with(method: :post, url: admin_episodes_path, local: true) do %>
-  <div>
-    <div><%= label_tag(:access_key, "Access Key (secret key in the URL or episode number for episodes with public transcript):") %></div>
-    <div><%= text_field_tag(:access_key) %></div>
-  </div>
-  <div>
-    <div><%= label_tag(:slug, "Slug (e.g. 1-los-gehts-31090761 - optional):") %></div>
-    <div><%= text_field_tag(:slug) %></div>
-  </div>
-  <div>
-    <div><%= label_tag(:transcript, "Trascript (exported from transcript editor):") %></div>
-    <div><%= text_area_tag(:transcript, '', cols: 50, rows: 10) %></div>
-  </div>
-  <div><%= submit_tag("Submit") %></div>
+<% @feed.episodes.each do |episode| %>
+  <%= render 'admin/episodes/summary', episode: episode %>
 <% end %>

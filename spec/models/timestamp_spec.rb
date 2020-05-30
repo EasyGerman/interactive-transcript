@@ -53,4 +53,18 @@ describe Timestamp do
       expect(Timestamp::REGEX.match("hallo [1:01:13] hi")[1]).to eq "1:01:13"
     end
   end
+
+  describe ".from_seconds" do
+    it "works when the minute are zero" do
+      expect(Timestamp.from_seconds(13).to_s).to eq("0:13")
+    end
+
+    it "works when the hour is zero" do
+      expect(Timestamp.from_seconds(73).to_s).to eq("1:13")
+    end
+
+    it "works when the hour is non-zero" do
+      expect(Timestamp.from_seconds(3673).to_s).to eq("1:01:13")
+    end
+  end
 end

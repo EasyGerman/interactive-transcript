@@ -1,0 +1,30 @@
+<h1>Episode: <%= @episode.title %></h1>
+
+<%= link_to "Episode page", admin_episode_path(@episode.slug) %>
+
+<h2>Times Script</h2>
+
+<% if @episode.transcript_editor_html.present? %>
+
+  <div>
+    <% @episode.timed_script.paras.each do |para| %>
+      <p style="padding-bottom: 2em;">
+        <%= para.to_json %>
+      </p>
+    <% end %>
+  </div>
+
+  <small>
+    <%= render 'admin/shared/nokogiri_node', node: @episode.timed_script.doc.css('#transcript').first, level: 1 %>
+  </small>
+
+  <% @episode.timed_script.paragraphs.each do |paragraph| %>
+    <p>
+      [<%= paragraph.timestamp %>]
+      <%= paragraph.text %>
+    </p>
+  <% end %>
+
+<% else %>
+  Transcript with timestamps not found.
+<% end %>

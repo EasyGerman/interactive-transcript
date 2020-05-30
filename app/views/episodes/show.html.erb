@@ -11,12 +11,12 @@
   </div>
 
   <div id="rest">
-    <div id="vocab-helper" class="unpreferred" ><img id="vocab-helper-img" src="<%= @feed.cover_url %>" /></div>
+    <div id="vocab-helper"><img id="vocab-helper-img" src="<%= @feed.cover_url %>" /></div>
 
     <div id="content"
       data-access-key="<%= @episode.access_key %>"
       data-chapters="<%= @chapters_data.to_json %>"
-      data-mode="<%= @mode %>"
+      data-mode="word"
     >
       <header>
         <h1><%= @title %></h1>
@@ -24,10 +24,37 @@
         <a target="_blank" href="http://www.easygerman.fm">www.easygerman.fm</a>
       </header>
 
-      <% if @mode == :word %>
-        <%= @episode.transcript_editor_html %>
-      <% else %>
-        <%= @episode.processed_html %>
+      <%= @episode.notes_html %>
+
+      <% @episode.chapters.each do |chapter| %>
+        <div class="chapter">
+
+          <h3><%= chapter.title %></h3>
+
+          <% chapter.paragraphs.each do |paragraph| %>
+            <% timed_paragraph = paragraph.timed_paragraph %>
+
+            <p class="paragraph" data-translation-id="<%= paragraph.translation_id %>">
+
+              <% Bench.m("render-paragraph-#{paragraph.slug}") do %>
+
+<strong class="speaker"><%= paragraph.speaker.name %>:</strong><br/>
+<span class="timestamp" data-timestamp="<%= paragraph.timestamp&.to_seconds %>">[<%= paragraph.timestamp %>]</span>
+
+<% if paragraph.segments %>
+  <% paragraph.segments.each do |segment| %><span
+    class="segment"
+    title="<%= segment.timestamp.to_s %>"><%= segment.text %></span><% end %>
+<% else %>
+  <%= paragraph.text %>
+<% end %>
+
+              <% end %>
+            </p>
+
+          <% end %>
+        </div><!-- /chapter -->
+
       <% end %>
     </div>
   </div>

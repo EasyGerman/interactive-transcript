@@ -1,0 +1,39 @@
+<% flash.each do |type, msg| %>
+  <div class="<%= type %>">
+    <%= msg %>
+  </div>
+<% end %>
+
+<h2>Upload Transcript</h2>
+<%= form_with(method: :post, url: admin_transcripts_path, local: true, html: { multipart: true }) do %>
+  <div class="field">
+    <div><%= label_tag(:access_key, "Episode Access Key:") %></div>
+    <div class="guide">Secret key in the URL or the episode number for episodes with public transcript</div>
+    <div><%= text_field_tag(:access_key) %></div>
+  </div>
+  <div class="field">
+    <div><%= label_tag(:transcript_file, "Transcript File:") %></div>
+    <div class="guide">Exported from transcript editor</div>
+    <div><input type="file" name="transcript_file" id="transcript_file" /></div>
+  </div>
+  <div><%= submit_tag("Upload") %></div>
+<% end %>
+
+<h2>Uploaded Transcripts</h2>
+
+<table class="bordered">
+  <thead>
+    <tr>
+      <th>Access Key</th>
+      <th>Uploaded at</th>
+      <th>Content</th>
+    </tr>
+  </thead>
+  <% @records.each do |record| %>
+    <tr>
+      <td><%= record.access_key %></td>
+      <td><%= record.created_at %></td>
+      <td><%= record.transcript.first(100) %></td>
+    </tr>
+  <% end %>
+</table>

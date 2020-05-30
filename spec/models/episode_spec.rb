@@ -25,10 +25,6 @@ describe Episode do
     expect(subject.title).to eq "28: Freundschaften in Deutschland (+ Bonus)"
   end
 
-  it "provides the raw html" do
-    expect(subject.html).to eq description_html
-  end
-
   it "provides the audio url" do
     expect(subject.audio_url).to eq "https://example.com/1.mp3"
   end
@@ -49,13 +45,6 @@ describe Episode do
 
     it "populates translation cache (without translations)" do
       expect { subject.processed_html }.to change { TranslationCache.count }.by(2)
-    end
-  end
-
-  describe "#paragraphs" do
-    it "returns an object for each paragraph" do
-      expect(subject.paragraphs[0].text).to eq "Da würde ich aber … Sag du mal."
-      expect(subject.paragraphs[1].text).to eq "Naja, ich denke, …"
     end
   end
 end

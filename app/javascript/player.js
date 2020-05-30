@@ -1,3 +1,6 @@
+import wordHighlighter from 'player/word-highlighter';
+import scroller from 'player/scroller';
+
 $(document).ready(() => {
   const media = document.querySelector('audio');
   const timestampElements = $('.timestamp').toArray().map((x) => [parseInt(x.dataset['timestamp']), x])
@@ -17,69 +20,18 @@ $(document).ready(() => {
     })
     if (item) {
       const [ts, e] = item;
-      const elem = $(e).parent();
+      const $elem = $(e).parent();
       if (ts !== activeTimestamp) {
-        if (elem.height() > $('#content').height()) {
-          elem.get(0).scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-        else {
-          elem.get(0).scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+        const $segment = $elem.find('.segment:first');
+        scroller.scrollTo($segment.length ? $segment : $elem, { evenIfRecentlyScrolled: true });
         $(".current").removeClass("current");
-        $(elem).addClass("current");
+        $elem.addClass("current");
         activeTimestamp = ts;
       }
     }
     else {
       $(".current").removeClass("current");
       activeTimestamp = null;
-    }
-  }
-
-  function secondsToStringTimestamp(x) {
-    var seconds = x % 60;
-    if (seconds < 10) { seconds = "0" + seconds }
-
-    var rest = Math.floor(x / 60);
-    if (rest == 0) { return `0:${seconds}` }
-
-    var minutes = rest % 60
-    const hours = Math.floor(rest / 60);
-
-    if (hours == 0) { return `${minutes}:${seconds}` }
-    if (minutes < 10) { minutes = "0" + minutes }
-
-    return `${hours}:${minutes}:${seconds}`
-  }
-
-  function timeupdateWordMode(e) {
-    const eventTs = media.currentTime + 1;
-    const intTs = Math.floor(eventTs);
-
-    if (activeTimestamp == intTs) { return; }
-    activeTimestamp = intTs;
-
-    const strTs = secondsToStringTimestamp(intTs)
-
-    let $highlighted = $('.word-highlight')
-    let $current = $(`span[title="${strTs}"]`)
-
-    if ($current.length > 0) {
-      if (!$current.hasClass('word-highlight')) {
-        $highlighted.removeClass('word-highlight').addClass('remove-word-highlight')
-        $current.removeClass('remove-word-highlight')
-
-        // Make highlighting smoother, so that we don't highlight a bunch of words every second
-        $current.each((index, item) => {
-          const $item = $(item);
-          setTimeout(
-            () => { $item.addClass('word-highlight') },
-            index * 1000 / $current.length
-          )
-        })
-      }
-
-      $current.get(0).scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }
 
@@ -98,14 +50,8 @@ $(document).ready(() => {
     }
   }
 
-  if (mode === 'word') {
-    // Experimental - highlight each word
-    $('span').attr('style', null);
-    media.addEventListener('timeupdate', timeupdateWordMode);
-  } else {
-    media.addEventListener('timeupdate', timeupdateNormalMode);
-  }
-
+  media.addEventListener('timeupdate', timeupdateNormalMode);
+  media.addEventListener('timeupdate', wordHighlighter.handleTimeupdate.bind(null, media));
   media.addEventListener('timeupdate', timeupdateForVocabHelper);
 
   $('.timestamp').parent().addClass('timestampedEntry')
