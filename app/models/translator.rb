@@ -19,6 +19,7 @@ module Translator
   }
 
   SOURCE_LANG = ENV.fetch('SOURCE_LANG', 'de')
+  DEFAULT_TARGET_LANG = 'EN'.freeze
 
   STATUS_CODE_MEANINGS = {
     400 => 'Bad request. Please check error message and your parameters.',
@@ -35,7 +36,7 @@ module Translator
     resp = Faraday.get("https://api.deepl.com/v2/translate",
       auth_key: ENV.fetch('DEEPL_API_KEY'),
       source_lang: SOURCE_LANG,
-      target_lang: lang,
+      target_lang: lang.presence || DEFAULT_TARGET_LANG,
       text: original,
       preserve_formatting: 1,
 
