@@ -1,5 +1,6 @@
 class EpisodeDescription
   extend Memoist
+  include ErrorHandling
 
   attr_reader :html, :episode
 
@@ -42,9 +43,11 @@ class EpisodeDescription
     nokogiri_html.css('p').each do |node|
       if node.css('.timestamp').length > 0
         node['class'] = "timestampedEntry"
-        text = Paragraph.new(node).text
-        translation_cache = TranslationCache.add_original_nx(text)
-        node['data-translation-id'] = translation_cache.key
+        hide_and_report_errors do
+          text = Paragraph.new(node).text
+          translation_cache = TranslationCache.add_original_nx(text)
+          node['data-translation-id'] = translation_cache.key
+        end
       end
     end
     nokogiri_html.css('body').children.to_html.html_safe
@@ -57,7 +60,7 @@ class EpisodeDescription
     transcript_nodes.each do |node|
       if node.name == 'h3'
         chapters << current_chapter = Chapter.new(node.text.strip, [], self, chapters.size)
-      elsif node.name == 'p'# && node.children.first.name == 'strong' && node.children.first.text.end_with?(':')
+      elsif node.name == 'p'
         current_chapter.paragraphs << Paragraph.new(node, current_chapter, current_chapter.paragraphs.size)
       else
         raise "Unexpected format: #{node.to_html}"
