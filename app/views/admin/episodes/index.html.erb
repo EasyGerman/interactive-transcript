@@ -1,5 +1,7 @@
 <h1>Episodes</h1>
 
-<% @feed.episodes.each do |episode| %>
-  <%= render 'admin/episodes/summary', episode: episode %>
-<% end %>
+<table>
+  <% @feed.episodes.each do |episode| %>
+    <%= render 'admin/episodes/summary', episode: episode %>
+  <% end %>
+</table>
