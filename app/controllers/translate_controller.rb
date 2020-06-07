@@ -4,7 +4,7 @@ class TranslateController < ApplicationController
   def translate
     respond_to do |format|
       format.json do
-        translated_text = Translator.translate_from_key(params[:key])
+        translated_text = Translator.translate_from_key(params[:key], params[:lang])
 
         render json: { text: translated_text }
       end

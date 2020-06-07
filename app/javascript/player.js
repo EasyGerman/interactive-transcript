@@ -1,5 +1,6 @@
 import wordHighlighter from 'player/word-highlighter';
 import scroller from 'player/scroller';
+import languagePicker from 'player/languagePicker';
 
 $(document).ready(() => {
   const media = document.querySelector('audio');
@@ -125,7 +126,8 @@ $(document).ready(() => {
       url: "/translate.json",
       method: 'post',
       data: {
-        key: $entry.data('translationId')
+        key: $entry.data('translationId'),
+        lang: languagePicker.lang,
       }
     }).done(function(resp) {
       let $translation = $('<p>').addClass('translation').text(resp.text)

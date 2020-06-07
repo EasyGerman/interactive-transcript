@@ -3,6 +3,23 @@ module Translator
 
   Error = Class.new(StandardError)
 
+  TARGET_LANGUAGES = {
+    "DE" => "German",
+    "EN" => "English",
+    "FR" => "French",
+    "IT" => "Italian",
+    "JA" => "Japanese",
+    "ES" => "Spanish",
+    "NL" => "Dutch",
+    "PL" => "Polish",
+    "PT-PT" => "Portuguese",
+    "PT-BR" => "Portuguese (Brazilian)",
+    "RU" => "Russian",
+    "ZH" => "Chinese",
+  }
+
+  SOURCE_LANG = ENV.fetch('SOURCE_LANG', 'de')
+
   STATUS_CODE_MEANINGS = {
     400 => 'Bad request. Please check error message and your parameters.',
     403 => 'Authorization failed. Please supply a valid auth_key parameter.',
@@ -17,25 +34,29 @@ module Translator
   def fetch_translation(original, lang)
     resp = Faraday.get("https://api.deepl.com/v2/translate",
       auth_key: ENV.fetch('DEEPL_API_KEY'),
-      source_lang: 'de',
+      source_lang: SOURCE_LANG,
       target_lang: lang,
-      text: original
+      text: original,
+      preserve_formatting: 1,
+
     )
     if resp.status.to_s[0] != '2'
-      raise Error, "DeepL returned: #{[resp.status, STATUS_CODE_MEANINGS[resp.status], resp.body].reject(&:blank?).join(' - ')}"
+      message = "DeepL returned: #{[resp.status, STATUS_CODE_MEANINGS[resp.status], resp.body].reject(&:blank?).join(' - ')}"
+      Rails.logger.error(message)
+      raise Error, message
     end
     data = JSON.parse(resp.body)
     data.fetch('translations').first.fetch('text')
   end
 
-  def translate_from_key(key)
-    TranslationCache.with_key_cache(key, "en") do |original, lang|
+  def translate_from_key(key, lang)
+    TranslationCache.with_key_cache(key, lang) do |original, lang|
       fetch_translation(original, lang)
     end
   end
 
   def translate(original, lang)
-    TranslationCache.with_cache(original, "en") do |original, lang|
+    TranslationCache.with_cache(original, lang) do |original, lang|
       fetch_translation(original, lang)
     end
   end

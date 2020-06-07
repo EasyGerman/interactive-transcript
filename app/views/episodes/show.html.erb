@@ -24,6 +24,23 @@
         <a target="_blank" href="http://www.easygerman.fm">www.easygerman.fm</a>
       </header>
 
+      <section id="pre-play">
+        <form id="language-picker-form">
+          <%= label(:language, "Translation language:") %>
+          &nbsp;
+          <%=
+            select_tag(
+              :language,
+              options_for_select(
+                Translator::TARGET_LANGUAGES.map { |code, description| [description, code] },
+              ),
+              id: "language-picker",
+            )
+          %>
+          <p>Translations by DeepL.com</p>
+        </form>
+      </section>
+
       <%= @episode.notes_html %>
 
       <% @episode.chapters.each do |chapter| %>
