@@ -61,6 +61,9 @@ class EpisodeDescription
       if node.name == 'h3'
         chapters << current_chapter = Chapter.new(node.text.strip, [], self, chapters.size)
       elsif node.name == 'p'
+        if current_chapter.blank?
+          chapters << current_chapter = Chapter.new("Intro", [], self, chapters.size)
+        end
         current_chapter.paragraphs << Paragraph.new(node, current_chapter, current_chapter.paragraphs.size)
       else
         raise "Unexpected format: #{node.to_html}"
