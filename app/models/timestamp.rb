@@ -1,5 +1,5 @@
 class Timestamp
-  REGEX = %r{\[((\d{1,2}:)?\d{1,2}:\d{2})\]}
+  REGEX = %r{\[((\d{1,2}:)?\d{1,2}:\d{2})\]?}
 
   def self.tag_in_html(html)
     html.gsub(REGEX) do |m|

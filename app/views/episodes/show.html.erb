@@ -46,7 +46,9 @@
       <% @episode.chapters.each do |chapter| %>
         <div class="chapter">
 
-          <h3><%= chapter.title %></h3>
+          <% if chapter.title.present? %>
+            <h3><%= chapter.title %></h3>
+          <% end %>
 
           <% chapter.paragraphs.each do |paragraph| %>
             <% timed_paragraph = paragraph.timed_paragraph %>

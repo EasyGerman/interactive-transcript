@@ -8,7 +8,7 @@ class Episode
     @node = node
   end
 
-  def slug
+  memoize def slug
     url = node.css('link').text
     url[%r{^https://www.patreon.com/posts/(.*)$}, 1] || raise("Cannot find slug in #{url}")
   end

@@ -67,7 +67,7 @@ class TimedScript::Iterator
   end
 
   def add_paragraph_timestamp(node)
-    @paragraph[:time] = filter_text(node.text)[/^\s*\[(.*)\]\s*$/, 1] || raise("time not found in: #{node.text.inspect}")
+    @paragraph[:time] = filter_text(node.text)[/^\s*\[?(.*)\]?\s*$/, 1] || raise("time not found in: #{node.text.inspect}")
   end
 
   def add_text(node)

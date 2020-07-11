@@ -62,7 +62,7 @@ class EpisodeDescription
         chapters << current_chapter = Chapter.new(node.text.strip, [], self, chapters.size)
       elsif node.name == 'p'
         if current_chapter.blank?
-          chapters << current_chapter = Chapter.new("Intro", [], self, chapters.size)
+          chapters << current_chapter = Chapter.new(nil, [], self, chapters.size)
         end
         current_chapter.paragraphs << Paragraph.new(node, current_chapter, current_chapter.paragraphs.size)
       else
@@ -73,16 +73,29 @@ class EpisodeDescription
     chapters
   end
 
+  memoize def nodes
+    Nokogiri::HTML(html_with_timestamps_tagged).css('body > *').to_a
+  end
+
   memoize def notes_html
-    nodes = Nokogiri::HTML(html_with_timestamps_tagged).css('body > *').to_a
-    i = nodes.index { |node| node.name == 'h3' && node.text.strip == 'Transkript' }
-    nodes[0 .. i].map(&:to_html).join("\n").html_safe
+    nodes[0 .. transcript_start_index - 1].map(&:to_html).join("\n").html_safe
   end
 
   memoize def transcript_nodes
-    nodes = Nokogiri::HTML(html_with_timestamps_tagged).css('body > *').to_a
-    i = nodes.index { |node| node.name == 'h3' && node.text.strip == 'Transkript' }
-    nodes[i + 1 .. -1]
+    nodes[transcript_start_index .. -1]
+  end
+
+  def transcript_header?(node)
+    node.name == 'h3' && node.text.strip == 'Transkript'
+  end
+
+  memoize def transcript_start_index
+    if episode.slug == 'our-podcast-how-31006226'
+      nodes.index { |node| node.text.include?("[0:00]") }
+    else
+      i = nodes.index(&method(:transcript_header?))
+      i + 1
+    end
   end
 
   def paragraphs
