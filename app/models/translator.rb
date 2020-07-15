@@ -36,7 +36,7 @@ module Translator
     resp = Faraday.get("https://api.deepl.com/v2/translate",
       auth_key: ENV.fetch('DEEPL_API_KEY'),
       source_lang: SOURCE_LANG,
-      target_lang: lang.presence || DEFAULT_TARGET_LANG,
+      target_lang: coerce_lang(lang),
       text: original,
       preserve_formatting: 1,
 
@@ -51,15 +51,21 @@ module Translator
   end
 
   def translate_from_key(key, lang)
+    lang = coerce_lang(lang)
     TranslationCache.with_key_cache(key, lang) do |original, lang|
       fetch_translation(original, lang)
     end
   end
 
   def translate(original, lang)
+    lang = coerce_lang(lang)
     TranslationCache.with_cache(original, lang) do |original, lang|
       fetch_translation(original, lang)
     end
+  end
+
+  def coerce_lang(lang)
+    TARGET_LANGUAGES.key?(lang) ? lang : DEFAULT_TARGET_LANG
   end
 
 end
