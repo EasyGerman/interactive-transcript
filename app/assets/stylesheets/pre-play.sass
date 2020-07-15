@@ -1,7 +1,7 @@
 @import 'colors'
 
 $textColor: $green
-$bgColor: #daefde
+$bgColor: $lightGray
 
 .translation
   color: $textColor
@@ -24,7 +24,12 @@ $bgColor: #daefde
   // equal space between heading above and content below
   margin-bottom: 4em
 
+  > label
+    font-weight: 500
+
   > p
     font-size: smaller
+    color: #999
+
   > p:last-child
-    margin-bottom: 0
+    margin-top: 0

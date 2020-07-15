@@ -16,7 +16,7 @@ module Translator
     "PT-BR" => "Portuguese (Brazilian)",
     "RU" => "Russian",
     "ZH" => "Chinese",
-  }
+  }.reject { |key, value| key.downcase == ENV.fetch('SOURCE_LANG', 'de').downcase }
 
   SOURCE_LANG = ENV.fetch('SOURCE_LANG', 'de')
   DEFAULT_TARGET_LANG = 'EN'.freeze

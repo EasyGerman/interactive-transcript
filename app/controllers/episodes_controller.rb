@@ -36,7 +36,6 @@ class EpisodesController < ApplicationController
     @title = @episode.title
   end
 
-
   def prepare_experimental
     @chapters = filter_by_param(:c, @episode.chapters)
   end
