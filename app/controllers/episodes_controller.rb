@@ -31,7 +31,8 @@ class EpisodesController < ApplicationController
 
     @episode = @feed.episodes.find { |ep| ep.access_key == @access_key }
     if @episode.blank?
-      raise ActionController::RoutingError.new('Episode not found')
+      render 'not_found', status: 404
+      return
     end
     @title = @episode.title
   end
