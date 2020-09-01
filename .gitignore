@@ -29,11 +29,11 @@
 yarn-debug.log*
 .yarn-integrity
 
-data/
+data
 
 *.local
 .env.development
 
-/public/episodes/
+/public/episodes
 /public/tmp
 /spec/examples.txt
