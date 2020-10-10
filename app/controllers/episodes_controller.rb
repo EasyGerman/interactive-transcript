@@ -1,6 +1,4 @@
 class EpisodesController < ApplicationController
-  caches_page :show
-
   def show
     @access_key = params[:id].presence or raise "access key missing"
 
