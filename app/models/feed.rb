@@ -28,7 +28,7 @@ class Feed
 
   memoize def episodes
     node.css('item').map do |episode_node|
-      Episode.new(episode_node)
+      Episode.new(episode_node, self)
     end
   end
 

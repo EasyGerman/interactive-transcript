@@ -6,7 +6,7 @@ class EpisodeDescription
 
   attr_reader :html, :episode
 
-  delegate :chapters, to: :transcript
+  delegate :chapters, to: :transcript, allow_nil: true
 
   def initialize(html, episode)
     @html = html
@@ -37,8 +37,10 @@ class EpisodeDescription
   memoize def transcript
     ::TranscriptFromFeed.new(transcript_nodes, self)
   rescue TranscriptHeaderNotFound
-    html = URI.open(downloadable_html_url).read
-    ::TranscriptFromFile.new(html, self)
+    if downloadable_html_url.present?
+      html = URI.open(downloadable_html_url).read
+      ::TranscriptFromFile.new(html, self)
+    end
   end
 
   memoize def html_node
@@ -79,8 +81,8 @@ class EpisodeDescription
     nodes[transcript_start_index .. -1]
   end
 
-  def downloadable_html_url
-    html_node.at_css('a:contains("HTML")').attr('href')
+  memoize def downloadable_html_url
+    html_node.at_css('a:contains("HTML")')&.attr('href')
   end
 
   def transcript_header?(node)

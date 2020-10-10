@@ -24,4 +24,11 @@ Chapter.class_eval do
     episode_description.chapters[index + 1]
   end
 
+  def processed
+    ::Processed::Chapter.new(
+      title: title,
+      paragraphs: paragraphs.map(&:processed),
+    )
+  end
+
 end

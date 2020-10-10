@@ -50,4 +50,11 @@ class Timestamp
     minutes = minutes.to_s.rjust(2, '0')
     new("#{hours}:#{minutes}:#{seconds}")
   end
+
+  def processed
+    ::Processed::Timestamp.new(
+      text: string,
+      seconds: to_seconds,
+    )
+  end
 end

@@ -14,5 +14,12 @@ class TimedScript
     memoize def timestamp
       Timestamp.new(timestamp_string)
     end
+
+    def processed
+      ::Processed::Segment.new(
+        timestamp: timestamp.processed,
+        text: text,
+      )
+    end
   end
 end

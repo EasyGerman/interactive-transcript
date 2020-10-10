@@ -82,4 +82,15 @@ class Paragraph
   end
 
   Speaker = Struct.new(:name)
+
+  def processed
+    ::Processed::Paragraph.new(
+      translation_id: translation_id,
+      slug: slug,
+      speaker: ::Processed::Speaker.new(name: speaker.name),
+      timestamp: timestamp.processed,
+      segments: segments&.map(&:processed),
+      text: text,
+    )
+  end
 end

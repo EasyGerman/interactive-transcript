@@ -2,10 +2,11 @@ class Episode
   extend Memoist
   include ErrorHandling
 
-  attr_reader :node
+  attr_reader :node, :feed
 
-  def initialize(node)
+  def initialize(node, feed)
     @node = node
+    @feed = feed
   end
 
   memoize def slug
@@ -65,5 +66,34 @@ class Episode
 
   def paragraphs
     chapters.flat_map(&:paragraphs)
+  end
+
+  memoize def processed
+    ::Processed::Episode.new(
+      title: title,
+      cover_url: feed.cover_url,
+      audio_url: audio_url,
+      notes_html: notes_html,
+      chapters: chapters&.map(&:processed),
+      audio_chapters: processed_audio_chapters,
+    )
+  end
+
+  def processed_audio_chapters
+    return nil if chapters.nil? # No transcript, e.g. Zwischending
+
+    audio.chapters.to_enum.with_index.map { |chapter, index|
+      if chapter.picture.present?
+        local_path = Rails.root.join('public', 'episodes', access_key, 'chapters', chapter.id, 'picture.jpg')
+        FileUtils.mkdir_p(File.dirname(local_path))
+        File.open(local_path, 'wb') { |f| f.write(chapter.picture.data) }
+      end
+      ::Processed::AudioChapter.new(
+        id: chapter.id,
+        start_time: chapter.start_time / 1000,
+        end_time: chapter.end_time / 1000,
+        has_picture: chapter.picture.present?,
+      )
+    }
   end
 end

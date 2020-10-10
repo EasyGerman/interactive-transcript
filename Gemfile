@@ -36,6 +36,7 @@ gem 'ruby-mp3info'
 gem 'mp3info'
 gem 'levenshtein'
 gem 'diffy'
+gem 'dry-struct', '~> 1.0.0'
 
 group :test do
   gem 'rspec-rails'

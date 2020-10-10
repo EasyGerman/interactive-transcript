@@ -4,18 +4,18 @@
       <button id="vocab-button">Vocab</button>
     </div>
     <figure>
-      <audio controls src="<%= @episode.audio_url %>">
+      <audio controls src="<%= @prepared_episode.audio_url %>">
         Your browser does not support the <code>audio</code> element.
       </audio>
     </figure>
   </div>
 
   <div id="rest">
-    <div id="vocab-helper"><img id="vocab-helper-img" src="<%= @feed.cover_url %>" /></div>
+    <div id="vocab-helper"><img id="vocab-helper-img" src="<%= @prepared_episode.cover_url %>" /></div>
 
     <div id="content"
-      data-access-key="<%= @episode.access_key %>"
-      data-chapters="<%= @chapters_data.to_json %>"
+      data-access-key="<%= @access_key %>"
+      data-chapters="<%= @prepared_episode.audio_chapters.to_json %>"
       data-mode="word"
     >
       <header>
@@ -41,11 +41,11 @@
         </form>
       </section>
 
-      <%= @episode.notes_html %>
+      <%= @prepared_episode.notes_html.html_safe %>
 
       <h2>Transkript</h2>
 
-      <% @episode.chapters.each do |chapter| %>
+      <% @prepared_episode.chapters.each do |chapter| %>
         <div class="chapter">
 
           <% if chapter.title.present? %>
@@ -53,19 +53,17 @@
           <% end %>
 
           <% chapter.paragraphs.each do |paragraph| %>
-            <% timed_paragraph = paragraph.timed_paragraph %>
-
             <p class="paragraph" data-translation-id="<%= paragraph.translation_id %>">
 
               <% Bench.m("render-paragraph-#{paragraph.slug}") do %>
 
 <strong class="speaker"><%= paragraph.speaker.name %>:</strong><br/>
-<span class="timestamp" data-timestamp="<%= paragraph.timestamp&.to_seconds %>">[<%= paragraph.timestamp %>]</span>
+<span class="timestamp" data-timestamp="<%= paragraph.timestamp&.seconds %>">[<%= paragraph.timestamp.text %>]</span>
 
 <% if paragraph.segments %>
   <% paragraph.segments.each do |segment| %><span
     class="segment"
-    title="<%= segment.timestamp.to_s %>"><%= segment.text %></span><% end %>
+    title="<%= segment.timestamp.text %>"><%= segment.text %></span><% end %>
 <% else %>
   <%= paragraph.text %>
 <% end %>
