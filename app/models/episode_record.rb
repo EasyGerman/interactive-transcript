@@ -6,10 +6,14 @@ class EpisodeRecord < ApplicationRecord
       record.update!(data: data)
       record
     else
-      create!(
-        access_key: access_key,
-        data: data,
-      )
+      begin
+        create!(
+          access_key: access_key,
+          data: data,
+        )
+      rescue ActiveRecord::RecordNotUnique
+        find_by(access_key: access_key)
+      end
     end
   end
 

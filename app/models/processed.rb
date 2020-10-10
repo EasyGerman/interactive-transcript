@@ -26,7 +26,7 @@ module Processed
   end
 
   class Chapter < CustomStruct
-    attribute :title, Types::String
+    attribute :title, Types::String.optional
     attribute :paragraphs, Types::Array.of(Paragraph)
   end
 
