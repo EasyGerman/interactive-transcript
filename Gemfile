@@ -37,6 +37,7 @@ gem 'mp3info'
 gem 'levenshtein'
 gem 'diffy'
 gem 'dry-struct', '~> 1.0.0'
+gem 'redis-mutex'
 
 group :test do
   gem 'rspec-rails'
