@@ -9,13 +9,14 @@ class Paragraph
 
   def initialize(node, chapter, index)
     @node = node
+    node_text = node.is_a?(String) ? node : node.text
     @chapter = chapter
     @index = index
-    @timestamp_string = node.text[%r{\[[\d:]+\]}]
+    @timestamp_string = node_text[%r{\[[\d:]+\]}]
     if ts = @timestamp_string[Timestamp::REGEX]
       @timestamp = Timestamp.new(ts[1..-2])
     end
-    @label, @text = node.text.split(@timestamp_string, 2).map(&:strip)
+    @label, @text = node_text.split(@timestamp_string, 2).map(&:strip)
   end
 
   def slug

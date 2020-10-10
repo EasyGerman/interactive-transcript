@@ -2,7 +2,11 @@ class EpisodeDescription
   extend Memoist
   include ErrorHandling
 
+  TranscriptHeaderNotFound = Class.new(StandardError)
+
   attr_reader :html, :episode
+
+  delegate :chapters, to: :transcript
 
   def initialize(html, episode)
     @html = html
@@ -30,6 +34,13 @@ class EpisodeDescription
     Vocab.new(vocab_url) if vocab_url.present?
   end
 
+  memoize def transcript
+    ::TranscriptFromFeed.new(transcript_nodes, self)
+  rescue TranscriptHeaderNotFound
+    html = URI.open(downloadable_html_url).read
+    ::TranscriptFromFile.new(html, self)
+  end
+
   memoize def html_node
     Nokogiri::HTML(html)
   end
@@ -53,25 +64,6 @@ class EpisodeDescription
     nokogiri_html.css('body').children.to_html.html_safe
   end
 
-  memoize def chapters
-    chapters = []
-    current_chapter = nil
-
-    transcript_nodes.each do |node|
-      if node.name == 'h3'
-        chapters << current_chapter = Chapter.new(node.text.strip, [], self, chapters.size)
-      elsif node.name == 'p'
-        if current_chapter.blank?
-          chapters << current_chapter = Chapter.new(nil, [], self, chapters.size)
-        end
-        current_chapter.paragraphs << Paragraph.new(node, current_chapter, current_chapter.paragraphs.size)
-      else
-        raise "Unexpected format: #{node.to_html}"
-      end
-    end
-
-    chapters
-  end
 
   memoize def nodes
     Nokogiri::HTML(html_with_timestamps_tagged).css('body > *').to_a
@@ -79,10 +71,16 @@ class EpisodeDescription
 
   memoize def notes_html
     nodes[0 .. transcript_start_index - 1].map(&:to_html).join("\n").html_safe
+  rescue TranscriptHeaderNotFound
+    nodes.map(&:to_html).join("\n").html_safe
   end
 
   memoize def transcript_nodes
     nodes[transcript_start_index .. -1]
+  end
+
+  def downloadable_html_url
+    html_node.at_css('a:contains("HTML")').attr('href')
   end
 
   def transcript_header?(node)
@@ -94,6 +92,7 @@ class EpisodeDescription
       nodes.index { |node| node.text.include?("[0:00]") }
     else
       i = nodes.index(&method(:transcript_header?))
+      raise TranscriptHeaderNotFound if i.nil?
       i + 1
     end
   end

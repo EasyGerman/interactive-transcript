@@ -10,6 +10,14 @@
   <% end %>
 </p>
 
-<% @episode.chapters.each do |chapter| %>
-  <%= render 'admin/chapters/summary', chapter: chapter, episode: @episode %>
+<%= rescue_and_show_errors do %>
+  <% @episode.chapters.each do |chapter| %>
+    <%= render 'admin/chapters/summary', chapter: chapter, episode: @episode %>
+  <% end %>
 <% end %>
+
+<div>
+  <%= Time.zone.parse(@episode.node.css('pubDate').text) %>
+  <% url = @episode.description.html_node.at_css('a:contains("HTML")').attr('href') %>
+  <%= URI.open(url).read.html_safe %>
+</div>
