@@ -70,7 +70,7 @@ class EpisodeDescription
   end
 
   memoize def notes_html
-    nodes[0 .. transcript_start_index - 1].map(&:to_html).join("\n").html_safe
+    nodes[0 .. transcript_start_index - 2].map(&:to_html).join("\n").html_safe
   rescue TranscriptHeaderNotFound
     nodes.map(&:to_html).join("\n").html_safe
   end
