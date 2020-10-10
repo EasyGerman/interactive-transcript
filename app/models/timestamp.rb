@@ -1,5 +1,6 @@
 class Timestamp
   REGEX = %r{\[((\d{1,2}:)?\d{1,2}:\d{2})\]?}
+  CORE_REGEX = %r{(((?<hours>\d{1,2}):)?(?<minutes>\d{1,2}):(?<seconds>\d{2}))}
 
   def self.tag_in_html(html)
     html.gsub(REGEX) do |m|
@@ -17,7 +18,11 @@ class Timestamp
   alias to_s string
 
   def initialize(string)
-    @string = string
+    if m = CORE_REGEX.match(string)
+      @string = [m[:hours], m[:minutes], m[:seconds]].compact.join(":")
+    else
+      @string = string
+    end
   end
 
   def to_seconds

@@ -67,4 +67,23 @@ describe Timestamp do
       expect(Timestamp.from_seconds(3673).to_s).to eq("1:01:13")
     end
   end
+
+  describe ".new + .to_s" do
+    context "when there are some extra characters" do
+      it "works when the minute are zero" do
+        expect(Timestamp.new("0:13]").to_s).to eq "0:13"
+        expect(Timestamp.new("00:13]").to_s).to eq "00:13"
+      end
+
+      it "works when the hour is zero" do
+        expect(Timestamp.new("0:01:13]").to_s).to eq "0:01:13"
+        expect(Timestamp.new("00:01:13]").to_s).to eq "00:01:13"
+      end
+
+      it "works when the hour is non-zero" do
+        expect(Timestamp.new("1:01:13]").to_s).to eq "1:01:13"
+        expect(Timestamp.new("01:01:13]").to_s).to eq "01:01:13"
+      end
+    end
+  end
 end
