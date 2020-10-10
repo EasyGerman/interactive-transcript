@@ -40,6 +40,11 @@ a:hover { opacity: 0.7; }
   color: #777;
 }
 
+#content {
+  ul, ol {
+    margin-left: 2em;
+  }
+}
 #content > h2 {
   margin-top: 3em;
 }
