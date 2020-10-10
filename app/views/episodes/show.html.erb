@@ -41,7 +41,7 @@
         </form>
       </section>
 
-      <%= @prepared_episode.notes_html.html_safe %>
+      <%= @prepared_episode.notes_html.sub(%r{<p><br></p>\n\Z}, '').html_safe %>
 
       <h2>Transkript</h2>
 
