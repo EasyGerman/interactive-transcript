@@ -11,6 +11,10 @@ class EpisodeDescription
   def initialize(html, episode)
     @html = html
     @episode = episode
+
+    if episode.title == '23: Das deutsche Gesundheitssystem'
+      @html.sub!('[59:4]', '[59:44]')
+    end
   end
 
   def pretty_html

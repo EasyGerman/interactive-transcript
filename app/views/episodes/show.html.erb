@@ -58,7 +58,9 @@
               <% Bench.m("render-paragraph-#{paragraph.slug}") do %>
 
 <strong class="speaker"><%= paragraph.speaker.name %>:</strong><br/>
-<span class="timestamp" data-timestamp="<%= paragraph.timestamp&.seconds %>">[<%= paragraph.timestamp.text %>]</span>
+<% if paragraph.timestamp %>
+  <span class="timestamp" data-timestamp="<%= paragraph.timestamp.seconds %>">[<%= paragraph.timestamp.text %>]</span>
+<% end %>
 
 <% if paragraph.segments %>
   <% paragraph.segments.each do |segment| %><span
