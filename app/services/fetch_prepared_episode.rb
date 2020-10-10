@@ -27,7 +27,7 @@ class FetchPreparedEpisode < Operation
   end
 
   def with_mutex
-    RedisMutex.with_lock("process_episode:#{access_key}", block: 10, sleep: 0.5, expire: 30) do
+    RedisMutex.with_lock("process_episode:#{access_key}", block: 30, sleep: 0.5, expire: 60) do
       yield
     end
   end

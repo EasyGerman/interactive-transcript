@@ -8,12 +8,14 @@ class Feed
       return File.read(LOCAL_FILE)
     end
 
-    Rails.cache.fetch("feed", expires_in: 5.minutes) do
-      content = get_content
-      if Rails.env.development?
-        File.open(LOCAL_FILE, "w") { |f| f.write(content) }
+    RedisMutex.with_lock("feed", block: 30, sleep: 0.5, expire: 60) do
+      Rails.cache.fetch("feed", expires_in: 15.seconds) do
+        content = get_content
+        if Rails.env.development?
+          File.open(LOCAL_FILE, "w") { |f| f.write(content) }
+        end
+        content
       end
-      content
     end
   end
 
