@@ -39,7 +39,12 @@ class EpisodeDescription
   end
 
   memoize def transcript
-    ::TranscriptFromFeed.new(transcript_nodes, self)
+    if Date.parse(episode.node.at_css('pubDate')) >= Date.parse("2020-10-13 00:00 UTC") && downloadable_html_url.present?
+      html = URI.open(downloadable_html_url).read
+      ::TranscriptFromFile.new(html, self)
+    else
+      ::TranscriptFromFeed.new(transcript_nodes, self)
+    end
   rescue TranscriptHeaderNotFound
     if downloadable_html_url.present?
       html = URI.open(downloadable_html_url).read

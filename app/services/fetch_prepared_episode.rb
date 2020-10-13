@@ -14,6 +14,7 @@ class FetchPreparedEpisode < Operation
       end
     end
 
+    return if record.blank?
     ::Processed::Episode.new(record.data)
   end
 

@@ -18,9 +18,14 @@ class TranscriptFromFeed
       if node.name == 'h3'
         chapters << current_chapter = Chapter.new(node.text.strip, [], episode_description, chapters.size)
       elsif node.name == 'p'
+        if node.children.count == 1 && node.children.first.name == "strong"
+          chapters << current_chapter = Chapter.new(node.text.strip, [], episode_description, chapters.size)
+          next
+        end
         if current_chapter.blank?
           chapters << current_chapter = Chapter.new(nil, [], episode_description, chapters.size)
         end
+        next if node.text.blank?
         current_chapter.paragraphs << Paragraph.new(node, current_chapter, current_chapter.paragraphs.size)
       else
         raise "Unexpected format: #{node.to_html}"
