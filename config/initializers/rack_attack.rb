@@ -1,5 +1,3 @@
-puts "RACK ATTACK"
-
 class Rack::Attack
   {
     second: { limit: 1, period: 5.seconds },
@@ -16,10 +14,10 @@ class Rack::Attack
   end
 
   self.throttled_response = lambda do |env|
+    match_data = env['rack.attack.match_data']
+
     req = Rack::Request.new(env)
-    Rails.logger.info "RequestThrottled ip=#{req.ip}"
-   [ 503,  # status
-     {},   # headers
-     ['']] # body
+    Rails.logger.info "RequestThrottled ip=#{req.ip} #{match_data.map { |k, v| "#{k}=#{v}" }.join(' ') }"
+    [503, {'Content-Type' => 'application/json'}, [{ error: { message: "Too many requests" }}.to_json]]
   end
 end
