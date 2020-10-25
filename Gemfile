@@ -38,6 +38,7 @@ gem 'levenshtein'
 gem 'diffy'
 gem 'dry-struct', '~> 1.0.0'
 gem 'redis-mutex'
+gem 'rack-attack'
 
 group :test do
   gem 'rspec-rails'

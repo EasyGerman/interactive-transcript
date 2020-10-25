@@ -137,7 +137,7 @@ $(document).ready(() => {
     }).catch(function(err) {
       let jsonr = err.responseJSON;
       console.error("Error while fetching translation:", jsonr)
-      let errorMessage = jsonr.error ? jsonr.error.message : "Error"
+      let errorMessage = (jsonr && jsonr.error) ? jsonr.error.message : "Translation failed"
       let $controls = $button.closest('.controls')
       $button.text(errorMessage);
       $button.addClass('error')
