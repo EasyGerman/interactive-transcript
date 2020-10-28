@@ -1,6 +1,6 @@
 class Rack::Attack
   {
-    second: { limit: 1, period: 5.seconds },
+    second: { limit: 1, period: 1.second },
     minute: { limit: 12, period: 1.minute },
     hour:   { limit: 60, period: 1.hour },
     day:    { limit: 100, period: 1.day },
