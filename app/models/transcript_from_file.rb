@@ -39,7 +39,7 @@ class TranscriptFromFile
     Nokogiri::HTML(html).css('.transcript-base').children.each do |child|
       case child
       when Nokogiri::XML::Text
-        add_text(child.text.strip)
+        add_text(child.text)
       when Nokogiri::XML::Element
         case child.name
         when "h4"
@@ -49,7 +49,9 @@ class TranscriptFromFile
         when "br"
           # do nothing
         when "small"
-          add_text(child.text.strip)
+          add_text(child.text)
+        when "i", "b", "u", "em", "strong"
+          add_text(child.text)
         else raise "unexpected tag: #{child.name}"
         end
       else raise "unexpected element: #{child.class.name}"
