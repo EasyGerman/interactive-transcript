@@ -39,6 +39,35 @@ namespace :feed do
     end
   end
 
+  task :reprocess_all => :environment do
+    ALREADY_PROCESSED = *%w[
+    ]
+    delay = 10
+
+    feed = Feed.new
+    feed.episodes.each do |episode|
+      puts [
+        episode.access_key,
+        episode.slug,
+      ].join(" ")
+      next if episode.access_key.in?(ALREADY_PROCESSED)
+
+      begin
+        FetchPreparedEpisode.(
+          access_key: episode.access_key,
+          force_processing: true
+        )
+      rescue => e
+        if e.message.include?('Too Many Requests')
+          puts "Too Many Requests - Sleeping for #{delay.seconds}..."
+          sleep delay
+          delay *= 2
+          retry
+        end
+      end
+    end
+  end
+
   def write(content, to:)
     path = Rails.root.join('data', *Array(to))
     FileUtils.mkdir_p(File.dirname(path))

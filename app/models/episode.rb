@@ -84,9 +84,10 @@ class Episode
 
     audio.chapters.to_enum.with_index.map { |chapter, index|
       if chapter.picture.present?
-        local_path = Rails.root.join('public', 'episodes', access_key, 'chapters', chapter.id, 'picture.jpg')
-        FileUtils.mkdir_p(File.dirname(local_path))
-        File.open(local_path, 'wb') { |f| f.write(chapter.picture.data) }
+        # local_path = Rails.root.join('public', 'episodes', access_key, 'chapters', chapter.id, 'picture.jpg')
+        # FileUtils.mkdir_p(File.dirname(local_path))
+        # File.open(local_path, 'wb') { |f| f.write(chapter.picture.data) }
+        upload_to_aws("vocab/#{access_key}/#{chapter.id}.jpg", chapter.picture.data)
       end
       ::Processed::AudioChapter.new(
         id: chapter.id,
@@ -95,5 +96,21 @@ class Episode
         has_picture: chapter.picture.present?,
       )
     }
+  end
+
+  def upload_to_aws(path, data)
+    Rails.logger.info "Uploading to #{data.size} bytes to #{path}"
+    file = Tempfile.new(encoding: 'ascii-8bit')
+    begin
+      file.write(data)
+      file.rewind
+
+      object = Aws::S3::Resource.new(region: 'eu-central-1').bucket('easygermanpodcastplayer-public').object(path)
+      object.upload_file(file.path)
+
+    ensure
+      file.close
+      file.unlink
+    end
   end
 end

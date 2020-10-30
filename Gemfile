@@ -39,6 +39,7 @@ gem 'diffy'
 gem 'dry-struct', '~> 1.0.0'
 gem 'redis-mutex'
 gem 'rack-attack'
+gem 'aws-sdk-s3', '~> 1'
 
 group :test do
   gem 'rspec-rails'

@@ -44,7 +44,7 @@ $(document).ready(() => {
     if (chapter !== activeChapter) {
       activeChapter = chapter;
       if (chapter && chapter.has_picture) {
-        $('#vocab-helper-img').attr('src', `/episodes/${accessKey}/chapters/${chapter.id}/picture.jpg`);
+        $('#vocab-helper-img').attr('src', `https://easygermanpodcastplayer-public.s3.eu-central-1.amazonaws.com/vocab/${accessKey}/${chapter.id}.jpg`);
       } else {
         $('#vocab-helper-img').attr('src', coverUrl);
       }
