@@ -31,11 +31,7 @@ class Episode
     EpisodeDescription.new(@fetcher, description_html, self)
   end
 
-  delegate :transcript, :notes_html, :chapters, :processed_html, :pretty_html, :access_key, :vocab_url, :vocab, :downloadable_html, to: :description
-
-  memoize def record
-    EpisodeRecord.find_by(access_key: access_key) || EpisodeRecord.find_by(slug: slug)
-  end
+  delegate :transcript, :notes_html, :chapters, :pretty_html, :access_key, :vocab_url, :downloadable_html, to: :description
 
   memoize def transcript_editor_html
     return @fetcher.fetch_editor_transcript(self) if @fetcher.present?
@@ -68,8 +64,9 @@ class Episode
     Audio.new(audio_url)
   end
 
-  def paragraphs
-    chapters.flat_map(&:paragraphs)
+  # Vocab - for experimental use
+  memoize def vocab
+    Vocab.new(vocab_url) if vocab_url.present?
   end
 
   memoize def processed

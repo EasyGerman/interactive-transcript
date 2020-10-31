@@ -11,10 +11,6 @@
 </style>
 <div class="lanes">
 
-  <div class="lane">
-    <%= @episode_description.processed_html %>
-  </div>
-
   <div class="lane" style="flex: 3">
     <% @episode_description.chapters.each do |chapter| %>
       <div class="chapter">
