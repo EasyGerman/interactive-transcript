@@ -25,16 +25,24 @@ namespace :feed do
     feed = Feed.new
     write feed.content, to: 'feed.xml'
 
-    feed.episodes.map do |episode|
-      puts [
-        episode.slug,
-        episode.vocab_url,
+    with_retry do
+      feed.episodes.map do |episode|
+        puts episode.slug
 
-      ].join(" ")
-      write episode.pretty_html, to: ['episodes', episode.slug, 'description.html']
-      if (vocab = episode.vocab).present?
-        write vocab.plain_text_content, to: ['episodes', episode.slug, "vocab.txt"]
-        analize_vocab(episode)
+        generate_file(episode, 'description.html') { episode.pretty_html }
+
+        if (vocab = episode.vocab).present?
+          generate_file(episode, 'vocab.txt') { vocab.plain_text_content }
+          # analize_vocab(episode)
+        end
+
+        generate_file(episode, 'processed.json') { JSON.pretty_generate(episode.processed.as_json) }
+        generate_file(episode, 'processed.yaml') { YAML.dump(episode.processed.as_json) }
+
+        if episode.transcript.present?
+          generate_file(episode, 'downloadable.html', rand * retry_delay) { episode.downloadable_html }
+          generate_file(episode, 'editor.html', rand * retry_delay) { episode.transcript_editor_html }
+        end
       end
     end
   end
@@ -42,7 +50,6 @@ namespace :feed do
   task :reprocess_all => :environment do
     ALREADY_PROCESSED = *%w[
     ]
-    delay = 10
 
     feed = Feed.new
     feed.episodes.each do |episode|
@@ -52,18 +59,11 @@ namespace :feed do
       ].join(" ")
       next if episode.access_key.in?(ALREADY_PROCESSED)
 
-      begin
+      with_retry do
         FetchPreparedEpisode.(
           access_key: episode.access_key,
           force_processing: true
         )
-      rescue => e
-        if e.message.include?('Too Many Requests')
-          puts "Too Many Requests - Sleeping for #{delay.seconds}..."
-          sleep delay
-          delay *= 2
-          retry
-        end
       end
     end
   end
@@ -80,6 +80,38 @@ namespace :feed do
       puts entry.to_s
       WordMatch.new(entry.de, episode.sentences).matches.each do |text|
         puts "- #{text.green}"
+      end
+    end
+  end
+
+  def generate_file(episode, file_name, delay = 0)
+    path = Rails.root.join('data', 'episodes', episode.slug, file_name)
+    return if File.exist?(path)
+
+    STDOUT.puts "- #{file_name}"
+    sleep delay
+    FileUtils.mkdir_p(File.dirname(path))
+
+    with_retry do
+      File.open(path, 'w') { |f| f.write(yield) }
+    end
+  end
+
+  def retry_delay
+    @retry_delay ||= 5
+  end
+
+  def with_retry
+    begin
+      yield
+    rescue => e
+      if e.message.include?('Too Many Requests')
+        STDOUT.puts "Too Many Requests - Sleeping for #{@retry_delay.seconds}..."
+        sleep @retry_delay
+        @retry_delay *= 2
+        retry
+      else
+        raise
       end
     end
   end

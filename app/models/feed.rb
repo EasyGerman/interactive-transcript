@@ -3,7 +3,14 @@ class Feed
 
   LOCAL_FILE = Rails.root.join('data', 'feed.xml')
 
+  def initialize(fetcher = nil)
+    @fetcher = fetcher
+  end
+
   memoize def content
+    return @fetcher.fetch_feed if @fetcher.present?
+
+    # TODO: move to fetcher
     if Rails.env.development?
       return File.read(LOCAL_FILE)
     end
@@ -30,7 +37,7 @@ class Feed
 
   memoize def episodes
     node.css('item').map do |episode_node|
-      Episode.new(episode_node, self)
+      Episode.new(@fetcher, episode_node, self)
     end
   end
 

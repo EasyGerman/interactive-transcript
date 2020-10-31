@@ -1,3 +1,22 @@
+# Description of a feed entry
+#
+# Responsibilities:
+# - find access key in the content
+# - make corrections
+# - exposes a prettified html
+# - finds downloadable (txt/rtf) vocab url
+# - exposes a Vocab object
+# - decides whether to take transcript from file or feed based on episode date and delegates to the appropriate transcript processing object
+# - exposes nokogiri html_node
+# - exposes html with timestamps tagged (delegates to Timestamp)
+# - parses HTML, recognizes <p>, .timestamp, adds them to TranslationCache, and adds data-translation-id to the <p> tag, exposes final html
+# - exposes nokogiri nodes in the body
+# - finds the Notes section and exposes it as HTML
+# - finds the transcript nodes and exposes them
+# - finds the downloadable_html_url
+# - exposes paragraph objects
+# - exposes sentences
+#
 class EpisodeDescription
   extend Memoist
   include ErrorHandling
@@ -8,7 +27,8 @@ class EpisodeDescription
 
   delegate :chapters, to: :transcript, allow_nil: true
 
-  def initialize(html, episode)
+  def initialize(fetcher, html, episode)
+    @fetcher = fetcher
     @html = html
     @episode = episode
 
@@ -40,16 +60,21 @@ class EpisodeDescription
 
   memoize def transcript
     if Date.parse(episode.node.at_css('pubDate')) >= Date.parse("2020-10-13 00:00 UTC") && downloadable_html_url.present?
-      html = URI.open(downloadable_html_url).read
-      ::TranscriptFromFile.new(html, self)
+      ::TranscriptFromFile.new(downloadable_html, self)
     else
       ::TranscriptFromFeed.new(transcript_nodes, self)
     end
   rescue TranscriptHeaderNotFound
     if downloadable_html_url.present?
-      html = URI.open(downloadable_html_url).read
-      ::TranscriptFromFile.new(html, self)
+      ::TranscriptFromFile.new(downloadable_html, self)
     end
+  end
+
+  memoize def downloadable_html
+    return @fetcher.fetch_downloadable_transcript(episode) if @fetcher.present?
+
+    # TODO: move to fetcher
+    URI.open(downloadable_html_url).read
   end
 
   memoize def html_node
@@ -94,11 +119,11 @@ class EpisodeDescription
     html_node.at_css('a:contains("HTML")')&.attr('href')
   end
 
-  def transcript_header?(node)
+  private def transcript_header?(node)
     node.name == 'h3' && node.text.strip == 'Transkript'
   end
 
-  memoize def transcript_start_index
+  private memoize def transcript_start_index
     if episode.slug == 'our-podcast-how-31006226'
       nodes.index { |node| node.text.include?("[0:00]") }
     else

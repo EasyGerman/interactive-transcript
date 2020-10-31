@@ -4,7 +4,8 @@ class Episode
 
   attr_reader :node, :feed
 
-  def initialize(node, feed)
+  def initialize(fetcher, node, feed)
+    @fetcher = fetcher
     @node = node
     @feed = feed
   end
@@ -27,16 +28,19 @@ class Episode
   end
 
   memoize def description
-    EpisodeDescription.new(description_html, self)
+    EpisodeDescription.new(@fetcher, description_html, self)
   end
 
-  delegate :notes_html, :chapters, :processed_html, :pretty_html, :access_key, :vocab_url, :vocab, to: :description
+  delegate :transcript, :notes_html, :chapters, :processed_html, :pretty_html, :access_key, :vocab_url, :vocab, :downloadable_html, to: :description
 
   memoize def record
     EpisodeRecord.find_by(access_key: access_key) || EpisodeRecord.find_by(slug: slug)
   end
 
   memoize def transcript_editor_html
+    return @fetcher.fetch_editor_transcript(self) if @fetcher.present?
+
+    # TODO: move to fetcher
     if Rails.env.development?
       episode_path = Rails.root.join("data", "episodes", slug)
       path = episode_path.join("transcript_editor.html")
