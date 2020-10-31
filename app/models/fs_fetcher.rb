@@ -1,27 +1,32 @@
 class FsFetcher
 
-  def initialize(root)
+  def initialize(root = Rails.root.join('data'))
     @root = root
   end
 
+  def path_to_feed
+    @root.join('feed.xml')
+  end
+
   def fetch_feed
-    File.read(@root.join('feed.xml'))
+    File.read(path_to_feed)
+  end
+
+  def path_to_downloadable_transcript(episode)
+    @root.join('episodes', episode.slug, 'downloadable.html')
   end
 
   def fetch_downloadable_transcript(episode)
-    File.read(@root.join('episodes', episode.slug, 'downloadable.html'))
+    File.read(path_to_downloadable_transcript(episode))
+  end
+
+  def path_to_editor_transcript(episode)
+    @root.join('episodes', episode.slug, 'editor.html')
   end
 
   def fetch_editor_transcript(episode)
-    File.read(@root.join('episodes', episode.slug, 'editor.html'))
+    File.read(path_to_editor_transcript(episode))
   end
-
-  def fetch_vocab_rtf(episode)
-  end
-
-  def fetch_vocab_csv(episode)
-  end
-
 
   # For testing only
 

@@ -1,34 +1,20 @@
 class Feed
   extend Memoist
 
-  LOCAL_FILE = Rails.root.join('data', 'feed.xml')
-
-  def initialize(fetcher = nil)
+  def initialize(fetcher = default_fetcher)
     @fetcher = fetcher
   end
 
-  memoize def content
-    return @fetcher.fetch_feed if @fetcher.present?
-
-    # TODO: move to fetcher
-    if Rails.env.development?
-      return File.read(LOCAL_FILE)
-    end
-
-    RedisMutex.with_lock("feed", block: 30, sleep: 0.5, expire: 60) do
-      Rails.cache.fetch("feed", expires_in: 15.seconds) do
-        content = get_content
-        if Rails.env.development?
-          File.open(LOCAL_FILE, "w") { |f| f.write(content) }
-        end
-        content
-      end
+  def default_fetcher
+    if Rails.env.development? || Rails.env.test?
+      DevelopmentFetcher.new
+    else
+      NetworkFetcher.new
     end
   end
 
-  def get_content
-    require 'open-uri'
-    open(ENV.fetch('PODCAST_URL')).read
+  memoize def content
+    @fetcher.fetch_feed
   end
 
   memoize def node

@@ -40,26 +40,12 @@ class Episode
   end
 
   memoize def downloadable_html
-    return @fetcher.fetch_downloadable_transcript(self) if @fetcher.present?
-
-    # TODO: move to fetcher
-    URI.open(downloadable_html_url).read
+    @fetcher.fetch_downloadable_transcript(self)
   end
 
   memoize def transcript_editor_html
-    return @fetcher.fetch_editor_transcript(self) if @fetcher.present?
-
-    # TODO: move to fetcher
-    if Rails.env.development?
-      episode_path = Rails.root.join("data", "episodes", slug)
-      path = episode_path.join("transcript_editor.html")
-      return File.read(path) if File.exists?(path)
-    end
-
     hide_and_report_errors do
-      file_contents = DropboxAdapter.new.transcript_for(number)
-      doc = Nokogiri::HTML(file_contents)
-      doc.css('#transcript').to_html
+      @fetcher.fetch_editor_transcript(self)
     end
   end
 
