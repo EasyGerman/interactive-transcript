@@ -1,6 +1,14 @@
+# High-level representation of a podcast episode.
+#
+# Responsibilities:
+#
+# - decide how the transcript is processed (TODO: extract)
+# -
+#
 class Episode
   extend Memoist
   include ErrorHandling
+  include AwsUtils
 
   attr_reader :node, :feed
 
@@ -55,6 +63,7 @@ class Episode
     end
   end
 
+  # Used by Paragraph to find matching timed paragraph
   memoize def timed_script
     hide_and_report_errors do
       TimedScript.new(transcript_editor_html) if transcript_editor_html
@@ -77,47 +86,8 @@ class Episode
       audio_url: audio_url,
       notes_html: notes_html,
       chapters: chapters&.map(&:processed),
-      audio_chapters: processed_audio_chapters,
+      audio_chapters: audio.processed_chapters,
     )
-  end
-
-  def processed_audio_chapters
-    return nil if chapters.nil? # No transcript, e.g. Zwischending
-
-    audio.chapters.to_enum.with_index.map { |chapter, index|
-      if chapter.picture.present?
-        Rails.logger.info "Scheduling job #{chapter.id}"
-
-        Concurrent::ScheduledTask.execute(2 + index) do
-          upload_to_aws("vocab/#{access_key}/#{chapter.id}.jpg", chapter.picture.data)
-        end
-      end
-      ::Processed::AudioChapter.new(
-        id: chapter.id,
-        start_time: chapter.start_time / 1000,
-        end_time: chapter.end_time / 1000,
-        has_picture: chapter.picture.present?,
-      )
-    }
-  end
-
-  def upload_to_aws(path, data)
-    Rails.logger.info "Uploading #{path} (#{data.size} bytes)"
-    file = Tempfile.new(encoding: 'ascii-8bit')
-    begin
-      file.write(data)
-      file.rewind
-
-      object = Aws::S3::Resource.new(region: 'eu-central-1').bucket('easygermanpodcastplayer-public').object(path)
-      object.upload_file(file.path)
-
-      Rails.logger.info "Finished uploading #{path}"
-    rescue => e
-      Rails.logger.error "Failed uploading #{path}: #{e.class.name} #{e.message} #{e.backtrace.first}"
-    ensure
-      file.close
-      file.unlink
-    end
   end
 
   private
@@ -127,5 +97,4 @@ class Episode
   memoize def feed_entry_description_parser
     Feed::EntryDescriptionParser.new(feed_entry_parser.description, self)
   end
-
 end

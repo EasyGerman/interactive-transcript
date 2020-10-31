@@ -13,50 +13,32 @@ class Audio
     CachedNetwork.fetch(url)
   end
 
-  def chapters
-    @chapters ||
-      begin
-        Mp3Info.open(StringIO.new(content)) do |m|
-          @chapters = m.tag2.CHAP.map { |s| Chapter.new(s) }
-        end
-        @chapters
-      end
+  memoize def chapters
+    Mp3Parser.new(content).chapters
   end
 
   def end_time
     chapters.last.end_time
   end
 
-  class Chapter
-    attr_reader :id, :start_time, :end_time, :props, :picture
+  def processed_chapters
+    return nil if chapters.nil? # No transcript, e.g. Zwischending
 
-    def initialize(str)
-      @id, rest = str.split("\x00", 2)
-      io = StringIO.new(rest)
-      io.extend(Mp3Info::Mp3FileMethods)
+    chapters.to_enum.with_index.map { |chapter, index|
+      if chapter.picture.present?
+        Rails.logger.info "Scheduling job #{chapter.id}"
 
-      @start_time   = io.get32bits
-      @end_time     = io.get32bits
-      @start_offset = io.get32bits
-      @end_offset   = io.get32bits
-      @props = {}
-
-      until io.eof? do
-        name = io.read(4)
-        size = io.get32bits
-        io.seek(2, IO::SEEK_CUR) # skip flags
-        @props[name] = io.read(size)
+        # TODO: add a recovery method in case any of these threads fail
+        Concurrent::ScheduledTask.execute(2 + index) do
+          upload_to_aws("vocab/#{access_key}/#{chapter.id}.jpg", chapter.picture.data)
+        end
       end
-
-      @picture = Picture.new(@props["APIC"]) if @props.key?("APIC")
-    end
-  end
-
-  class Picture
-    attr_reader :data
-    def initialize(str)
-      str =~ /^.([^\0]*)\0.([^\0]*)\0(.*)$/m
-      @mime_type, @description, @data = $1, $2, $3
-    end
+      ::Processed::AudioChapter.new(
+        id: chapter.id,
+        start_time: chapter.start_time / 1000,
+        end_time: chapter.end_time / 1000,
+        has_picture: chapter.picture.present?,
+      )
+    }
   end
 end
