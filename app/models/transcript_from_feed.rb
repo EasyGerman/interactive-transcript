@@ -2,12 +2,12 @@ class TranscriptFromFeed
   extend Memoist
   include ErrorHandling
 
-  # TODO: try to remove episode_description, it doesn't belong here
-  attr_reader :nodes, :episode_description
+  attr_reader :nodes, :episode
 
-  def initialize(nodes, episode_description)
-    @nodes = nodes
-    @episode_description = episode_description
+  def initialize(feed_entry_description_parser, episode)
+    @feed_entry_description_parser = feed_entry_description_parser
+    @nodes = feed_entry_description_parser.transcript_nodes
+    @episode = episode
   end
 
   memoize def chapters
@@ -16,14 +16,14 @@ class TranscriptFromFeed
 
     nodes.each do |node|
       if node.name == 'h3'
-        chapters << current_chapter = Chapter.new(node.text.strip, [], episode_description, chapters.size)
+        chapters << current_chapter = Chapter.new(node.text.strip, [], episode, chapters.size)
       elsif node.name == 'p'
         if node.children.count == 1 && node.children.first.name == "strong"
-          chapters << current_chapter = Chapter.new(node.text.strip, [], episode_description, chapters.size)
+          chapters << current_chapter = Chapter.new(node.text.strip, [], episode, chapters.size)
           next
         end
         if current_chapter.blank?
-          chapters << current_chapter = Chapter.new(nil, [], episode_description, chapters.size)
+          chapters << current_chapter = Chapter.new(nil, [], episode, chapters.size)
         end
         next if node.text.blank?
         current_chapter.paragraphs << Paragraph.new(node, current_chapter, current_chapter.paragraphs.size)

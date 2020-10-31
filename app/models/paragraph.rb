@@ -4,8 +4,7 @@ class Paragraph
 
   attr_reader :node, :timestamp, :label, :text, :segments, :chapter, :index
 
-  delegate :episode_description, to: :chapter
-  delegate :episode, to: :episode_description
+  delegate :episode, to: :chapter
 
   def initialize(node, chapter, index)
     @node = node

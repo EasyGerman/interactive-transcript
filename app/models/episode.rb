@@ -8,30 +8,35 @@ class Episode
     @fetcher = fetcher
     @node = node
     @feed = feed
-  end
-
-  memoize def slug
-    url = node.css('link').text
-    url[%r{^https://www.patreon.com/posts/(.*)$}, 1] || raise("Cannot find slug in #{url}")
+    @feed_entry_parser = Feed::EntryParser.new(node)
   end
 
   def number
-    slug[/^\d+/]&.to_i
+    feed_entry_parser.episode_number
   end
 
-  def title
-    node.css('title').first.text
+  delegate :slug, :title, :audio_url, :published_at, to: :feed_entry_parser
+  delegate :access_key, :vocab_url, :downloadable_html_url, :notes_html, to: :feed_entry_description_parser
+  delegate :chapters, to: :transcript
+
+  memoize def transcript
+    if published_at >= Date.parse("2020-10-13 00:00 UTC") && downloadable_html_url.present?
+      ::TranscriptFromFile.new(downloadable_html, self)
+    else
+      ::TranscriptFromFeed.new(feed_entry_description_parser, self)
+    end
+  rescue Feed::EntryDescriptionParser::TranscriptHeaderNotFound
+    if downloadable_html_url.present?
+      ::TranscriptFromFile.new(downloadable_html, self)
+    end
   end
 
-  def description_html
-    node.css('description').text
-  end
+  memoize def downloadable_html
+    return @fetcher.fetch_downloadable_transcript(self) if @fetcher.present?
 
-  memoize def description
-    EpisodeDescription.new(@fetcher, description_html, self)
+    # TODO: move to fetcher
+    URI.open(downloadable_html_url).read
   end
-
-  delegate :transcript, :notes_html, :chapters, :pretty_html, :access_key, :vocab_url, :downloadable_html, to: :description
 
   memoize def transcript_editor_html
     return @fetcher.fetch_editor_transcript(self) if @fetcher.present?
@@ -54,10 +59,6 @@ class Episode
     hide_and_report_errors do
       TimedScript.new(transcript_editor_html) if transcript_editor_html
     end
-  end
-
-  def audio_url
-    node.css('enclosure').first["url"]
   end
 
   memoize def audio
@@ -118,4 +119,13 @@ class Episode
       file.unlink
     end
   end
+
+  private
+
+  attr_reader :feed_entry_parser, :feed_entry_description_parser
+
+  memoize def feed_entry_description_parser
+    Feed::EntryDescriptionParser.new(feed_entry_parser.description, self)
+  end
+
 end

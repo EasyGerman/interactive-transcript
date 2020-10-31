@@ -1,8 +1,6 @@
-Chapter = Struct.new(:title, :paragraphs, :episode_description, :index)
+Chapter = Struct.new(:title, :paragraphs, :episode, :index)
 Chapter.class_eval do
   extend Memoist
-
-  delegate :episode, to: :episode_description
 
   def timestamp
     paragraphs.first.timestamp
