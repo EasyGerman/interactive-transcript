@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://api.deepl.com/v2/translate?auth_key=<DEEPL_API_KEY>&source_lang=de&target_lang=esperanto&text=Und%20hat%20es%20was%20gebracht?
+    uri: https://api.deepl.com/v2/translate?auth_key=<DEEPL_API_KEY>&preserve_formatting=1&source_lang=de&target_lang=EN&text=Und%20hat%20es%20was%20gebracht?
     body:
       encoding: US-ASCII
       string: ''
@@ -30,7 +30,6 @@ http_interactions:
       - "*"
     body:
       encoding: UTF-8
-      string: '{"message":"Value for ''target_lang'' not supported."}'
-    http_version: null
+      string: '{"message":"Error 888"}'
   recorded_at: Sun, 24 May 2020 08:41:12 GMT
-recorded_with: VCR 5.1.0
+recorded_with: VCR 6.0.0

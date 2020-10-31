@@ -31,7 +31,7 @@ class Feed
     end
 
     def published_at
-      Date.parse(node.at_css('pubDate'))
+      Time.parse(node.at_css('pubDate'))
     end
 
     private

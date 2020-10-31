@@ -7,7 +7,7 @@ describe Paragraph do
     HTML
   }
   let(:node) { Nokogiri::XML(html).css('p').first }
-  subject(:paragraph) { described_class.new(node) }
+  subject(:paragraph) { described_class.new(node, double(:chapter), 0) }
 
   it "extracts the text after the timestamp" do
     expect(subject.text).to eq "Da würde ich aber … Sag du mal."

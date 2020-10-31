@@ -7,12 +7,12 @@ describe Translator do
 
   it "can handle errors", :vcr do
     error = capture_error(Translator::Error) do
-      Translator.fetch_translation("Und hat es was gebracht?", "esperanto")
+      Translator.fetch_translation("Und hat es was gebracht?", "zh")
     end
 
     expect(error).to be_present
     expect(error.message).to include "DeepL"
-    expect(error.message).to include "Value for 'target_lang' not supported."
+    expect(error.message).to include "Error 888"
   end
 
   def capture_error(error_class)
