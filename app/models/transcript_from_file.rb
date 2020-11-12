@@ -50,7 +50,7 @@ class TranscriptFromFile
           # do nothing
         when "small"
           add_text(child.text)
-        when "i", "b", "u", "em", "strong"
+        when "i", "b", "u", "em", "strong", "font"
           add_text(child.text)
         else raise "unexpected tag: #{child.name}"
         end
