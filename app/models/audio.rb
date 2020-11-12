@@ -2,6 +2,7 @@ require "mp3info"
 
 class Audio
   extend Memoist
+  include AwsUtils
 
   attr_reader :url
 
