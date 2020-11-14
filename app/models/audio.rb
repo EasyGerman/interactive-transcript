@@ -2,7 +2,6 @@ require "mp3info"
 
 class Audio
   extend Memoist
-  include AwsUtils
 
   attr_reader :url
 
@@ -26,14 +25,6 @@ class Audio
     return nil if chapters.nil? # No transcript, e.g. Zwischending
 
     chapters.to_enum.with_index.map { |chapter, index|
-      if chapter.picture.present?
-        Rails.logger.info "Scheduling job #{chapter.id}"
-
-        # TODO: add a recovery method in case any of these threads fail
-        Concurrent::ScheduledTask.execute(2 + index) do
-          upload_to_aws("vocab/#{access_key}/#{chapter.id}.jpg", chapter.picture.data)
-        end
-      end
       ::Processed::AudioChapter.new(
         id: chapter.id,
         start_time: chapter.start_time / 1000,

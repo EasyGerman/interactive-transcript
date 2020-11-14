@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_10_145147) do
+ActiveRecord::Schema.define(version: 2020_11_14_120256) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,4 +32,13 @@ ActiveRecord::Schema.define(version: 2020_10_10_145147) do
     t.index ["key"], name: "index_translation_caches_on_key"
   end
 
+  create_table "vocab_slide_records", force: :cascade do |t|
+    t.bigint "episode_record_id", null: false
+    t.string "chapter_key", limit: 10, null: false
+    t.binary "data"
+    t.datetime "uploaded_at"
+    t.index ["episode_record_id", "chapter_key"], name: "index_vocab_slide_records_on_episode_record_id_and_chapter_key", unique: true
+  end
+
+  add_foreign_key "vocab_slide_records", "episode_records"
 end

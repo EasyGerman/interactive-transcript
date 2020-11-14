@@ -1,4 +1,5 @@
 class FetchPreparedEpisode < Operation
+  include AwsUtils
 
   attribute :access_key, Types::String
   attribute :force_processing, Types::Bool.default(false)
@@ -24,7 +25,19 @@ class FetchPreparedEpisode < Operation
     episode = Feed.new.episodes.find { |ep| ep.access_key == access_key }
     return if episode.blank?
 
-    EpisodeRecord.upsert!(access_key, episode.processed.as_json)
+    episode_record = EpisodeRecord.upsert!(access_key, episode.processed.as_json)
+    episode.audio.chapters.each do |chapter|
+      next if chapter.picture.blank?
+      episode_record.vocab_slide_records.upsert!(chapter.id, chapter.picture.data)
+    end
+
+    Concurrent::ScheduledTask.execute(2) do
+      episode_record.vocab_slide_records.each do |slide|
+        VocabSlide.new(slide, episode.access_key).upload
+      end
+    end
+
+    episode_record
   end
 
   def with_mutex

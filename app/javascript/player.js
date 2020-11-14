@@ -44,7 +44,15 @@ $(document).ready(() => {
     if (chapter !== activeChapter) {
       activeChapter = chapter;
       if (chapter && chapter.has_picture) {
-        $('#vocab-helper-img').attr('src', `https://easygermanpodcastplayer-public.s3.eu-central-1.amazonaws.com/vocab/${accessKey}/${chapter.id}.jpg`);
+        $('#vocab-helper-img').off('error');
+        const primaryURL = `https://easygermanpodcastplayer-public.s3.eu-central-1.amazonaws.com/vocab/${accessKey}/${chapter.id}.jpg`;
+        const fallbackURL = `/episodes/${accessKey}/chapters/${chapter.id}/picture.jpg`
+        $('#vocab-helper-img').attr('src', primaryURL);
+        $('#vocab-helper-img').on('error', (e, a) => {
+          console.warn("Error loading image from primary location");
+          $('#vocab-helper-img').off('error');
+          $('#vocab-helper-img').attr('src', fallbackURL);
+        })
       } else {
         $('#vocab-helper-img').attr('src', coverUrl);
       }

@@ -2,21 +2,45 @@ class PicturesController < ApplicationController
 
   def show
     access_key = params[:episode_id].presence or raise "access key missing"
-    chapter_id = params[:chapter_id]
+    chapter_key = params[:chapter_id] or raise "chapter key missing"
 
-    @feed = Feed.new
+    # 1. Find Episode
+    episode_record = EpisodeRecord.find_by(access_key: access_key)
 
-    @episode = @feed.episodes.find { |ep| ep.access_key == access_key }
-    if @episode.blank?
-      raise ActionController::RoutingError.new('Episode not found')
+    if episode_record.blank?
+      Rails.logger.warn("Episode #{access_key} not found in database")
+      render 'not_found', status: 404
+      return
     end
 
-    @chapter = @episode.audio.chapters.find { |c| c.id == chapter_id }
+    # 2. Find or create Slide
+    slide = episode_record.vocab_slide_records.find_by(chapter_key: chapter_key)
 
-    if @chapter.picture.blank?
-      raise ActionController::RoutingError.new('Picture not found')
+    if slide.blank?
+      Rails.logger.info "Slide record not found"
+
+      episode = Feed.new.episodes.find { |ep| ep.access_key == access_key }
+      if episode.blank?
+        Rails.logger.warn("Episode #{access_key} not found in feed")
+        render 'not_found', status: 404
+        return
+      end
+
+      chapter = episode.audio.chapters.find { |chapter| chapter.id == chapter_key }
+      if chapter.blank?
+        Rails.logger.warn("Chapter #{chapter_key} not found for episode #{access_key}")
+        render 'not_found', status: 404
+        return
+      end
+
+      slide = episode_record.vocab_slide_records.upsert!(chapter.id, chapter.picture.data)
     end
 
-    send_data @chapter.picture.data, type: 'image/jpeg', disposition: 'inline'
+    # 3. Upload to AWS
+    VocabSlide.new(slide, access_key).upload # TODO: episode.vocab_slide (ability to instantiate Episode without parsing the feed)
+
+    # 4. Redirect
+    redirect_to "https://easygermanpodcastplayer-public.s3.eu-central-1.amazonaws.com/vocab/#{access_key}/#{chapter_key}.jpg"
   end
+
 end
