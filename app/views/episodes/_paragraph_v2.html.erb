@@ -1,0 +1,27 @@
+<div class="paragraph" data-translation-id="<%= paragraph.translation_id %>">
+
+  <% Bench.m("render-paragraph-#{paragraph.slug}") do %>
+
+    <div class="paragraph-header">
+      <% if paragraph.timestamp %>
+        <span class="timestamp" data-timestamp="<%= paragraph.timestamp.seconds %>"><%= paragraph.timestamp.text %></span>
+      <% end %>
+      <strong class="speaker"><%= paragraph.speaker.name %>:</strong>
+    </div>
+
+    <div class="paragraph-main">
+      <div class="paragraph-content">
+        <% if paragraph.segments %>
+          <% paragraph.segments.each do |segment| %><span class="segment" title="<%= segment.timestamp.text %>"><%= segment.text %></span><% end %>
+        <% else %>
+          <%= paragraph.text %>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="paragraph-footer">
+      <button class="translateParagraphButton">Übersetzen</button>
+    </div>
+
+  <% end %>
+</div>

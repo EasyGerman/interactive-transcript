@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= @title || "Easy German Podcast Scroller" %></title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="UTF-8">
+
+    <style>
+      .button-row { display: flex; flex-direction: row; }
+    </style>
+  </head>
+
+  <body>
+    <%= yield %>
+
+    <%= stylesheet_link_tag 'v2', media: 'all' %>
+    <%= javascript_pack_tag 'v2' %>
+
+    <link rel="stylesheet" href="/semanticui/semantic.min.css">
+    <script src="/semanticui/semantic.min.js"></script>
+  </body>
+</html>

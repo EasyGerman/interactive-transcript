@@ -1,0 +1,87 @@
+@import colors
+
+body
+  margin: 0
+  padding: 0
+  overflow: hidden hidden
+
+#player-page
+  background: white
+  position: fixed
+  top: 0
+  left: 0
+  bottom: 0
+  right: 0
+  max-height: 100vh
+  display: grid
+  grid-template-columns: [w-left c-left] 1fr [c-right w-right]
+  grid-template-rows: [w-top c-top] 1fr [c-bottom] auto [w-bottom]
+  overflow: hidden hidden
+
+#content
+  height: 100%
+  grid-column: c-left / c-right
+  grid-row: c-top / c-bottom
+  overflow-y: auto
+  #content-inner
+    max-width: 900px
+
+#player-controls
+  grid-column: w-left / w-right
+  grid-row: c-bottom / w-bottom
+  text-align: center
+  padding: 4px
+  background: $uiGray
+  width: 100vw
+  #main-buttons
+    display: flex
+    align-items: center
+    justify-content: center
+    .button
+      margin: 0 .5px
+      display: inline-block
+    .central-buttons
+      flex-shrink: 1
+      flex-basis: 120px
+      margin: 0 10px
+      #play-button
+        width: 100%
+  #builtin-player
+    padding-top: 10px
+    figure
+      width: 100%
+      margin: auto
+      audio
+        width: 100%
+
+#vocab-helper
+  display: none
+
+#player-page.vocab-on
+  #vocab-helper
+    height: 100%
+    overflow: hidden
+    display: block
+    text-align: center
+
+    img
+      position: relative
+      top: 50%
+      transform: translateY(-50%)
+      display: inline-block
+      object-fit: cover
+      object-position: 50% 0
+      // When the cover is showing instead of vocab helper, don't cut off the bottom
+      &.is-cover
+        object-fit: contain
+
+@media (orientation: landscape)
+  #vocab-helper
+    grid-column: w-left / c-left
+    grid-row: w-top / c-bottom
+
+
+@media (orientation: portrait)
+  #vocab-helper
+    grid-column: c-left / c-right
+    grid-row: w-top / c-top

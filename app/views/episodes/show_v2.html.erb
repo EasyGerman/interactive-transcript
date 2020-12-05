@@ -1,0 +1,53 @@
+<style>
+  @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+  #loading { width: 20px; height: 20px; border: solid 2px gray; border-right-color: transparent; border-radius: 50%; position: fixed; top: 100px; left: calc(50% - 10px); animation: spin 1s linear infinite }
+</style>
+<script>
+  // If javascript is enabled, hide the content before everthing is loaded,
+  // to prevent the content from jumping around.
+  document.write('<style>#player-page { visibility: hidden }</style>')
+  document.write('<div id="loading" style=""></div>');
+</script>
+
+<div id="player-page" class="version2">
+  <div id="vocab-helper"><img id="vocab-helper-img" class="is-cover" src="<%= @prepared_episode.cover_url %>" /></div>
+
+  <%= render 'content_v2' %>
+
+  <div id="player-controls">
+    <div id="main-buttons">
+      <div class="side-buttons">
+        <!-- Settings --><div id="settings-button" class="ui icon top left pointing huge white dropdown button">
+          <i class="cog alternate icon"></i>
+          <div class="menu">
+            <div data-rate="0.25"  class="speed item">Superlangsam (0.25x)</div>
+            <div data-rate="0.5"   class="speed item">Langsam (0.5x)</div>
+            <div data-rate="0.75"  class="speed item">Langsamer (0.75x)</div>
+            <div data-rate="1"     class="speed item">Normal (1x)</div>
+            <div data-rate="1.25"  class="speed item">Schneller (1.25x)</div>
+            <div data-rate="1.5"   class="speed item">Schnell (1.5x)</div>
+            <div data-rate="2"     class="speed item">Superschnell (2x)</div>
+            <div class="divider"></div>
+            <div id="builtin-player-button" class="item">Standard Player</div>
+          </div>
+        </div>
+        <!-- Back --><div id="jump-backward-button" class="ui icon huge white button"><i class="undo icon"></i></div>
+      </div>
+      <div class="central-buttons">
+        <div id="play-button" class="ui icon massive grey button"><i class="play icon"></i></div>
+      </div>
+      <div class="side-buttons">
+        <!-- Forward --><div id="jump-forward-button" class="ui icon huge white button"><i class="redo icon"></i></div>
+        <!-- Vocab helper --><div id="vocab-button" class="ui icon huge white button"><i class="align justify icon"></i></div>
+      </div>
+    </div>
+    <div id="builtin-player" style="display: none">
+      <figure>
+        <audio controls src="<%= @prepared_episode.audio_url %>">
+          Your browser does not support the <code>audio</code> element.
+        </audio>
+      </figure>
+    </div>
+  </div>
+
+</div>

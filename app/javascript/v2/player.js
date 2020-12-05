@@ -1,0 +1,145 @@
+import layout from './layout';
+import playerControls from './playerControls';
+import wordHighlighter from './word-highlighter';
+import scroller from './scroller';
+import paragraphMenu from './paragraphMenu';
+import translation from './translation';
+import vocabHelper from './vocabHelper';
+import vocabHelperToggle from './vocabHelperToggle';
+import builtinPlayerToggle from './builtinPlayerToggle';
+
+$(document).ready(() => {
+  const media = document.querySelector('audio');
+
+  const player = {
+    pause: () => media.pause(),
+    play: () => media.play(),
+  }
+
+  layout.init();
+  playerControls.init(media);
+  paragraphMenu.init();
+  translation.init();
+
+  const timestampElements = $('.timestamp').toArray().map((x) => [parseInt(x.dataset['timestamp']), x])
+  let activeTimestamp = null;
+  const mode = $('#content').data('mode');
+  const chapters = $('#content').data('chapters');
+  const accessKey = $('#content').data('accessKey');
+
+  vocabHelper.init({ media, chapters, accessKey });
+  vocabHelperToggle.init();
+
+  builtinPlayerToggle.init();
+
+  function timeupdateNormalMode(e) {
+    const eventTs = media.currentTime;
+    const item = timestampElements.find(([t1, e], index) => {
+      const nextPair = timestampElements[index + 1];
+      const t2 = nextPair ? nextPair[0] : null;
+      return eventTs >= t1 && (!t2 || eventTs < t2);
+    })
+    if (item) {
+      const [ts, e] = item;
+      const $elem = $(e).parent();
+      if (ts !== activeTimestamp) {
+        const $segment = $elem.find('.segment:first');
+        scroller.scrollTo($segment.length ? $segment : $elem, { evenIfRecentlyScrolled: true });
+        $(".current").removeClass("current");
+        $elem.addClass("current");
+        activeTimestamp = ts;
+      }
+    }
+    else {
+      $(".current").removeClass("current");
+      activeTimestamp = null;
+    }
+  }
+
+  media.addEventListener('timeupdate', timeupdateNormalMode);
+  media.addEventListener('timeupdate', wordHighlighter.handleTimeupdate.bind(null, media));
+  media.addEventListener('timeupdate', vocabHelper.ontimeupdate);
+
+  $('.timestamp').closest('.paragraph').addClass('timestampedEntry')
+
+  $(window).keypress(function(event) {
+    switch (event.key) {
+      case " ":
+        if (media.paused) {
+          media.play();
+        }
+        else {
+          media.pause();
+        }
+        event.preventDefault();
+        break;
+    }
+  });
+  $(window).keydown(function(event) {
+    const ev = event.originalEvent;
+    let e;
+    switch (ev.keyCode) {
+      case 37: // left
+        media.currentTime -= ev.shiftKey ? 60 : 5;
+        event.preventDefault();
+        break;
+      case 39: // right
+        media.currentTime += ev.shiftKey ? 60 : 5;
+        event.preventDefault();
+        break;
+      case 38: // up
+        e = $('.current').prevAll('.timestampedEntry').get(0);
+        if (e) {
+          media.currentTime = parseInt($(e).find('.timestamp').data('timestamp'))
+          event.preventDefault();
+        }
+        break;
+      case 40: // down
+        e = $('.current').nextAll('.timestampedEntry').get(0);
+          if (e) {
+          media.currentTime = parseInt($(e).find('.timestamp').data('timestamp'))
+          event.preventDefault();
+        }
+        break;
+    }
+  });
+
+  $('.playParagraphButton').click(function(event) {
+    let timestamp = $(event.target).closest('.paragraph').find('.timestamp');
+    if (timestamp.length) {
+      media.currentTime = parseInt(timestamp.data('timestamp'));
+      media.play();
+    }
+  });
+
+  function hashChanged(hash) {
+    const match = hash.match(/^#((\d{1,2}):)?(\d{1,2}):(\d{2})$/)
+    if (match) {
+      const [_x, _y, h, m, s] = match;
+      const seconds = (parseInt(h) || 0) * 3600 + parseInt(m) * 60 + parseInt(s)
+      console.log('jumping to', seconds, h, m, s)
+      media.currentTime = seconds;
+      media.play();
+    }
+  }
+  if (window.location.hash && window.location.hash.length) {
+    hashChanged(window.location.hash);
+  }
+  if ("onhashchange" in window) { // event supported?
+    window.onhashchange = function () {
+      hashChanged(window.location.hash);
+    }
+  }
+  else { // event not supported:
+    var storedHash = window.location.hash;
+    window.setInterval(function () {
+      if (window.location.hash != storedHash) {
+        storedHash = window.location.hash;
+        hashChanged(storedHash);
+      }
+    }, 1000);
+  }
+
+  document.getElementById('player-page').style.visibility = 'visible';
+
+});

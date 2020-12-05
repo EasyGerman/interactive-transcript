@@ -44,6 +44,7 @@ $(document).ready(() => {
     if (chapter !== activeChapter) {
       activeChapter = chapter;
       if (chapter && chapter.has_picture) {
+        $('#vocab-helper-img').attr('src', ''); // clear the image to avoid transition artifacts when we change 'is-cover'
         $('#vocab-helper-img').off('error');
         const primaryURL = `https://easygermanpodcastplayer-public.s3.eu-central-1.amazonaws.com/vocab/${accessKey}/${chapter.id}.jpg`;
         const fallbackURL = `/episodes/${accessKey}/chapters/${chapter.id}/picture.jpg`
@@ -53,8 +54,10 @@ $(document).ready(() => {
           $('#vocab-helper-img').off('error');
           $('#vocab-helper-img').attr('src', fallbackURL);
         })
+        $('#vocab-helper-img').removeClass('is-cover');
       } else {
         $('#vocab-helper-img').attr('src', coverUrl);
+        $('#vocab-helper-img').addClass('is-cover');
       }
     }
   }
@@ -63,7 +66,7 @@ $(document).ready(() => {
   media.addEventListener('timeupdate', wordHighlighter.handleTimeupdate.bind(null, media));
   media.addEventListener('timeupdate', timeupdateForVocabHelper);
 
-  $('.timestamp').parent().addClass('timestampedEntry')
+  $('.timestamp').closest('.paragraph').addClass('timestampedEntry')
 
   $(window).keypress(function(event) {
     switch (event.key) {
@@ -164,6 +167,19 @@ $(document).ready(() => {
       // Ensure we scroll to the current position, since scrolling doesn't work while we're in vocab mode
       activeTimestamp = null;
     }
+    window.dispatchEvent(new Event('vocabToggle'));
     $('#vocab-button').blur();
   })
+
+  const anchor = window.location.hash;
+  if (anchor && anchor.length) {
+    const match = anchor.match(/^#(((\d{1,2}):)?(\d{1,2}):(\d{2}))$/)
+    if (match) {
+      const [_x, _y, h, m, s] = anchor.match(/^#((\d{1,2}):)?(\d{1,2}):(\d{2})$/)
+      const seconds = (parseInt(h) || 0) * 3600 + parseInt(m) * 60 + parseInt(s)
+      console.log('jumping to', seconds, h, m, s)
+      media.currentTime = seconds;
+      media.play();
+    }
+  }
 });

@@ -1,0 +1,41 @@
+@import 'colors';
+
+body {
+  line-height: 1.4em;
+  font-weight: 400;
+  color: #20292e;
+  font-size: 16px;
+}
+header { text-align: center; margin: 4em 0; }
+header > a { color: $green; }
+header > p { margin: 0; }
+
+h1 {
+  color: $green;
+}
+
+a { color: #586f7c; }
+a:hover { opacity: 0.7; }
+
+#transcript {
+  color: #777;
+}
+
+
+.word-highlight {
+  color: #000;
+  background: #FF9;
+  transition: background 1s ease;
+}
+.remove-word-highlight {
+  color: inherit;
+  background: none;
+  transition: background 3s ease;
+}
+
+.notice {
+  color: green;
+}
+.error {
+  color: red;
+}

@@ -1,4 +1,6 @@
 class EpisodesController < ApplicationController
+  layout "application2", :only => [ :show_v2 ]
+
   def show
     @access_key = params[:id].presence or raise "access key missing"
 
@@ -13,6 +15,10 @@ class EpisodesController < ApplicationController
     end
 
     @title = @prepared_episode.title
+  end
+
+  def show_v2
+    show
   end
 
 end

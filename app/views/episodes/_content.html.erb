@@ -1,0 +1,74 @@
+<div id="content"
+  data-access-key="<%= @access_key %>"
+  data-chapters="<%= @prepared_episode.audio_chapters.to_json %>"
+  data-mode="word"
+>
+  <div id="content-inner">
+    <header>
+      <h1><%= @title %></h1>
+      <p>The Easy German Podcast</p>
+      <a target="_blank" href="http://www.easygerman.fm">www.easygerman.fm</a>
+    </header>
+
+    <div style="margin: 1em; text-align: center; font-size: 80%">
+      <%= link_to "Neue Version", v2_episode_path(@access_key) %>
+    </div>
+
+    <section id="pre-play">
+      <form id="language-picker-form">
+        <%= label(:language, "Translation language:") %>
+        &nbsp;
+        <%=
+          select_tag(
+            :language,
+            options_for_select(
+              Translator::TARGET_LANGUAGES.map { |code, description| [description, code] },
+            ),
+            id: "language-picker",
+          )
+        %>
+        <p>Translations by DeepL.com</p>
+      </form>
+    </section>
+
+    <%= @prepared_episode.notes_html.sub(%r{<p><br></p>\n\Z}, '').html_safe %>
+
+    <h2>Transkript</h2>
+
+    <% @prepared_episode.chapters.each do |chapter| %>
+      <div class="chapter">
+
+        <% if chapter.title.present? %>
+          <h3><%= chapter.title %></h3>
+        <% end %>
+
+        <% chapter.paragraphs.each do |paragraph| %>
+          <p class="paragraph" data-translation-id="<%= paragraph.translation_id %>">
+
+            <% Bench.m("render-paragraph-#{paragraph.slug}") do %>
+
+  <span class="paragraph-header">
+    <% if paragraph.timestamp %>
+    <span class="timestamp" data-timestamp="<%= paragraph.timestamp.seconds %>"><%= paragraph.timestamp.text %></span>
+    <% end %>
+
+    <strong class="speaker"><%= paragraph.speaker.name %>:</strong>
+  </span>
+
+  <% if paragraph.segments %>
+  <% paragraph.segments.each do |segment| %><span
+  class="segment"
+  title="<%= segment.timestamp.text %>"><%= segment.text %></span><% end %>
+  <% else %>
+  <%= paragraph.text %>
+  <% end %>
+
+            <% end %>
+          </p>
+
+        <% end %>
+      </div><!-- /chapter -->
+
+    <% end %>
+  </div>
+</div>

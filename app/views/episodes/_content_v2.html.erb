@@ -1,0 +1,82 @@
+<div id="content"
+  data-access-key="<%= @access_key %>"
+  data-chapters="<%= @prepared_episode.audio_chapters.to_json %>"
+  data-mode="word"
+>
+  <div id="content-inner">
+    <div class="ui message" id="top-message">
+      <div class="header">
+        Willkommen zur neuen Version!
+      </div>
+      <p lang="de">Vielen Dank, dass du die neue Version ausprobiert hast. Wenn du ein Problem findest, hinterlasse bitte Feedback. Du kannst immer noch auf die alte Version zurückgreifen.</p>
+      <p lang="en">Thank you for trying out the new version. If you experience any problem, please leave feedback. You can still go back to the old version.</p>
+
+      <div class="button-container">
+        <a class="ui labeled icon button" href="<%= episode_path(@access_key) %>">
+          <i class="left chevron icon"></i>
+          Zurück zur alten Version
+        </a>
+        <a class="ui right labeled icon button" href="https://docs.google.com/forms/d/e/1FAIpQLSemlKJpVrhlIQA8M-Yc8WMBtxHISVQJYTq1zH8wZrm47l3p3A/viewform?usp=sf_link" target="_blank">
+          Feedback
+          <i class="right chevron icon"></i>
+        </a>
+      </div>
+    </div>
+
+    <header>
+      <h1><%= @title %></h1>
+      <p>The Easy German Podcast</p>
+      <a target="_blank" href="http://www.easygerman.fm">www.easygerman.fm</a>
+    </header>
+
+
+    <section id="pre-play">
+      <form id="language-picker-form">
+        <%= label(:language, "Sprache der Übersetzung:") %>
+        &nbsp;
+        <%=
+          select_tag(
+            :language,
+            options_for_select(
+              Translator::TARGET_LANGUAGES.map { |code, description| [description, code] },
+            ),
+            id: "language-picker",
+          )
+        %>
+        <p>Übersetzungen von DeepL.com</p>
+      </form>
+    </section>
+
+    <%= @prepared_episode.notes_html.sub(%r{<p><br></p>\n\Z}, '').html_safe %>
+
+    <h2>Transkript</h2>
+
+    <% @prepared_episode.chapters.each do |chapter| %>
+      <div class="chapter">
+
+        <% if chapter.title.present? %>
+          <h3><%= chapter.title %></h3>
+        <% end %>
+
+        <% chapter.paragraphs.each do |paragraph| %>
+          <%= render 'paragraph_v2', paragraph: paragraph %>
+        <% end %>
+
+      </div><!-- /chapter -->
+    <% end %>
+
+    <div id="feedback">
+      <div class="ui compact message">
+        <p lang="de">Hallo, hier ist Levente, der Entwickler des Transcript Players. Ich würde gerne wissen, wie die neue Version für dich funktioniert hat.</p>
+        <p lang="en">Hello, this is Levente, the developer of the Transcript Player. I would like to know how the new version worked for you.</p>
+
+        <div class="button-container">
+          <a class="ui right labeled icon button" href="https://docs.google.com/forms/d/e/1FAIpQLSemlKJpVrhlIQA8M-Yc8WMBtxHISVQJYTq1zH8wZrm47l3p3A/viewform?usp=sf_link" target="_blank">
+            Feedback
+            <i class="right chevron icon"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
