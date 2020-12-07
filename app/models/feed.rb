@@ -1,15 +1,18 @@
 class Feed
   extend Memoist
 
-  def initialize(fetcher = default_fetcher)
-    @fetcher = fetcher
+  attr_reader :podcast
+
+  def initialize(podcast, fetcher = nil)
+    @podcast = podcast || raise(ArgumentError, 'podcast missing')
+    @fetcher = fetcher || default_fetcher
   end
 
   def default_fetcher
     if Rails.env.development? || Rails.env.test?
-      DevelopmentFetcher.new
+      DevelopmentFetcher.new(podcast)
     else
-      NetworkFetcher.new
+      NetworkFetcher.new(podcast)
     end
   end
 
@@ -23,7 +26,7 @@ class Feed
 
   memoize def episodes
     node.css('item').map do |episode_node|
-      Episode.new(@fetcher, episode_node, self)
+      Episode.new(@podcast, @fetcher, episode_node, self)
     end
   end
 

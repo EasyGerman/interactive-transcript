@@ -1,14 +1,16 @@
 class TranslationCache < ApplicationRecord
 
+  belongs_to :podcast
+
   # Add a record based on the original text if it doesn't exist yet
-  def self.add_original_nx(original)
-    find_or_create_by!(key: digest(original)) do |record|
+  def self.add_original_nx(podcast_id, original)
+    find_or_create_by!(podcast_id: podcast_id, key: digest(original)) do |record|
       record.original = original
     end
   end
 
-  def self.lookup(original)
-    find_by(key: digest(original))
+  def self.lookup(podcast_id, original)
+    find_by(podcast_id: podcast_id, key: digest(original))
   end
 
   def self.digest(text)
@@ -23,12 +25,12 @@ class TranslationCache < ApplicationRecord
     translations[lang]
   end
 
-  def self.with_key_cache(key, lang, &block)
-    find_by!(key: key).with_this_cache(lang, &block)
+  def self.with_key_cache(podcast_id, key, lang, &block)
+    find_by!(podcast_id: podcast_id, key: key).with_this_cache(lang, &block)
   end
 
-  def self.with_cache(original, lang, &block)
-    add_original_nx(original).with_this_cache(lang, &block)
+  def self.with_cache(podcast_id, original, lang, &block)
+    add_original_nx(podcast_id, original).with_this_cache(lang, &block)
   end
 
   def with_this_cache(lang)

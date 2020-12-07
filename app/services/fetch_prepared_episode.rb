@@ -1,14 +1,15 @@
 class FetchPreparedEpisode < Operation
   include AwsUtils
 
+  attribute :podcast, Types.Instance(::Podcast)
   attribute :access_key, Types::String
   attribute :force_processing, Types::Bool.default(false)
 
   def call
-    record = EpisodeRecord.find_by(access_key: access_key)
+    record = podcast.episode_records.find_by(access_key: access_key)
     if record.blank? || force_processing
       with_mutex do
-        record = EpisodeRecord.find_by(access_key: access_key)
+        record = podcast.episode_records.find_by(access_key: access_key)
         if record.blank? || force_processing
           record = process
         end
@@ -22,10 +23,10 @@ class FetchPreparedEpisode < Operation
   private
 
   def process
-    episode = Feed.new.episodes.find { |ep| ep.access_key == access_key }
+    episode = Feed.new(podcast).episodes.find { |ep| ep.access_key == access_key }
     return if episode.blank?
 
-    episode_record = EpisodeRecord.upsert!(access_key, episode.processed.as_json)
+    episode_record = podcast.episode_records.upsert!(access_key, episode.processed.as_json)
     episode.audio.chapters.each do |chapter|
       next if chapter.picture.blank?
       episode_record.vocab_slide_records.upsert!(chapter.id, chapter.picture.data)

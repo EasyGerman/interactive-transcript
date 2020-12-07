@@ -77,7 +77,7 @@ class Paragraph
   end
 
   memoize def translation_id
-    TranslationCache.add_original_nx(text).key
+    TranslationCache.add_original_nx(episode.podcast.id, text).key
   end
 
   Speaker = Struct.new(:name)

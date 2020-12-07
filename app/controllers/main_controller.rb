@@ -1,5 +1,5 @@
 class MainController < ApplicationController
   def show
-    redirect_to "https://www.easygerman.org/membership"
+    redirect_to current_podcast.membership_url || current_podcast.homepage_url
   end
 end

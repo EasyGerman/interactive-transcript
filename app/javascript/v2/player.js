@@ -7,6 +7,7 @@ import translation from './translation';
 import vocabHelper from './vocabHelper';
 import vocabHelperToggle from './vocabHelperToggle';
 import builtinPlayerToggle from './builtinPlayerToggle';
+import feedback from './feedback';
 
 $(document).ready(() => {
   const media = document.querySelector('audio');
@@ -31,6 +32,7 @@ $(document).ready(() => {
   vocabHelperToggle.init();
 
   builtinPlayerToggle.init();
+  feedback.init();
 
   function timeupdateNormalMode(e) {
     const eventTs = media.currentTime;

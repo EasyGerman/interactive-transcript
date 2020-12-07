@@ -50,16 +50,16 @@ module Translator
     data.fetch('translations').first.fetch('text')
   end
 
-  def translate_from_key(key, lang)
+  def translate_from_key(podcast_id, key, lang)
     lang = coerce_lang(lang)
-    TranslationCache.with_key_cache(key, lang) do |original, lang|
+    TranslationCache.with_key_cache(podcast_id, key, lang) do |original, lang|
       fetch_translation(original, lang)
     end
   end
 
   def translate(original, lang)
     lang = coerce_lang(lang)
-    TranslationCache.with_cache(original, lang) do |original, lang|
+    TranslationCache.with_cache(podcast_id, original, lang) do |original, lang|
       fetch_translation(original, lang)
     end
   end

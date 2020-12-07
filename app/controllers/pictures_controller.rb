@@ -40,7 +40,7 @@ class PicturesController < ApplicationController
     VocabSlide.new(slide, access_key).upload # TODO: episode.vocab_slide (ability to instantiate Episode without parsing the feed)
 
     # 4. Redirect
-    redirect_to "https://easygermanpodcastplayer-public.s3.eu-central-1.amazonaws.com/vocab/#{access_key}/#{chapter_key}.jpg"
+    redirect_to current_podcast.vocab_helper_image_access_url(access_key, chapter_key)
   end
 
 end

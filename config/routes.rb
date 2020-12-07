@@ -21,6 +21,7 @@ Rails.application.routes.draw do
   end
 
   post :translate, to: 'translate#translate'
+  post :feedback, to: 'feedback#feedback'
   root to: 'main#show'
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

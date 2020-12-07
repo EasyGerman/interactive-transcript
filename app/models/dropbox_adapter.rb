@@ -1,27 +1,29 @@
 class DropboxAdapter
-  ACCESS_KEY  = ENV['DROPBOX_ACCESS_KEY'].freeze
-  SHARED_LINK = ENV['DROPBOX_SHARED_LINK'].freeze
+  def initialize(access_key, shared_link)
+    @access_key = access_key
+    @shared_link = shared_link
+  end
 
   def transcript_for(episode_number)
-    if [ACCESS_KEY, SHARED_LINK].any?(&:blank?)
-      Rails.logger.warn("DROPBOX_ACCESS_KEY missing") if ACCESS_KEY.blank?
-      Rails.logger.warn("DROPBOX_SHARED_LINK missing") if SHARED_LINK.blank?
+    if [@access_key, @shared_link].any?(&:blank?)
+      Rails.logger.warn("@access_key missing") if @access_key.blank?
+      Rails.logger.warn("@shared_link missing") if @shared_link.blank?
       return
     end
     get_shared_link_file("/#{episode_number}.html")
   end
 
   def get_shared_link_file(path)
-    CachedNetwork.with_file_cache("Drobpox:#{SHARED_LINK}:#{path}") do
+    CachedNetwork.with_file_cache("Drobpox:#{@shared_link}:#{path}") do
       response = Faraday.post("https://content.dropboxapi.com/2/sharing/get_shared_link_file") do |req|
-        req.headers["Authorization"] = "Bearer #{ACCESS_KEY}"
+        req.headers["Authorization"] = "Bearer #{@access_key}"
         req.headers["Content-Type"] = "application/octet-stream"
-        req.headers["Dropbox-API-Arg"] = JSON.generate(url: SHARED_LINK, path: path)
+        req.headers["Dropbox-API-Arg"] = JSON.generate(url: @shared_link, path: path)
       end
       case response.status
       when 200 then response.body
       when 404, 409 then nil
-      else raise "Dropbox returned #{response.status} #{response.body} for #{SHARED_LINK.inspect} #{path.inspect}"
+      else raise "Dropbox returned #{response.status} #{response.body} for #{@shared_link.inspect} #{path.inspect}"
       end
     end
   end

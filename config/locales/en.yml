@@ -1,33 +1,40 @@
-# Files in the config/locales directory are used for internationalization
-# and are automatically loaded by Rails. If you want to use locales other
-# than English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t 'hello'
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t('hello') %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# The following keys must be escaped otherwise they will not be retrieved by
-# the default I18n backend:
-#
-# true, false, on, off, yes, no
-#
-# Instead, surround them with single quotes.
-#
-# en:
-#   'true': 'foo'
-#
-# To learn more, please read the Rails Internationalization guide
-# available at https://guides.rubyonrails.org/i18n.html.
-
 en:
-  hello: "Hello world"
+  thanks: "Thanks!"
+  settings:
+    speed_options:
+      x025: "Very slow"
+      x050: "Slow"
+      x075: "Slower"
+      x100: "Normal"
+      x125: "Faster"
+      x150: "Fast"
+      x200: "Very fast"
+    standard_player: "Standard Player"
+
+  translation:
+    translate_button: "Translate"
+    translation_language_label: "Translation language:"
+    deepl_notice: "Translations by DeepL.com"
+    loading_status: "Loading translation"
+    failed_status: "Translation failed"
+
+  transcript:
+    transcript_heading: "Transcript"
+
+  errors:
+    audio_element_not_supported: "Your browser does not support the <audio> element."
+    episode_not_found:
+      title: "Error 404"
+      description: "There is no episode at this location."
+      info_new: "If this episode has just been published, please try reloading this page in a few minutes."
+      info_all_episodes: "For all episodes available to you, head to Easy German's Patreon page."
+      link: "Easy German's Patreon page"
+
+  beta:
+    new_version_info: "There is a new version of Transcript Player available for beta testing! Changes include a revamped user interface with a bigger play button, improved scrolling and adjustable playback speed."
+    new_version_button: "New version"
+    welcome: "Welcome to the Version!"
+    info: "Thank you for trying out the new version. If you experience any problem, please leave feedback. You can still go back to the old version."
+    back_to_old_version_button: "Back to the old version"
+    feedback_button: "Feedback"
+    feedback_request: "How do you like the new version of the Transcript Player?"

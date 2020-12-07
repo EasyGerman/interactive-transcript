@@ -1,0 +1,37 @@
+hu:
+  settings:
+    speed_options:
+      x025: "Extra-lassú"
+      x050: "Lassú"
+      x075: "Lassabb"
+      x100: "Normál"
+      x125: "Gyorsabb"
+      x150: "Gyors"
+      x200: "Extra-gyors"
+    standard_player: "Beépített lejátszó"
+
+  translation:
+    translate_button: "Fordít"
+    translation_language_label: "Fordítás nyelve:"
+    deepl_notice: "Fordítások DeepL.com-en keresztül"
+    loading_status: "Fordítás folyamatban"
+    failed_status: "Fordítás sikertelen"
+
+  transcript:
+    transcript_heading: "Átirat"
+
+  errors:
+    audio_element_not_supported: "A böngésződ nem kezeli az <audio> elemet."
+    episode_not_found:
+      title: "Hiba 404"
+      description: "Ezen a helyen nem található epizód."
+      info_new: "Ha egy újonnan megjelent epizódot szeretnél elérni, kérlek próbáld újra pár percen belül."
+      info_all_episodes: "A számodra elérhető epizódokat az Easy German Patreon-oldalán találod."
+      link: "Easy German Patreon-oldalán"
+
+  beta:
+    welcome: "Welcome to the Version!"
+    info: "Thank you for trying out the new version. If you experience any problem, please leave feedback. You can still go back to the old version."
+    back_to_old_version_button: "Back to the old version"
+    feedback_button: "Feedback"
+    feedback_request: "Hello, this is Levente, the developer of the Transcript Player. I would like to know how the new version worked for you."

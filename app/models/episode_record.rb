@@ -1,5 +1,6 @@
 class EpisodeRecord < ApplicationRecord
 
+  belongs_to :podcast
   has_many :vocab_slide_records
 
   def self.upsert!(access_key, data)

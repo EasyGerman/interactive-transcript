@@ -39,8 +39,10 @@ module Player
     # Don't generate system test files.
     config.generators.system_tests = nil
 
-    ENV.fetch('HOSTS', '').split(',').each do |host|
-      config.hosts << host
-    end
+    # Replaced by a check in ApplicationController, so that we can use the database to fetch supported hosts
+    config.hosts << /.*/
+
+    config.i18n.default_locale = :en
+    I18n.available_locales = [:en, :de]
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_14_120256) do
+ActiveRecord::Schema.define(version: 2020_12_07_170437) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,7 +20,27 @@ ActiveRecord::Schema.define(version: 2020_11_14_120256) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.json "data"
-    t.index ["access_key"], name: "index_episode_records_on_access_key", unique: true
+    t.bigint "podcast_id", null: false
+    t.index ["podcast_id", "access_key"], name: "index_episode_records_on_podcast_id_and_access_key", unique: true
+    t.index ["podcast_id"], name: "index_episode_records_on_podcast_id"
+  end
+
+  create_table "feedbacks", force: :cascade do |t|
+    t.boolean "outcome", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "podcasts", force: :cascade do |t|
+    t.string "code", null: false
+    t.string "name", null: false
+    t.string "lang", null: false
+    t.string "host", null: false
+    t.string "feed_url", null: false
+    t.json "settings", default: {}, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["code"], name: "index_podcasts_on_code", unique: true
   end
 
   create_table "translation_caches", force: :cascade do |t|
@@ -29,7 +49,9 @@ ActiveRecord::Schema.define(version: 2020_11_14_120256) do
     t.json "translations", default: {}, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["key"], name: "index_translation_caches_on_key"
+    t.bigint "podcast_id", default: 1, null: false
+    t.index ["podcast_id", "key"], name: "index_translation_caches_on_podcast_id_and_key", unique: true
+    t.index ["podcast_id"], name: "index_translation_caches_on_podcast_id"
   end
 
   create_table "vocab_slide_records", force: :cascade do |t|
@@ -40,5 +62,7 @@ ActiveRecord::Schema.define(version: 2020_11_14_120256) do
     t.index ["episode_record_id", "chapter_key"], name: "index_vocab_slide_records_on_episode_record_id_and_chapter_key", unique: true
   end
 
+  add_foreign_key "episode_records", "podcasts"
+  add_foreign_key "translation_caches", "podcasts"
   add_foreign_key "vocab_slide_records", "episode_records"
 end

@@ -46,6 +46,7 @@ $(document).ready(() => {
       if (chapter && chapter.has_picture) {
         $('#vocab-helper-img').attr('src', ''); // clear the image to avoid transition artifacts when we change 'is-cover'
         $('#vocab-helper-img').off('error');
+        // TODO: customize for podcasts
         const primaryURL = `https://easygermanpodcastplayer-public.s3.eu-central-1.amazonaws.com/vocab/${accessKey}/${chapter.id}.jpg`;
         const fallbackURL = `/episodes/${accessKey}/chapters/${chapter.id}/picture.jpg`
         $('#vocab-helper-img').attr('src', primaryURL);

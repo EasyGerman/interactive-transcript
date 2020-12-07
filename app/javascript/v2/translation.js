@@ -1,4 +1,5 @@
 import languagePicker from './languagePicker';
+import t from './translations';
 
 const getOrCreateElement = ($paragraph) => {
   // Find element
@@ -24,7 +25,7 @@ export default {
 
       $button.prop('disabled', true)
       $button.addClass('loading');
-      $button.text('Übersetzung wird geladen...');
+      $button.text(t.translation.loading_status);
 
       $.get({
         url: "/translate.json",
@@ -40,7 +41,7 @@ export default {
       }).catch(function(err) {
         let jsonr = err.responseJSON;
         console.error("Error while fetching translation:", jsonr)
-        let errorMessage = (jsonr && jsonr.error) ? jsonr.error.message : "Übersetzung fehlgeschlagen"
+        let errorMessage = (jsonr && jsonr.error) ? jsonr.error.message : t.translation.error_status
         $button.removeClass('loading').addClass('error');
         $button.text(errorMessage);
       });

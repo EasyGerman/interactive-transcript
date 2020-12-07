@@ -4,7 +4,7 @@ const languagePicker = {
 
 $(document).ready(() => {
   const $picker = $('#language-picker')
-  languagePicker.lang = localStorage.getItem('language') || 'EN';
+  languagePicker.lang = localStorage.getItem('language') || 'EN'; // TODO: localize
 
   $picker.val(languagePicker.lang);
 

@@ -8,16 +8,16 @@
       <div class="header">
         Willkommen zur neuen Version!
       </div>
-      <p lang="de">Vielen Dank, dass du die neue Version ausprobiert hast. Wenn du ein Problem findest, hinterlasse bitte Feedback. Du kannst immer noch auf die alte Version zurückgreifen.</p>
-      <p lang="en">Thank you for trying out the new version. If you experience any problem, please leave feedback. You can still go back to the old version.</p>
+
+      <%= bilingual_paragraphs 'beta.info' %>
 
       <div class="button-container">
         <a class="ui labeled icon button" href="<%= episode_path(@access_key) %>">
           <i class="left chevron icon"></i>
-          Zurück zur alten Version
+          <%= t('beta.back_to_old_version_button') %>
         </a>
         <a class="ui right labeled icon button" href="https://docs.google.com/forms/d/e/1FAIpQLSemlKJpVrhlIQA8M-Yc8WMBtxHISVQJYTq1zH8wZrm47l3p3A/viewform?usp=sf_link" target="_blank">
-          Feedback
+          <%= t('beta.feedback_button') %>
           <i class="right chevron icon"></i>
         </a>
       </div>
@@ -25,14 +25,15 @@
 
     <header>
       <h1><%= @title %></h1>
-      <p>The Easy German Podcast</p>
-      <a target="_blank" href="http://www.easygerman.fm">www.easygerman.fm</a>
+      <p><%= @podcast.name %></p>
+      <% if @podcast.homepage_url.present? %>
+        <a target="_blank" href="<%= @podcast.homepage_url %>"><%= @podcast.homepage_url_display %></a>
+      <% end %>
     </header>
-
 
     <section id="pre-play">
       <form id="language-picker-form">
-        <%= label(:language, "Sprache der Übersetzung:") %>
+        <%= label(:language, "#{t('translation.translation_language_label')}") %>
         &nbsp;
         <%=
           select_tag(
@@ -43,7 +44,7 @@
             id: "language-picker",
           )
         %>
-        <p>Übersetzungen von DeepL.com</p>
+        <p><%= t('translation.deepl_notice') %></p>
       </form>
     </section>
 
@@ -67,12 +68,16 @@
 
     <div id="feedback">
       <div class="ui compact message">
-        <p lang="de">Hallo, hier ist Levente, der Entwickler des Transcript Players. Ich würde gerne wissen, wie die neue Version für dich funktioniert hat.</p>
-        <p lang="en">Hello, this is Levente, the developer of the Transcript Player. I would like to know how the new version worked for you.</p>
+        <%= bilingual_paragraphs 'beta.feedback_request' %>
+
+        <div id="feedback-thumbs-container" class="button-container">
+          <button id="feedback-good" class="ui huge icon button"><i class="thumbs up icon"></i></button>
+          <button id="feedback-bad" class="ui huge icon button"><i class="thumbs down icon"></i></button>
+        </div>
 
         <div class="button-container">
           <a class="ui right labeled icon button" href="https://docs.google.com/forms/d/e/1FAIpQLSemlKJpVrhlIQA8M-Yc8WMBtxHISVQJYTq1zH8wZrm47l3p3A/viewform?usp=sf_link" target="_blank">
-            Feedback
+            <%= t('beta.feedback_button') %>
             <i class="right chevron icon"></i>
           </a>
         </div>

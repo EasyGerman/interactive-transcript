@@ -1,0 +1,40 @@
+de:
+  thanks: "Danke!"
+  settings:
+    speed_options:
+      x025: "Superlangsam"
+      x050: "Langsam"
+      x075: "Langsamer"
+      x100: "Normal"
+      x125: "Schneller"
+      x150: "Schnell"
+      x200: "Superschnell"
+    standard_player: "Standard Player"
+
+  translation:
+    translate_button: "Übersetzen"
+    translation_language_label: "Sprache der Übersetzung:"
+    deepl_notice: "Übersetzungen von DeepL.com"
+    loading_status: "Übersetzung wird geladen"
+    failed_status: "Übersetzung fehlgeschlagen"
+
+  transcript:
+    transcript_heading: "Transkript"
+
+  errors:
+    audio_element_not_supported: "Your browser does not support the <audio> element."
+    episode_not_found:
+      title: "Fehler 404"
+      description: "An diesem Ort gibt es keine Episode."
+      info_new: "Wenn diese Episode gerade erst veröffentlicht wurde, versuche bitte, diese Seite in ein paar Minuten neu zu laden."
+      info_all_episodes: "Alle Episoden, die dir zur Verfügung stehen, findest du auf der Patreon-Seite von Easy German."
+      link: "Patreon-Seite von Easy German"
+
+  beta:
+    new_version_info: "Es gibt eine neue Version vom Transcript Player, die zum Betatest zur Verfügung steht! Zu den Änderungen gehören eine überarbeitete Benutzeroberfläche mit einer größeren Abspieltaste, verbessertem Scrolling und einstellbarer Wiedergabegeschwindigkeit."
+    new_version_button: "Neue Version"
+    welcome: "Willkommen zur neuen Version!"
+    info: "Vielen Dank, dass du die neue Version ausprobiert hast. Wenn du ein Problem findest, hinterlasse bitte Feedback. Du kannst immer noch auf die alte Version zurückgreifen."
+    back_to_old_version_button: "Zurück zur alten Version"
+    feedback_button: "Feedback"
+    feedback_request: "Wie gefällt dir die neue Version des Transcript Players?"

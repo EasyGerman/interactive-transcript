@@ -10,9 +10,10 @@ class Episode
   include ErrorHandling
   include AwsUtils
 
-  attr_reader :node, :feed
+  attr_reader :node, :feed, :podcast
 
-  def initialize(fetcher, node, feed)
+  def initialize(podcast, fetcher, node, feed)
+    @podcast = podcast
     @fetcher = fetcher
     @node = node
     @feed = feed

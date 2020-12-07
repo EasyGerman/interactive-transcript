@@ -7,6 +7,12 @@
   // to prevent the content from jumping around.
   document.write('<style>#player-page { visibility: hidden }</style>')
   document.write('<div id="loading" style=""></div>');
+  window.translations = <%=
+    JSON.generate(collect_translations(
+      translation: %i[loading_status failed_status],
+      thanks: [],
+    )).html_safe
+  %>
 </script>
 
 <div id="player-page" class="version2">
@@ -20,13 +26,9 @@
         <!-- Settings --><div id="settings-button" class="ui icon top left pointing huge white dropdown button">
           <i class="cog alternate icon"></i>
           <div class="menu">
-            <div data-rate="0.25"  class="speed item">Superlangsam (0.25x)</div>
-            <div data-rate="0.5"   class="speed item">Langsam (0.5x)</div>
-            <div data-rate="0.75"  class="speed item">Langsamer (0.75x)</div>
-            <div data-rate="1"     class="speed item">Normal (1x)</div>
-            <div data-rate="1.25"  class="speed item">Schneller (1.25x)</div>
-            <div data-rate="1.5"   class="speed item">Schnell (1.5x)</div>
-            <div data-rate="2"     class="speed item">Superschnell (2x)</div>
+            <% [0.25, 0.5, 0.75, 1, 1.25, 1.5, 2].each do |rate| %>
+              <div data-rate="<%= rate %>" class="speed item"><%= t("settings.speed_options.x#{rate.to_s.sub('.', '').ljust(3, '0')}") %> (<%= rate %>x)</div>
+            <% end %>
             <div class="divider"></div>
             <div id="builtin-player-button" class="item">Standard Player</div>
           </div>
@@ -44,7 +46,7 @@
     <div id="builtin-player" style="display: none">
       <figure>
         <audio controls src="<%= @prepared_episode.audio_url %>">
-          Your browser does not support the <code>audio</code> element.
+          <%= t('errors.audio_element_not_supported') %>
         </audio>
       </figure>
     </div>

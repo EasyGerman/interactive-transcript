@@ -10,14 +10,14 @@ class Feed
     end
 
     def access_key
-      if html =~ %r{egp(\w+)_transkript(_(\w{12,}))?.html}
+      if html =~ %r{egp(\w+)_transkript(_(\w{12,}))?.html} # TODO: localize
         code, _, secret = $1, $2, $3
         secret || code
       end
     end
 
     def vocab_url
-      if html =~ %r{https://www.easygerman.org/s/(\w+)_vokabeln(_(\w+))?.(txt|rtf)}
+      if html =~ %r{https://www.easygerman.org/s/(\w+)_vokabeln(_(\w+))?.(txt|rtf)} # TODO: localize
         Regexp.last_match[0]
       end
     end
@@ -27,7 +27,7 @@ class Feed
     end
 
     def transcript_header?(node)
-      node.name == 'h3' && node.text.strip == 'Transkript'
+      node.name == 'h3' && node.text.strip == 'Transkript' # TODO: localize
     end
 
     memoize def transcript_start_index

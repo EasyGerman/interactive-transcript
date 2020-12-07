@@ -9,6 +9,7 @@
     <%= javascript_pack_tag 'application' %>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
+    <% if not @public %><meta name="robots" content="noindex"><% end %>
   </head>
 
   <body>

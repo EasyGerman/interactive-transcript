@@ -1,23 +1,9 @@
 <% @title = "404 Not Found" %>
 <div class="error-page">
-  <h1>Fehler 404</h1>
-
-  <p>An diesem Ort gibt es keine Episode.</p>
-
-  <p>Wenn diese Episode gerade erst veröffentlicht wurde, versuche bitte, diese Seite in ein paar Minuten neu zu laden.</p>
-
-  <p>
-    Alle Episoden, die dir zur Verfügung stehen, findest du auf der
-    <a href="https://www.patreon.com/easygerman/posts?filters[media_types]=audio">Patreon-Seite von Easy German</a>.
-  </p>
-
-  <hr/>
-
-  <h1>Error 404</h1>
-
-  <p>There is no episode at this location.</p>
-
-  <p>If this episode has just been published, please try reloading this page in a few minutes.</p>
-
-  <p>For all episodes available to you, head to <a href="https://www.patreon.com/easygerman/posts?filters[media_types]=audio">Easy German's Patreon page</a></p>
+  <%= bilingual do |locale| %>
+    <h1><%= t('errors.episode_not_found.title') %></h1>
+    <p><%= t('errors.episode_not_found.description') %></p>
+    <p><%= t('errors.episode_not_found.info_new') %></p>
+    <p><%= linkify_substring t('errors.episode_not_found.info_all_episodes'), t('errors.episode_not_found.link'), 'https://www.patreon.com/easygerman/posts?filters[media_types]=audio' %></p>
+  <% end %>
 </div>

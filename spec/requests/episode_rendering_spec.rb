@@ -1,6 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "Episode rendering", type: :request, vcr: true do
+  let!(:podcast) { create_podcast }
 
   it "renders episode" do
     get "/episodes/1"

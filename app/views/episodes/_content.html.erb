@@ -10,8 +10,12 @@
       <a target="_blank" href="http://www.easygerman.fm">www.easygerman.fm</a>
     </header>
 
-    <div style="margin: 1em; text-align: center; font-size: 80%">
-      <%= link_to "Neue Version", v2_episode_path(@access_key) %>
+    <div id="new-version">
+      🎉
+      <div class="info">
+        <%= bilingual_paragraphs('beta.new_version_info') %>
+      </div>
+      <%= link_to t('beta.new_version_button') + " ▸", v2_episode_path(@access_key) %>
     </div>
 
     <section id="pre-play">

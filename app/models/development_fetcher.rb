@@ -1,13 +1,14 @@
 class DevelopmentFetcher
 
-  def initialize
+  def initialize(podcast)
+    @podcast = podcast || raise(ArgumentError, 'podcast missing')
     @fs_fetcher = FsFetcher.new
     @network_fetcher = NetworkFetcher
   end
 
   def fetch_feed
     # with_local_cache(fs_fetcher.path_to_feed) do
-      NetworkFetcher.new.fetch_feed
+      NetworkFetcher.new.fetch_feed(@podcast)
     # end
   end
 

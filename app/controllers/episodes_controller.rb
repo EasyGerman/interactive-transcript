@@ -4,7 +4,10 @@ class EpisodesController < ApplicationController
   def show
     @access_key = params[:id].presence or raise "access key missing"
 
+    @podcast = current_podcast
+
     @prepared_episode = FetchPreparedEpisode.(
+      podcast: @podcast,
       access_key: @access_key,
       force_processing: (params[:reprocess] == '1'),
     )
@@ -15,6 +18,7 @@ class EpisodesController < ApplicationController
     end
 
     @title = @prepared_episode.title
+    @public = (@access_key =~ /^\d+$/)
   end
 
   def show_v2
