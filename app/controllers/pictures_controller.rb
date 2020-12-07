@@ -19,7 +19,7 @@ class PicturesController < ApplicationController
     if slide.blank?
       Rails.logger.info "Slide record not found"
 
-      episode = Feed.new.episodes.find { |ep| ep.access_key == access_key }
+      episode = Feed.new(current_podcast).episodes.find { |ep| ep.access_key == access_key }
       if episode.blank?
         Rails.logger.warn("Episode #{access_key} not found in feed")
         render 'not_found', status: 404
