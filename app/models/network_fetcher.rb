@@ -1,6 +1,12 @@
 class NetworkFetcher
 
-  def fetch_feed(podcast)
+  attr_reader :podcast
+
+  def initialize(podcast)
+    @podcast = podcast
+  end
+
+  def fetch_feed
     RedisMutex.with_lock("feed:#{podcast.code}", block: 30, sleep: 0.5, expire: 60) do
       Rails.cache.fetch("feed:#{podcast.code}", expires_in: 15.seconds) do
         require 'open-uri'

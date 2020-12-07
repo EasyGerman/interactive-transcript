@@ -7,9 +7,9 @@ class DevelopmentFetcher
   end
 
   def fetch_feed
-    # with_local_cache(fs_fetcher.path_to_feed) do
-      NetworkFetcher.new.fetch_feed(@podcast)
-    # end
+    with_local_cache(fs_fetcher.path_to_feed) do
+      NetworkFetcher.new(podcast).fetch_feed
+    end
   end
 
   def fetch_downloadable_transcript(episode)
