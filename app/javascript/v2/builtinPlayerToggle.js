@@ -1,10 +1,11 @@
 import settingStorage from './settingStorage';
 import layout from './layout';
 
-let $player, $button;
+let $player, $scrubber, $button;
 
 function init(params) {
-  $player = $('#builtin-player');
+  $player = $('#builtin-player'); // browser's UI for the <audio> element
+  $scrubber = $('#scrubber'); // our own implementation of the progress bar / scrubber
   $button = $('#builtin-player-button');
 
   $button.click(() => {
@@ -19,12 +20,14 @@ function init(params) {
 
 function enable() {
   $player.show();
+  $scrubber.hide();
   layout.resize();
   settingStorage.set('builtin-player', 'on');
 }
 
 function disable() {
   $player.hide();
+  $scrubber.show();
   layout.resize();
   settingStorage.set('builtin-player', 'off');
 }

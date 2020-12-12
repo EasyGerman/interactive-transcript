@@ -1,0 +1,34 @@
+@import colors
+
+#scrubber
+  display: flex
+  flex-direction: row
+  align-items: center
+  margin: 0 0.25cm
+
+  // A thicker bar containing the visible progressbar, to catch mouse events in a wider area for less exact clicking
+  #progress-bar-container
+    flex-grow: 1
+    margin-right: 10px
+    height: 1cm
+    display: flex
+    flex-direction: row
+
+  #progress-bar
+    flex-grow: 1
+    align-self: center
+    background: #ccc
+    .bar
+      background: $green
+      height: 6px
+      width: 0
+
+  #progress-bar, #progress-bar .bar
+    border-radius: 3px
+
+  #progress-times
+    font-size: 14px
+    color: #999
+
+    #progress-time
+      color: #000

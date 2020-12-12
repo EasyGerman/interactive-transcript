@@ -8,6 +8,7 @@ import vocabHelper from './vocabHelper';
 import vocabHelperToggle from './vocabHelperToggle';
 import builtinPlayerToggle from './builtinPlayerToggle';
 import feedback from './feedback';
+import progressBar from './progressBar';
 
 $(document).ready(() => {
   const media = document.querySelector('audio');
@@ -33,6 +34,7 @@ $(document).ready(() => {
 
   builtinPlayerToggle.init();
   feedback.init();
+  progressBar.init({ media });
 
   function timeupdateNormalMode(e) {
     const eventTs = media.currentTime;
