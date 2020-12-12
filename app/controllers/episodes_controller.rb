@@ -7,12 +7,12 @@ class EpisodesController < ApplicationController
 
   def show_v1
     prepare_data
-    render action: :show, layout: "application"
+    render action: :show, layout: "application" unless performed?
   end
 
   def show_v2
     prepare_data
-    render action: :show_v2, layout: "application2"
+    render action: :show_v2, layout: "application2" unless performed?
   end
 
   private
