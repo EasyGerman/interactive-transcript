@@ -39,7 +39,7 @@ function ontimeupdate(e) {
     }
 
     const nextChapter = chapters.find(({ id, start_time, end_time, has_picture }, index) => {
-      return start_time > activeChapter.start_time;
+      return start_time > activeChapter.start_time && has_picture;
     });
     if (nextChapter) {
       setImgSrc($(new Image()), nextChapter.id);
