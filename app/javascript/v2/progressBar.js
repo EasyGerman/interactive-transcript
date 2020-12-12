@@ -15,13 +15,25 @@ function secondsToStringTimestamp(x) {
 }
 
 const init = ({ media }) => {
-  const duration = Math.ceil(media.duration);
-  $('#total-time').text(secondsToStringTimestamp(duration));
+  let duration = null;
+  updateDuration();
+
+  function updateDuration() {
+    if (media.duration) {
+      duration = Math.ceil(media.duration);
+      $('#total-time').text(secondsToStringTimestamp(duration));
+    }
+  }
 
   function updateProgress() {
     const currentTime = Math.round(media.currentTime);
 
     $('#progress-time').text(secondsToStringTimestamp(currentTime));
+
+    if (duration === null) {
+      updateDuration();
+      if (duration === null) return;
+    }
 
     const ratio = currentTime / duration;
     const thickness = 6; // 6px .bar height set in CSS
@@ -31,6 +43,7 @@ const init = ({ media }) => {
     $('#progress-bar .bar').css('width', `${w/maxWidth * 100}%`);
   }
 
+  media.addEventListener('durationchange', updateDuration);
   media.addEventListener('timeupdate', updateProgress);
   updateProgress();
 
