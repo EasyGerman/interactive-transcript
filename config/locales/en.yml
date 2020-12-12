@@ -34,7 +34,7 @@ en:
     new_version_info: "There is a new version of Transcript Player available for beta testing! Changes include a revamped user interface with a bigger play button, improved scrolling and adjustable playback speed."
     new_version_button: "New version"
     welcome: "Welcome to the Version!"
-    info: "Thank you for trying out the new version. If you experience any problem, please leave feedback. You can still go back to the old version."
+    info: "Thank you for your amazing feedback. As requested by many of you, the progress bar is back. You can also switch to the original player component by clicking on the cog icon and choosing \"Standard Player\"."
     back_to_old_version_button: "Back to the old version"
     feedback_button: "Feedback"
     feedback_request: "How do you like the new version of the Transcript Player?"

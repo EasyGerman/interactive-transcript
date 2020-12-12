@@ -5,14 +5,10 @@
 >
   <div id="content-inner">
     <div class="ui message" id="top-message">
-      <div class="header">
-        Willkommen zur neuen Version!
-      </div>
-
       <%= bilingual_paragraphs 'beta.info' %>
 
       <div class="button-container">
-        <a class="ui labeled icon button" href="<%= episode_path(@access_key) %>">
+        <a class="ui labeled icon button" href="<%= episode_path(@access_key) + "/v1" %>">
           <i class="left chevron icon"></i>
           <%= t('beta.back_to_old_version_button') %>
         </a>

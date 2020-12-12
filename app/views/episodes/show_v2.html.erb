@@ -1,12 +1,14 @@
 <style>
   @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
-  #loading { width: 20px; height: 20px; border: solid 2px gray; border-right-color: transparent; border-radius: 50%; position: fixed; top: 100px; left: calc(50% - 10px); animation: spin 1s linear infinite }
+  #loading-container { margin-top: 100px; text-align: center }
+  #loading { display: inline-block; width: 20px; height: 20px; border: solid 2px gray; border-right-color: transparent; border-radius: 50%; animation: spin 1s linear infinite }
+  #loading-container p { margin: 2em }
 </style>
 <script>
   // If javascript is enabled, hide the content before everthing is loaded,
   // to prevent the content from jumping around.
   document.write('<style>#player-page { visibility: hidden }</style>')
-  document.write('<div id="loading" style=""></div>');
+  document.write('<div id="loading-container"><div id="loading"></div><p><a href="<%= episode_path(@access_key) %>/v1">Go to the old version</a></p></div>');
   window.translations = <%=
     JSON.generate(collect_translations(
       translation: %i[loading_status failed_status],

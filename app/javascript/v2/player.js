@@ -145,5 +145,6 @@ $(document).ready(() => {
   }
 
   document.getElementById('player-page').style.visibility = 'visible';
+  document.getElementById('loading').style.display = 'none';
 
 });

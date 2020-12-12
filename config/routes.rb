@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   resources :episodes, only: [:show] do
     member do
+      get :v1, action: :show_v1
       get :v2, action: :show_v2
       get :dev_compare
     end
