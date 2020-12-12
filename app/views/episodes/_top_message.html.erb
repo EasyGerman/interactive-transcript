@@ -1,0 +1,16 @@
+<div class="ui message" id="top-message">
+  <p>
+    <a href="#" id="info-modal-opener">Transcript Player Update - Samstag, 12. Dezember 2020</a>
+  </p>
+
+  <div class="button-container">
+    <a class="ui labeled icon button" href="<%= episode_path(@access_key) + "/v1" %>">
+      <i class="left chevron icon"></i>
+      <%= t('beta.back_to_old_version_button') %>
+    </a>
+    <a class="ui right labeled icon button" href="https://docs.google.com/forms/d/e/1FAIpQLSemlKJpVrhlIQA8M-Yc8WMBtxHISVQJYTq1zH8wZrm47l3p3A/viewform?usp=sf_link" target="_blank">
+      <%= t('beta.feedback_button') %>
+      <i class="right chevron icon"></i>
+    </a>
+  </div>
+</div>

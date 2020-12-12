@@ -1,0 +1,28 @@
+#info-modal
+  position: fixed
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  background: #FFF
+  z-index: 5
+  display: flex
+  flex-direction: column
+
+  > .button-container
+    text-align: left
+    width: 100%
+
+  h2
+    margin-top: 2em
+    margin-bottom: 2em
+
+  > *
+    max-width: 900px
+    margin-left: auto
+    margin-right: auto
+
+  .content
+    flex-grow: 1
+    padding: 1em
+    overflow: auto

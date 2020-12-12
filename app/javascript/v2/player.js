@@ -9,9 +9,11 @@ import vocabHelperToggle from './vocabHelperToggle';
 import builtinPlayerToggle from './builtinPlayerToggle';
 import feedback from './feedback';
 import progressBar from './progressBar';
+import _ from './infoModal';
 
 $(document).ready(() => {
   const media = document.querySelector('audio');
+  window.dispatchEvent(new CustomEvent('initialize', { detail: { media } }));
 
   const player = {
     pause: () => media.pause(),

@@ -38,3 +38,6 @@ en:
     back_to_old_version_button: "Back to the old version"
     feedback_button: "Feedback"
     feedback_request: "How do you like the new version of the Transcript Player?"
+
+  buttons:
+    back_to_podcast: "Back to the podcast"
