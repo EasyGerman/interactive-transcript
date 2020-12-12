@@ -2,16 +2,22 @@ class EpisodesController < ApplicationController
   layout "application2", :only => [ :show_v2 ]
 
   def show
-    show_v2
+    case cookies[:version]&.to_i
+    when 1 then show_v1
+    when 2 then show_v2
+    else show_v2
+    end
   end
 
   def show_v1
     prepare_data
+    cookies[:version] = 1
     render action: :show, layout: "application" unless performed?
   end
 
   def show_v2
     prepare_data
+    cookies[:version] = 2
     render action: :show_v2, layout: "application2" unless performed?
   end
 
