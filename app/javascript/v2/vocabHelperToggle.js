@@ -11,7 +11,7 @@ function init() {
     $button.blur();
   });
 
-  if (settingStorage.get('vocab-helper') == 'on') {
+  if (settingStorage.get('vocab-helper') !== 'off') {
     enable();
   }
 }
