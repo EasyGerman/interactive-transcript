@@ -1,3 +1,5 @@
+import settingStorage from './settingStorage';
+
 function init() {
   window.addEventListener("resize", resize);
   window.addEventListener("vocabToggle", resize);
@@ -7,12 +9,19 @@ function init() {
 const vocabDefaultSize = 400;
 const vocabHeightRatio = 0.85; // the ratio of the height compared to the width if we cut off the logo from the bottom
 const contentMaxWidth = 900;
+let fontSizeSetting = settingStorage.getInteger('font-size');
 
 function setFontSize() {
   // Set font size
   const referenceSize = Math.min(window.innerWidth, window.innerHeight);
-  window.fontSize = window.fontSize = (referenceSize >= 400 ? 16 : (referenceSize >= 360 ? 15 : (referenceSize >= 300 ? 14 : 13)))
+  window.fontSize = fontSizeSetting || (referenceSize >= 400 ? 16 : (referenceSize >= 360 ? 15 : (referenceSize >= 300 ? 14 : 13)))
   document.getElementsByTagName('body')[0].style.fontSize = `${Math.round(window.fontSize)}px`;
+}
+
+export function changeFontSizeSettingBy(delta) {
+  fontSizeSetting = (fontSizeSetting || window.fontSize) + delta;
+  settingStorage.set('font-size', fontSizeSetting)
+  resize();
 }
 
 function resize() {
@@ -110,4 +119,5 @@ const calculatePlayerControlButtonSize = (width) => {
 export default {
   init: init,
   resize: resize,
+  changeFontSizeSettingBy: changeFontSizeSettingBy,
 }

@@ -9,6 +9,7 @@ hu:
       x150: "Gyors"
       x200: "Extra-gyors"
     standard_player: "Beépített lejátszó"
+    font_size: "Betűméret"
 
   translation:
     translate_button: "Fordít"

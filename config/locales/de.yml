@@ -10,6 +10,7 @@ de:
       x150: "Schnell"
       x200: "Superschnell"
     standard_player: "Standard Player"
+    font_size: "Textgröße"
 
   translation:
     translate_button: "Übersetzen"

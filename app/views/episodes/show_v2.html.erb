@@ -30,6 +30,8 @@
         <!-- Settings --><div id="settings-button" class="ui icon top left pointing huge white dropdown button">
           <i class="cog alternate icon"></i>
           <div class="menu">
+            <div id="font-settings-opener" class="item"><%= t("settings.font_size") %>…</div>
+            <div class="divider"></div>
             <% [0.25, 0.5, 0.75, 1, 1.25, 1.5, 2].each do |rate| %>
               <div data-rate="<%= rate %>" class="speed item"><%= t("settings.speed_options.x#{rate.to_s.sub('.', '').ljust(3, '0')}") %> (<%= rate %>x)</div>
             <% end %>

@@ -10,6 +10,7 @@ en:
       x150: "Fast"
       x200: "Very fast"
     standard_player: "Standard Player"
+    font_size: "Text size"
 
   translation:
     translate_button: "Translate"

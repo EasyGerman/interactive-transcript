@@ -9,7 +9,8 @@ import vocabHelperToggle from './vocabHelperToggle';
 import builtinPlayerToggle from './builtinPlayerToggle';
 import feedback from './feedback';
 import progressBar from './progressBar';
-import _ from './infoModal';
+import './infoModal';
+import './fontSettingsModal';
 
 $(document).ready(() => {
   checkBrowserSuitability().then(initializeApplication);
