@@ -12,6 +12,19 @@ import progressBar from './progressBar';
 import _ from './infoModal';
 
 $(document).ready(() => {
+  checkBrowserSuitability().then(initializeApplication);
+});
+
+function checkBrowserSuitability(callback) {
+  if (document.getElementById('content').scrollTo) {
+    return Promise.resolve();
+  }
+  else {
+    $('#loading-container').text("This browser does not support scrolling. Please use a recent version of Chrome or Firefox.");
+  }
+}
+
+function initializeApplication() {
   const media = document.querySelector('audio');
   window.dispatchEvent(new CustomEvent('initialize', { detail: { media } }));
 
@@ -149,4 +162,4 @@ $(document).ready(() => {
   document.getElementById('player-page').style.visibility = 'visible';
   document.getElementById('loading').style.display = 'none';
 
-});
+};
