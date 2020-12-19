@@ -6,7 +6,7 @@ const playElement = $(`
 
 export default {
   init: () => {
-    $('.paragraph-header').prepend(playElement);
+    $('.paragraph').prepend(playElement);
     $('.ui.dropdown').dropdown();
   }
 }

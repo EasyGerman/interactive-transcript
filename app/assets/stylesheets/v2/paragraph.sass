@@ -3,14 +3,23 @@
 #player-page
   #content
     .paragraph
-      display: flex
-      flex-direction: column
-      align-items: flex-start
+      display: grid
+      grid-template-columns: [start sidebar-start] 30px [sidebar-end] 2px [main-start] auto [main-end end]
+      grid-template-rows: [start header-start] auto [header-end main-start] auto [main-end footer-start] auto [end]
+
       margin-top: .5em 0 .5em 0
+
+      .playParagraphButton
+        grid-column: sidebar-start / sidebar-end
+        grid-row: header-start / header-end
+
 
       .paragraph-header
         display: flex
         align-items: center
+
+        grid-column: main-start / main-end
+        grid-row: header-start / header-end
 
         > *
           margin-right: 4px
@@ -29,6 +38,8 @@
             display: inline
 
       .paragraph-main
+        grid-column: main-start / main-end
+        grid-row: main-start / main-end
         display: flex
         flex-direction: row
         align-items: flex-start
@@ -44,6 +55,9 @@
             flex-grow: 0
 
       .paragraph-footer
+        grid-column: sidebar-end / end
+        grid-row: footer-start / end
+
         margin: 0 0 .5rem 0
         .translateParagraphButton
           display: inline-block
@@ -58,6 +72,3 @@
             opacity: 0.7
           &.error
             color: $errorColor
-
-      .paragraph-main, .paragraph-footer
-        padding-left: 32px
