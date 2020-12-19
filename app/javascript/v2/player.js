@@ -39,6 +39,7 @@ function initializeApplication() {
       media.play();
     },
     getCurrentSecond: () => Math.floor(media.currentTime),
+    get currentTime() { return media.currentTime },
   }
 
   window.player = player;

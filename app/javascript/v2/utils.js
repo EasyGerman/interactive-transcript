@@ -19,3 +19,17 @@ export function secondsToStringTimestamp(x) {
 
   return `${hours}:${minutes}:${seconds}`
 }
+
+export function readJSONFromStorage(key, defaultValue = {}) {
+  let item = window.localStorage.getItem(key);
+  if (!item) return defaultValue;
+  try {
+    return JSON.parse(item);
+  } catch (SyntaxError) {
+    return defaultValue;
+  }
+}
+
+export function writeJSONToStorage(key, value) {
+  window.localStorage.setItem(key, JSON.stringify(value));
+}
