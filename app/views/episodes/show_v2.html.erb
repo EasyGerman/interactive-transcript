@@ -22,48 +22,6 @@
 <div id="player-page" class="version2">
   <div id="vocab-helper"><img id="vocab-helper-img" class="is-cover" src="<%= @prepared_episode.cover_url %>" /></div>
 
-  <%= render 'content_v2' %>
-
-  <div id="player-controls">
-    <div id="main-buttons">
-      <div class="side-buttons">
-        <!-- Settings --><div id="settings-button" class="ui icon top left pointing huge white dropdown button">
-          <i class="cog alternate icon"></i>
-          <div class="menu">
-            <div id="font-settings-opener" class="item"><%= t("settings.font_size") %>…</div>
-            <div class="divider"></div>
-            <% [0.25, 0.5, 0.75, 1, 1.25, 1.5, 2].each do |rate| %>
-              <div data-rate="<%= rate %>" class="speed item"><%= t("settings.speed_options.x#{rate.to_s.sub('.', '').ljust(3, '0')}") %> (<%= rate %>x)</div>
-            <% end %>
-            <div class="divider"></div>
-            <div id="builtin-player-button" class="item">Standard Player</div>
-          </div>
-        </div>
-        <!-- Back --><div id="jump-backward-button" class="ui icon huge white button"><i class="undo icon"></i></div>
-      </div>
-      <div class="central-buttons">
-        <div id="play-button" class="ui icon massive grey button"><i class="play icon"></i></div>
-      </div>
-      <div class="side-buttons">
-        <!-- Forward --><div id="jump-forward-button" class="ui icon huge white button"><i class="redo icon"></i></div>
-        <!-- Vocab helper --><div id="vocab-button" class="ui icon huge white button"><i class="align justify icon"></i></div>
-      </div>
-    </div>
-    <div id="scrubber">
-      <div id="progress-bar-container">
-        <div id="progress-bar">
-          <div class="bar"></div>
-        </div>
-      </div>
-      <div id="progress-times"><span id="progress-time">0:00:00</span> / <span id="total-time">0:00:00</span></div>
-    </div>
-    <div id="builtin-player" style="display: none">
-      <figure>
-        <audio controls src="<%= @prepared_episode.audio_url %>">
-          <%= t('errors.audio_element_not_supported') %>
-        </audio>
-      </figure>
-    </div>
-  </div>
-
+  <%= render 'v2/content' %>
+  <%= render 'v2/player_controls' %>
 </div>

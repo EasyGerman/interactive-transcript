@@ -1,0 +1,14 @@
+<form id="language-picker-form">
+  <%= label(:language, "#{t('translation.translation_language_label')}") %>
+  &nbsp;
+  <%=
+    select_tag(
+      :language,
+      options_for_select(
+        Translator::TARGET_LANGUAGES.map { |code, description| [description, code] },
+      ),
+      id: "language-picker",
+    )
+  %>
+  <p><%= t('translation.deepl_notice') %></p>
+</form>

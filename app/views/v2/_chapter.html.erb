@@ -1,0 +1,11 @@
+<div class="chapter">
+
+  <% if chapter.title.present? %>
+    <h3><%= chapter.title %></h3>
+  <% end %>
+
+  <% chapter.paragraphs.each do |paragraph| %>
+    <%= render 'v2/paragraph', paragraph: paragraph %>
+  <% end %>
+
+</div><!-- /chapter -->

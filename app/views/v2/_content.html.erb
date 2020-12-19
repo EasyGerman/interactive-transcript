@@ -1,0 +1,24 @@
+<div id="content"
+  data-access-key="<%= @access_key %>"
+  data-chapters="<%= @prepared_episode.audio_chapters.to_json %>"
+  data-mode="word"
+>
+  <div id="content-inner">
+    <%= render 'v2/top_message' %>
+    <%= render 'v2/episode_header' %>
+
+    <section id="pre-play">
+      <%= render 'v2/language_picker' %>
+    </section>
+
+    <%= @prepared_episode.notes_html.sub(%r{<p><br></p>\n\Z}, '').html_safe %>
+
+    <h2>Transkript</h2>
+
+    <% @prepared_episode.chapters.each do |chapter| %>
+      <%= render 'v2/chapter', chapter: chapter %>
+    <% end %>
+
+    <%= render 'v2/feedback' %>
+  </div>
+</div>

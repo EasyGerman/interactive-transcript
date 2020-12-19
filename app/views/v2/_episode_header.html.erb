@@ -1,0 +1,7 @@
+<header>
+  <h1><%= @title %></h1>
+  <p><%= @podcast.name %></p>
+  <% if @podcast.homepage_url.present? %>
+    <a target="_blank" href="<%= @podcast.homepage_url %>"><%= @podcast.homepage_url_display %></a>
+  <% end %>
+</header>
