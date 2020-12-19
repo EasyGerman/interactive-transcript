@@ -11,6 +11,7 @@ import feedback from './feedback';
 import progressBar from './progressBar';
 import './infoModal';
 import './fontSettingsModal';
+import './bookmarking';
 
 $(document).ready(() => {
   checkBrowserSuitability().then(initializeApplication);
@@ -27,12 +28,15 @@ function checkBrowserSuitability(callback) {
 
 function initializeApplication() {
   const media = document.querySelector('audio');
-  window.dispatchEvent(new CustomEvent('initialize', { detail: { media } }));
 
   const player = {
+    media: media,
     pause: () => media.pause(),
     play: () => media.play(),
+    getCurrentSecond: () => Math.floor(media.currentTime),
   }
+
+  window.dispatchEvent(new CustomEvent('initialize', { detail: { media, player } }));
 
   layout.init();
   playerControls.init(media);
