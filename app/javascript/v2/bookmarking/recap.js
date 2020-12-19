@@ -1,4 +1,5 @@
 import { createElementFromHTML } from 'v2/utils';
+import settingStorage from 'v2/settingStorage';
 
 const playWindowDuration = 5; // seconds
 const fadeInDuration = 2;
@@ -13,6 +14,7 @@ let triggerTime;
 
 
 function init() {
+  if (settingStorage.get('bookmarking:recap') != 'on') return;
   if (initialized) return;
   initialized = true;
 
