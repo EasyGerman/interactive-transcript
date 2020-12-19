@@ -33,7 +33,7 @@ window.addEventListener('initialize', (event) => {
 
     let boomarks = readJSONFromStorage(storageKey, { items: [] })
     boomarks.items.push({ t: timestamp });
-    readJSONFromStorage(storageKey, boomarks);
+    writeJSONToStorage(storageKey, boomarks);
 
     console.log('Bookmarked:', timestamp)
 

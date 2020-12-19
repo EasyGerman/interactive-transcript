@@ -90,7 +90,10 @@ function continueRecap() {
     i++;
     if (!bookmarkItems[i]) {
       // No more bookmarks, end of recap
-      window.player.pause();
+      $(window.player.media).animate({ volume: 0 }, fadeOutDuration * 1000, () => {
+        window.player.media.volume = 1;
+        window.player.pause();
+      });
       break;
     };
     didJump = jumpCarefully(i)
