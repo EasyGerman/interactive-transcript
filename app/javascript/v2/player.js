@@ -12,6 +12,7 @@ import progressBar from './progressBar';
 import './infoModal';
 import './fontSettingsModal';
 import './bookmarking';
+import { findParagraphByTimestamp } from './contentTimestamps';
 
 $(document).ready(() => {
   checkBrowserSuitability().then(initializeApplication);
@@ -33,9 +34,14 @@ function initializeApplication() {
     media: media,
     pause: () => media.pause(),
     play: () => media.play(),
+    playAt: (timestamp) => {
+      media.currentTime = timestamp;
+      media.play();
+    },
     getCurrentSecond: () => Math.floor(media.currentTime),
   }
 
+  window.player = player;
   window.dispatchEvent(new CustomEvent('initialize', { detail: { media, player } }));
 
   layout.init();
@@ -43,7 +49,6 @@ function initializeApplication() {
   paragraphMenu.init();
   translation.init();
 
-  const timestampElements = $('.timestamp').toArray().map((x) => [parseInt(x.dataset['timestamp']), x])
   let activeTimestamp = null;
   const mode = $('#content').data('mode');
   const chapters = $('#content').data('chapters');
@@ -58,20 +63,16 @@ function initializeApplication() {
 
   function timeupdateNormalMode(e) {
     const eventTs = media.currentTime;
-    const item = timestampElements.find(([t1, e], index) => {
-      const nextPair = timestampElements[index + 1];
-      const t2 = nextPair ? nextPair[0] : null;
-      return eventTs >= t1 && (!t2 || eventTs < t2);
-    })
-    if (item) {
-      const [ts, e] = item;
-      const $elem = $(e).parent();
-      if (ts !== activeTimestamp) {
+    const paragraph = findParagraphByTimestamp(eventTs);
+
+    if (paragraph) {
+      const $elem = $(paragraph.element);
+      if (paragraph.startTime !== activeTimestamp) {
         const $segment = $elem.find('.segment:first');
         scroller.scrollTo($segment.length ? $segment : $elem, { evenIfRecentlyScrolled: true });
         $(".current").removeClass("current");
         $elem.addClass("current");
-        activeTimestamp = ts;
+        activeTimestamp = paragraph.startTime;
       }
     }
     else {

@@ -1,3 +1,5 @@
+import sidebar from './bookmarking/sidebar';
+
 function readJSON(key, defaultValue = {}) {
   let item = window.localStorage.getItem(key);
   if (!item) return defaultValue;
@@ -27,5 +29,7 @@ window.addEventListener('initialize', (event) => {
     writeJSON(storageKey, boomarks);
 
     console.log('Bookmarked:', timestamp)
+
+    sidebar.placeBookmark(timestamp);
   }
 });
