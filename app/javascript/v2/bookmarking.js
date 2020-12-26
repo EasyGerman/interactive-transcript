@@ -20,6 +20,13 @@ window.addEventListener('initialize', (event) => {
 
   buttonElement.addEventListener('click', addBookmark);
 
+  $(window).keydown(function(event) {
+    const ev = event.originalEvent;
+    if (ev.key === 'b') {
+      addBookmark();
+    }
+  });
+
   const bookmarks = readJSONFromStorage(storageKey, { items: [] });
   if (bookmarks.items.length > 0) {
     bookmarks.items.forEach(({ t }, index) => {
