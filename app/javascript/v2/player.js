@@ -12,6 +12,7 @@ import progressBar from './progressBar';
 import './infoModal';
 import './fontSettingsModal';
 import './bookmarking';
+import './settingsMenu';
 import { findParagraphByTimestamp } from './contentTimestamps';
 
 $(document).ready(() => {

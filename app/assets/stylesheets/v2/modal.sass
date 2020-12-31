@@ -1,0 +1,49 @@
+.modal
+  position: fixed
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  background: #FFF
+  z-index: 5
+  background: #F7F7F7
+
+  .header
+    height: 2.5rem
+    display: flex
+    flex-direction: row
+    align-items: center
+    background: #FFF
+
+    position: fixed
+    top: 0
+    left: 0
+    right: 0
+    box-shadow: 1px 1px 4px 0px rgba(0,0,0,0.3)
+
+    .title
+      font-size: 1.25rem
+      margin-left: 1em
+
+  .content
+    flex-grow: 1
+    padding: 1rem
+    overflow: auto
+    padding-top: 3.75rem
+
+    h3
+      font-size: 1.125rem
+      font-weight: normal
+
+  button
+    border: none 0
+    width:  2.5rem
+    height: 2.5rem
+    padding: 0
+    cursor: pointer
+    background: #FFF
+
+    > svg
+      width:  2.5rem
+      height: 2.5rem
+      padding: 0.75rem

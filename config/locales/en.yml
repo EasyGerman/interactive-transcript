@@ -1,6 +1,7 @@
 en:
   thanks: "Thanks!"
   settings:
+    label: "Settings"
     speed_options:
       x025: "Very slow"
       x050: "Slow"

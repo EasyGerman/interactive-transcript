@@ -15,6 +15,7 @@ function setFontSize() {
   // Set font size
   const referenceSize = Math.min(window.innerWidth, window.innerHeight);
   window.fontSize = fontSizeSetting || (referenceSize >= 400 ? 16 : (referenceSize >= 360 ? 15 : (referenceSize >= 300 ? 14 : 13)))
+  document.getElementsByTagName('html')[0].style.fontSize = `${Math.round(window.fontSize)}px`;
   document.getElementsByTagName('body')[0].style.fontSize = `${Math.round(window.fontSize)}px`;
 }
 
