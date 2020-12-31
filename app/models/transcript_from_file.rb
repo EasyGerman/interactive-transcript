@@ -52,6 +52,8 @@ class TranscriptFromFile
           add_text(child.text)
         when "i", "b", "u", "em", "strong", "font"
           add_text(child.text)
+        when "script"
+          # nothing
         else raise "unexpected tag: #{child.name}"
         end
       else raise "unexpected element: #{child.class.name}"
