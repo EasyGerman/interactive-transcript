@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
     render plain: "Error 404 - Not found (host not found: #{e.host})", status: 404
   end
 
-  def current_podcast
+  helper_method def current_podcast
     @current_podcast ||=
       if Rails.env.development? && params[:podcast].present?
         @current_podcast ||= Podcast.find_by!(code: params[:podcast])

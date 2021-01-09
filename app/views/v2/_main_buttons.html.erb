@@ -1,35 +1,76 @@
-<div id="main-buttons">
+<% if current_podcast.vocab_helper_enabled? %>
+  <div id="main-buttons">
 
-  <div class="side-buttons">
-    <!-- Settings button -->
-    <div id="settings-button" class="ui icon top left pointing huge white dropdown button">
-      <i class="cog alternate icon"></i>
-      <%= render 'v2/settings_menu' %>
+    <div class="left side-buttons">
+      <!-- Settings button -->
+      <div id="settings-button" class="ui icon top left pointing huge white dropdown side button">
+        <i class="cog alternate icon"></i>
+        <%= render 'v2/settings_menu' %>
+      </div>
+
+      <!-- Jump back button -->
+      <div id="jump-backward-button" class="ui icon huge white side button">
+        <i class="undo icon"></i>
+      </div>
     </div>
 
-    <!-- Jump back button -->
-    <div id="jump-backward-button" class="ui icon huge white button">
-      <i class="undo icon"></i>
+    <div class="central-buttons">
+      <!-- Play/Pause button -->
+      <div id="play-button" class="ui icon massive grey button">
+        <i class="play icon"></i>
+      </div>
     </div>
+
+    <div class="right side-buttons">
+      <!-- Jump forward button -->
+      <div id="jump-forward-button" class="ui icon huge white side button">
+        <i class="redo icon"></i>
+      </div>
+
+      <!-- Vocab helper toggling button -->
+      <div id="vocab-button" class="ui icon huge white side button">
+        <i class="align justify icon"></i>
+      </div>
+    </div>
+
   </div>
+<% else %>
+  <div id="main-buttons" class="asymmetrical">
 
-  <div class="central-buttons">
-    <!-- Play/Pause button -->
-    <div id="play-button" class="ui icon massive grey button">
-      <i class="play icon"></i>
+    <div class="left side-buttons">
+      <!-- Settings button -->
+      <div id="settings-button" class="ui icon top left pointing huge white dropdown side button">
+        <i class="cog alternate icon"></i>
+        <%= render 'v2/settings_menu' %>
+      </div>
     </div>
+
+    <div class="central-buttons">
+      <!-- Jump back button -->
+      <div id="jump-backward-button" class="ui icon huge white side button">
+        <i class="undo icon"></i>
+      </div>
+
+      <!-- Play/Pause button -->
+      <div id="play-button" class="ui icon massive grey button">
+        <i class="play icon"></i>
+      </div>
+
+      <!-- Jump forward button -->
+      <div id="jump-forward-button" class="ui icon huge white side button">
+        <i class="redo icon"></i>
+      </div>
+
+    </div>
+
+    <div class="right side-buttons">
+      <% if current_podcast.vocab_helper_enabled? %>
+        <!-- Vocab helper toggling button -->
+        <div id="vocab-button" class="ui icon huge white side button">
+          <i class="align justify icon"></i>
+        </div>
+      <% end %>
+    </div>
+
   </div>
-
-  <div class="right side-buttons">
-    <!-- Jump forward button -->
-    <div id="jump-forward-button" class="ui icon huge white button">
-      <i class="redo icon"></i>
-    </div>
-
-    <!-- Vocab helper toggling button -->
-    <div id="vocab-button" class="ui icon huge white button">
-      <i class="align justify icon"></i>
-    </div>
-  </div>
-
-</div>
+<% end %>

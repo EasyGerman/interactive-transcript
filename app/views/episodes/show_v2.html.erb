@@ -15,6 +15,11 @@
       thanks: [],
     )).html_safe
   %>
+  window.transcriptPlayer = <%= JSON.generate(
+    vocabHelper: {
+      available: current_podcast.vocab_helper_enabled?,
+    }
+  ).html_safe %>
 </script>
 
 <%= render 'info_modal' %>

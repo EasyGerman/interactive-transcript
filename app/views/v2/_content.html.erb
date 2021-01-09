@@ -19,6 +19,8 @@
       <%= render 'v2/chapter', chapter: chapter %>
     <% end %>
 
-    <%= render 'v2/feedback' %>
+    <% if current_podcast == 'easygerman' %>
+      <%= render 'v2/feedback' %>
+    <% end %>
   </div>
 </div>

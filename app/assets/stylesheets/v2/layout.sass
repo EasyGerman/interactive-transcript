@@ -25,6 +25,7 @@ body
   overflow-y: auto
   #content-inner
     max-width: 900px
+    padding-bottom: 5em
 
 #player-controls
   grid-column: w-left / w-right
@@ -47,6 +48,23 @@ body
       margin: 0 10px
       #play-button
         width: 100%
+        max-width: 120px
+  #main-buttons.asymmetrical
+    .central-buttons
+      display: flex
+      align-items: center
+      justify-content: center
+      flex-basis: 60%
+      .button
+        margin: 0 5px
+    .side-buttons
+      flex-grow: 1
+      flex-basis: 20%
+      display: flex
+      &.left
+        justify-content: start
+      &.right
+        justify-content: end
   #builtin-player
     padding-top: 10px
     figure
