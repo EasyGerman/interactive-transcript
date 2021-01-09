@@ -40,6 +40,7 @@ class EpisodesController < ApplicationController
     end
 
     @title = @prepared_episode.title
+    @site_title = @podcast.name
     @public = (@access_key =~ /^\d+$/)
   end
 

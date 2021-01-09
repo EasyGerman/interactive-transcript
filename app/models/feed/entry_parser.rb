@@ -23,11 +23,11 @@ class Feed
     end
 
     def title
-      node.css('title').first.text
+      node.css('title').first.text.strip
     end
 
     def description
-      node.css('description').text
+      node.css('description').text.strip
     end
 
     def audio_url

@@ -8,12 +8,16 @@
     <%= render 'v2/episode_header' %>
 
     <section id="pre-play">
-      <%= render 'v2/language_picker' %>
+      <% if current_podcast.translations_enabled? %>
+        <%= render 'v2/language_picker' %>
+      <% end %>
     </section>
 
     <%= @prepared_episode.notes_html.sub(%r{<p><br></p>\n\Z}, '').html_safe %>
 
-    <h2>Transkript</h2>
+    <% if current_podcast.code == 'easygerman' # TODO %>
+      <h2>Transkript</h2>
+    <% end %>
 
     <% @prepared_episode.chapters.each do |chapter| %>
       <%= render 'v2/chapter', chapter: chapter %>

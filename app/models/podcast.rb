@@ -27,6 +27,14 @@ class Podcast < ApplicationRecord
     vocab_helper_config&.fetch("enabled", false)
   end
 
+  def translations_config
+    settings["translations"]
+  end
+
+  def translations_enabled?
+    translations_config&.fetch("enabled", false)
+  end
+
   def vocab_helper_aws_bucket
     vocab_helper_config["aws_bucket"]
   end

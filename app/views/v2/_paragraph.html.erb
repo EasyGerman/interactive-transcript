@@ -24,9 +24,11 @@
       %>
     </div>
 
-    <div class="paragraph-footer">
-      <button class="translateParagraphButton"><%= t('translation.translate_button') %></button>
-    </div>
+    <% if current_podcast.translations_enabled? %>
+      <div class="paragraph-footer">
+        <button class="translateParagraphButton"><%= t('translation.translate_button') %></button>
+      </div>
+    <% end %>
 
   <% end %>
 </div>
