@@ -1,19 +1,20 @@
 class FsFetcher
 
-  def initialize(root = Rails.root.join('data'))
-    @root = root
-  end
+  attr_reader :podcast
 
-  def path_to_feed
-    @root.join('feed.xml')
+  delegate :feed_path, :episode_dir_path_for, to: :@file_storage
+
+  def initialize(podcast)
+    @podcast = podcast
+    @file_storage = FileStorage.for_podcast(podcast)
   end
 
   def fetch_feed
-    File.read(path_to_feed)
+    File.read(feed_path)
   end
 
   def path_to_downloadable_transcript(episode)
-    @root.join('episodes', episode.slug, 'downloadable.html')
+    episode_dir_path_for(episode).join('downloadable.html')
   end
 
   def fetch_downloadable_transcript(episode)
@@ -21,7 +22,7 @@ class FsFetcher
   end
 
   def path_to_editor_transcript(episode)
-    @root.join('episodes', episode.slug, 'editor.html')
+    episode_dir_path_for(episode).join('editor.html')
   end
 
   def fetch_editor_transcript(episode)
@@ -31,7 +32,7 @@ class FsFetcher
   # For testing only
 
   def fetch_processed_yaml(episode)
-    File.read(@root.join('episodes', episode.slug, 'processed.yaml'))
+    File.read(episode_dir_path_for(episode).join('processed.yaml'))
   end
 
 end

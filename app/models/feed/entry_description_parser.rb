@@ -10,9 +10,18 @@ class Feed
     end
 
     def access_key
-      if html =~ %r{egp(\w+)_transkript(_(\w{12,}))?.html} # TODO: localize
-        code, _, secret = $1, $2, $3
-        secret || code
+      # TODO: remove hardcoded podcasts
+      case episode.podcast.code
+      when 'easygerman'
+        if html =~ %r{egp(\w+)_transkript(_(\w{12,}))?.html} # TODO: localize
+          code, _, secret = $1, $2, $3
+          secret || code
+        end
+      when 'easygreek'
+        if html =~ %r{https://www.dropbox.com/s/(\w+)/easygreekpodcast(.*)_transcript.html\?dl=1} # TODO: localize
+          secret, _ = $1, $2
+          secret
+        end
       end
     end
 
@@ -27,7 +36,7 @@ class Feed
     end
 
     def transcript_header?(node)
-      node.name == 'h3' && node.text.strip == 'Transkript' # TODO: localize
+      node.name == 'h3' && node.text.strip.in?(['Transkript', 'Απομαγνητοφώνηση']) # TODO: localize
     end
 
     memoize def transcript_start_index
@@ -52,8 +61,6 @@ class Feed
       nodes[transcript_start_index .. -1]
     end
 
-    private
-
     attr_reader :html, :episode
 
     memoize def html_node
@@ -66,6 +73,10 @@ class Feed
 
     def nodes
       node.css('body > *').to_a
+    end
+
+    def pretty_html
+      html_node.to_html(indent: 2, indent_text: ' ')
     end
   end
 end

@@ -12,3 +12,9 @@ Array.class_eval do
     end
   end
 end
+
+String.class_eval do
+  def limit_lines(limit)
+    split("\n").first(limit).join("\n")
+  end
+end

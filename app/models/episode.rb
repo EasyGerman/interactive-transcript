@@ -11,6 +11,7 @@ class Episode
   include AwsUtils
 
   attr_reader :node, :feed, :podcast
+  attr_reader :feed_entry_parser, :feed_entry_description_parser
 
   def initialize(podcast, fetcher, node, feed)
     @podcast = podcast
@@ -21,11 +22,11 @@ class Episode
   end
 
   def number
-    feed_entry_parser.episode_number
+    feed_entry_parser.episode_number || (0 if slug == 'trailer') # TODO
   end
 
   delegate :slug, :title, :audio_url, :published_at, to: :feed_entry_parser
-  delegate :access_key, :vocab_url, :downloadable_html_url, :notes_html, to: :feed_entry_description_parser
+  delegate :access_key, :vocab_url, :downloadable_html_url, :notes_html, :pretty_html, to: :feed_entry_description_parser
   delegate :chapters, to: :transcript
 
   memoize def transcript
@@ -76,10 +77,6 @@ class Episode
       audio_chapters: audio.processed_chapters,
     )
   end
-
-  private
-
-  attr_reader :feed_entry_parser, :feed_entry_description_parser
 
   memoize def feed_entry_description_parser
     Feed::EntryDescriptionParser.new(feed_entry_parser.description, self)

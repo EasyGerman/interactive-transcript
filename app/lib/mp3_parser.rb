@@ -8,9 +8,9 @@ class Mp3Parser
   memoize def chapters
     ret = nil
     Mp3Info.open(StringIO.new(@content)) do |m|
-      ret = m.tag2.CHAP.map { |s| Chapter.new(s) }
+      ret = m.tag2.CHAP&.map { |s| Chapter.new(s) }
     end
-    ret
+    ret || []
   end
 
   class Chapter

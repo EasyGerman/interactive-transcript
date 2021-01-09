@@ -1,6 +1,8 @@
 <h1>Episode: <%= @episode.title %></h1>
 
-<%= link_to "Go to Player", episode_path(@episode.access_key) %>
+<%= rescue_and_show_errors do %>
+  <%= link_to "Go to Player", episode_path(@episode.access_key) %>
+<% end %>
 
 <p>
   <% if @episode.transcript_editor_html.present? %>
@@ -16,8 +18,10 @@
   <% end %>
 <% end %>
 
-<div>
-  <%= Time.zone.parse(@episode.node.css('pubDate').text) %>
-  <% url = @episode.description.html_node.at_css('a:contains("HTML")').attr('href') %>
-  <%= URI.open(url).read.html_safe %>
-</div>
+<%= rescue_and_show_errors do %>
+  <div>
+    <%= Time.zone.parse(@episode.node.css('pubDate').text) %>
+    <% url = @episode.feed_entry_description_parser.html_node.at_css('a:contains("HTML")').attr('href') %>
+    <%= URI.open(url).read.html_safe %>
+  </div>
+<% end %>

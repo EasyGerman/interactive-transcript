@@ -7,10 +7,14 @@ class Feed
     end
 
     memoize def slug
-      patreon_post_url[%r{^https://www.patreon.com/posts/(.*)$}, 1] || raise("Cannot find slug in #{patreon_post_url}")
+      # TODO: remove hardcoded easygreek
+      link_url[%r{^https://www.patreon.com/posts/(.*)$}, 1] ||
+        ('trailer' if link_url == 'https://www.easygreek.fm/trailer') ||
+        episode_number ||
+        raise("Cannot find slug in #{patreon_post_url}")
     end
 
-    memoize def patreon_post_url
+    memoize def link_url
       node.css('link').text
     end
 

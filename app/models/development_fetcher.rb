@@ -6,11 +6,11 @@ class DevelopmentFetcher
 
   def initialize(podcast)
     @podcast = podcast || raise(ArgumentError, 'podcast missing')
-    @fs_fetcher = FsFetcher.new
+    @fs_fetcher = FsFetcher.new(podcast)
   end
 
   def fetch_feed
-    with_local_cache(fs_fetcher.path_to_feed) do
+    with_local_cache(fs_fetcher.feed_path) do
       network_fetcher.fetch_feed
     end
   end
@@ -32,9 +32,19 @@ class DevelopmentFetcher
   attr_reader :fs_fetcher
 
   def with_local_cache(path)
-    return File.read(path) if File.exists?(path)
+    if File.exists?(path)
+      if File.size(path) > 0
+        Rails.logger.debug "Cache hit: #{path} "
+        return File.read(path)
+      else
+        Rails.logger.debug "Cache miss: #{path} (zero length)"
+      end
+    else
+      Rails.logger.debug "Cache miss: #{path}"
+    end
 
     yield.tap do |content|
+      Rails.logger.debug "Encoding of content yielded to with_local_cache: #{content.encoding}"
       FileUtils.mkdir_p(File.dirname(path))
       File.open(path, "w") { |f| f.write(content) }
     end

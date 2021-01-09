@@ -10,7 +10,11 @@ class NetworkFetcher
     RedisMutex.with_lock("feed:#{podcast.code}", block: 30, sleep: 0.5, expire: 60) do
       Rails.cache.fetch("feed:#{podcast.code}", expires_in: 15.seconds) do
         require 'open-uri'
-        open(podcast.feed_url).read
+
+        open(podcast.feed_url) do |io|
+          io.set_encoding('UTF-8')
+          io.read
+        end
       end
     end
   end

@@ -22,13 +22,12 @@ namespace :feed do
 
   desc "Create local files for each episode (for easier experimentation)"
   task :import_to_files => :environment do
-    feed = Feed.new
-    write feed.content, to: 'feed.xml'
+    podcast = Podcast.find_by!(code: ENV.fetch('PODCAST'))
+    feed = Feed.new(podcast)
+    write feed.content, to: "podcasts/#{podcast.code}/feed.xml"
 
     with_retry do
       feed.episodes.map do |episode|
-        puts episode.slug
-
         generate_file(episode, 'description.html') { episode.pretty_html }
 
         if (vocab = episode.vocab).present?
@@ -45,6 +44,8 @@ namespace :feed do
         end
       end
     end
+
+    puts "Written #{@written || 0} files. Already exists: #{@already_exists || 0}"
   end
 
   task :reprocess_all => :environment do
@@ -85,8 +86,12 @@ namespace :feed do
   end
 
   def generate_file(episode, file_name, delay = 0)
-    path = Rails.root.join('data', 'episodes', episode.slug, file_name)
-    return if File.exist?(path)
+    path = Rails.root.join('data', 'podcasts', episode.podcast.code, 'episodes', episode.slug, file_name)
+    if File.exist?(path)
+      @already_exists ||= 0
+      @already_exists += 1
+      return
+    end
 
     STDOUT.puts "- #{file_name}"
     sleep delay
@@ -94,6 +99,8 @@ namespace :feed do
 
     with_retry do
       File.open(path, 'w') { |f| f.write(yield) }
+      @written ||= 0
+      @written += 1
     end
   end
 
