@@ -1,10 +1,5 @@
-<% if current_podcast == 'easygerman' %>
-<div class="ui message" id="top-message">
-  <div class="button-container">
-    <a class="ui labeled icon button" href="<%= episode_path(@access_key) + "/v1" %>">
-      <i class="left chevron icon"></i>
-      <%= t('beta.back_to_old_version_button') %>
-    </a>
-  </div>
-</div>
+<% if current_podcast.code == 'easygerman' %>
+  <a href="<%= episode_path(@access_key) + "/v1" %>">
+    ◂ <%= t('beta.back_to_old_version_button') %>
+  </a>
 <% end %>
