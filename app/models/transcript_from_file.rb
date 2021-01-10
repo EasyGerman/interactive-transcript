@@ -77,7 +77,7 @@ class TranscriptFromFile
         # do nothing
       when "small"
         add_text(element.text)
-      when "i", "b", "u", "em", "strong", "font"
+      when "i", "b", "u", "em", "strong", "font", "p"
         add_text(element.text)
       when "script"
         # nothing

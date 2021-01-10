@@ -20,7 +20,10 @@ class NetworkFetcher
   end
 
   def fetch_downloadable_transcript(episode)
-    URI.open(episode.downloadable_html_url).read
+    open(episode.downloadable_html_url) do |io|
+      io.set_encoding('UTF-8')
+      io.read
+    end
   end
 
   def fetch_editor_transcript(episode)

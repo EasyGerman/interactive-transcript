@@ -18,7 +18,7 @@ class Episode
     @fetcher = fetcher
     @node = node
     @feed = feed
-    @feed_entry_parser = Feed::EntryParser.new(node)
+    @feed_entry_parser = Feed::EntryParser.new(podcast, node)
   end
 
   def number
