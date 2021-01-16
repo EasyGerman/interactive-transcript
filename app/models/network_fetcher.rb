@@ -34,9 +34,6 @@ class NetworkFetcher
         editor_transcript_config["dropbox_access_key"],
         editor_transcript_config["dropbox_shared_link"],
       ).transcript_for(episode.number)
-
-    doc = Nokogiri::HTML(file_contents)
-    doc.css('#transcript').to_html
   end
 
 end

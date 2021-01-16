@@ -44,9 +44,11 @@ class DevelopmentFetcher
     end
 
     yield.tap do |content|
-      Rails.logger.debug "Encoding of content yielded to with_local_cache: #{content.encoding}"
-      FileUtils.mkdir_p(File.dirname(path))
-      File.open(path, "w") { |f| f.write(content) }
+      if content.present?
+        Rails.logger.debug "Encoding of content yielded to with_local_cache: #{content.encoding}"
+        FileUtils.mkdir_p(File.dirname(path))
+        File.open(path, "w") { |f| f.write(content) }
+      end
     end
   end
 

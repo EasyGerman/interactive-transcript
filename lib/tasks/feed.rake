@@ -28,6 +28,7 @@ namespace :feed do
 
     with_retry do
       feed.episodes.map do |episode|
+        puts episode.title
         generate_file(episode, 'description.html') { episode.pretty_html }
 
         if (vocab = episode.vocab).present?
@@ -40,7 +41,7 @@ namespace :feed do
 
         if episode.transcript.present?
           generate_file(episode, 'downloadable.html', rand * retry_delay) { episode.downloadable_html }
-          generate_file(episode, 'editor.html', rand * retry_delay) { episode.transcript_editor_html }
+          generate_file(episode, 'editor.html', rand * retry_delay) { episode.transcript_editor_contents }
         end
       end
     end

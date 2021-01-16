@@ -20,7 +20,7 @@ describe Episode do
     double(
       :fetcher,
       fetch_downloadable_transcript: "<html>Downloadable</html>",
-      fetch_editor_transcript: "<html>Editor</html>",
+      fetch_editor_transcript: "<html><head></head><body><div id=\"transcript\"><p>transcript-sample</p></div></body></html>",
     )
   }
   let(:description_html) {
@@ -107,7 +107,7 @@ describe Episode do
 
   describe "#transcript_editor_html" do
     subject(:transcript_editor_html) { episode.transcript_editor_html }
-    it { is_expected.to eq '<html>Editor</html>' }
+    it { is_expected.to eq "<div id=\"transcript\"><p>transcript-sample</p></div>" }
   end
 
   describe "#timed_script" do

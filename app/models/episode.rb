@@ -47,8 +47,13 @@ class Episode
 
   memoize def transcript_editor_html
     hide_and_report_errors do
-      @fetcher.fetch_editor_transcript(self)
+      doc = Nokogiri::HTML(transcript_editor_contents)
+      doc.css('#transcript').to_html
     end
+  end
+
+  memoize def transcript_editor_contents
+    @fetcher.fetch_editor_transcript(self)
   end
 
   # Used by Paragraph to find matching timed paragraph
