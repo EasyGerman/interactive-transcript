@@ -2,28 +2,37 @@ class Feed
   class EntryParser
     extend Memoist
 
-    def initialize(node)
+    def initialize(podcast, node)
+      @podcast = podcast
       @node = node
     end
 
     memoize def slug
-      patreon_post_url[%r{^https://www.patreon.com/posts/(.*)$}, 1] || raise("Cannot find slug in #{patreon_post_url}")
+      # TODO: remove hardcoded easygreek
+      link_url[%r{^https://www.patreon.com/posts/(.*)$}, 1] ||
+        ('trailer' if link_url == 'https://www.easygreek.fm/trailer') ||
+        episode_number.to_s ||
+        raise("Cannot find slug in #{patreon_post_url}")
     end
 
-    memoize def patreon_post_url
+    memoize def link_url
       node.css('link').text
     end
 
     def episode_number
-      slug[/^\d+/]&.to_i
+      if podcast.code == 'easygreek'
+        link_url[%r{/episodes/(\d+)}, 1]&.to_i
+      else
+        slug[/^\d+/]&.to_i
+      end
     end
 
     def title
-      node.css('title').first.text
+      node.css('title').first.text.strip
     end
 
     def description
-      node.css('description').text
+      node.css('description').text.strip
     end
 
     def audio_url
@@ -36,7 +45,7 @@ class Feed
 
     private
 
-    attr_reader :node
+    attr_reader :node, :podcast
 
   end
 end

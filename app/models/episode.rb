@@ -11,21 +11,22 @@ class Episode
   include AwsUtils
 
   attr_reader :node, :feed, :podcast
+  attr_reader :feed_entry_parser, :feed_entry_description_parser
 
   def initialize(podcast, fetcher, node, feed)
     @podcast = podcast
     @fetcher = fetcher
     @node = node
     @feed = feed
-    @feed_entry_parser = Feed::EntryParser.new(node)
+    @feed_entry_parser = Feed::EntryParser.new(podcast, node)
   end
 
   def number
-    feed_entry_parser.episode_number
+    feed_entry_parser.episode_number || (0 if slug == 'trailer') # TODO
   end
 
   delegate :slug, :title, :audio_url, :published_at, to: :feed_entry_parser
-  delegate :access_key, :vocab_url, :downloadable_html_url, :notes_html, to: :feed_entry_description_parser
+  delegate :access_key, :vocab_url, :downloadable_html_url, :notes_html, :pretty_html, to: :feed_entry_description_parser
   delegate :chapters, to: :transcript
 
   memoize def transcript
@@ -46,8 +47,13 @@ class Episode
 
   memoize def transcript_editor_html
     hide_and_report_errors do
-      @fetcher.fetch_editor_transcript(self)
+      doc = Nokogiri::HTML(transcript_editor_contents)
+      doc.css('#transcript').to_html
     end
+  end
+
+  memoize def transcript_editor_contents
+    @fetcher.fetch_editor_transcript(self)
   end
 
   # Used by Paragraph to find matching timed paragraph
@@ -76,10 +82,6 @@ class Episode
       audio_chapters: audio.processed_chapters,
     )
   end
-
-  private
-
-  attr_reader :feed_entry_parser, :feed_entry_description_parser
 
   memoize def feed_entry_description_parser
     Feed::EntryDescriptionParser.new(feed_entry_parser.description, self)

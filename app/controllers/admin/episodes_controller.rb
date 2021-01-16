@@ -1,16 +1,25 @@
 class Admin::EpisodesController < AdminController
+  before_action :load_feed
+  before_action :load_episode, except: [:index]
+
   def index
-    @feed = Feed.new
   end
 
   def show
-    @feed = Feed.new
-    @episode = @feed.episodes.find { |e| e.slug == params[:id] }
   end
 
   def timed_script
-    @feed = Feed.new
-    @episode = @feed.episodes.find { |e| e.slug == params[:id] }
     @timed_script = @episode.timed_script
+  end
+
+  private
+
+  def load_feed
+    @feed = Feed.new(current_podcast)
+  end
+
+  def load_episode
+    @episode = @feed.episodes.find { |e| e.slug == params[:id] }
+    raise "Episode not found: #{params[:id]}" if @episode.blank?
   end
 end

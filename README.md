@@ -54,6 +54,18 @@ or use guard to run tests as files change:
 guard
 ```
 
+Data tests are normally excluded because they require patron-only content.
+
+To download contents, run the following:
+
+```ruby
+bundle exec rake feed:import_to_files
+```
+
+```ruby
+PODCAST=easygerman EPISODES=all bundle exec rspec spec/modules/processing_spec.rb
+```
+
 ## Deployment to Heroku
 
 On Heroku Dashboard:

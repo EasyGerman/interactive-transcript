@@ -106,7 +106,7 @@ let previousSize = 'huge';
 const setPlayerControlButtonSize = (width) => {
   const newSize = calculatePlayerControlButtonSize(width);
   if (newSize === previousSize) return;
-  $('#player-controls .side-buttons .button').removeClass('massive huge big large medium small tiny mini').addClass(newSize);
+  $('#player-controls .button.side').removeClass('massive huge big large medium small tiny mini').addClass(newSize);
   previousSize = newSize;
 }
 const calculatePlayerControlButtonSize = (width) => {

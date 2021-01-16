@@ -37,27 +37,7 @@ class TranscriptFromFile
 
   memoize def chapters
     Nokogiri::HTML(html).css('.transcript-base').children.each do |child|
-      case child
-      when Nokogiri::XML::Text
-        add_text(child.text)
-      when Nokogiri::XML::Element
-        case child.name
-        when "h4"
-          add_chapter(child.text.strip)
-        when "b"
-          add_paragraph(child.text.strip)
-        when "br"
-          # do nothing
-        when "small"
-          add_text(child.text)
-        when "i", "b", "u", "em", "strong", "font"
-          add_text(child.text)
-        when "script"
-          # nothing
-        else raise "unexpected tag: #{child.name}"
-        end
-      else raise "unexpected element: #{child.class.name}"
-      end
+      parse_nokogiri_element(child)
     end
 
     collector[:chapters].to_enum.with_index.map do |chapter_hash, chapter_index|
@@ -78,6 +58,37 @@ class TranscriptFromFile
       end
 
       chapter
+    end
+  end
+
+  private
+
+  def parse_nokogiri_element(element)
+    case element
+    when Nokogiri::XML::Text
+      add_text(element.text)
+    when Nokogiri::XML::Element
+      case element.name
+      when "h2", "h3", "h4"
+        add_chapter(element.text.strip)
+      when "b"
+        add_paragraph(element.text.strip)
+      when "br"
+        # do nothing
+      when "small"
+        add_text(element.text)
+      when "i", "b", "u", "em", "strong", "font", "p"
+        add_text(element.text)
+      when "script"
+        # nothing
+      when "div"
+        # Recursively parse the contents of the div
+        element.children.each do |child|
+          parse_nokogiri_element(child)
+        end
+      else raise "unexpected tag: #{element.name}"
+      end
+    else raise "unexpected element: #{element.class.name}"
     end
   end
 
