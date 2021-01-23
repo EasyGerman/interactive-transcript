@@ -18,9 +18,12 @@ describe Episode do
   let(:feed) { double(:feed, cover_url: "https://example.com/cover.jpg") }
   let(:fetcher) {
     double(
-      :fetcher,
-      fetch_downloadable_transcript: "<html>Downloadable</html>",
-      fetch_editor_transcript: "<html><head></head><body><div id=\"transcript\"><p>transcript-sample</p></div></body></html>",
+      :fetcher_for_podcast,
+      for_episode: double(
+        :fetcher_for_episode,
+        fetch_downloadable_transcript: "<html>Downloadable</html>",
+        fetch_editor_transcript: "<html><head></head><body><div id=\"transcript\"><p>transcript-sample</p></div></body></html>",
+      )
     )
   }
   let(:description_html) {

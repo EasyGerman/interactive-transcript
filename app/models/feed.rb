@@ -9,11 +9,7 @@ class Feed
   end
 
   def default_fetcher
-    if Rails.env.development? || Rails.env.test?
-      DevelopmentFetcher.new(podcast)
-    else
-      NetworkFetcher.new(podcast)
-    end
+    ContentProvider.for_podcast(podcast)
   end
 
   memoize def content

@@ -4,14 +4,14 @@ namespace :podcasts do
     Util.log_to_stdout
     Podcast.all.each do |podcast|
       config = podcast.attributes.except('id', 'created_at', 'updated_at')
-      FileStorage.for_podcast(podcast).write_config(config)
+      ContentProvider.for_podcast(podcast).write_config(config)
     end
   end
 
   desc 'Import podcasts from the files to database'
   task :load => :environment do
     Util.log_to_stdout
-    FileStorage.each_podcast do |podcast_storage|
+    ContentProvider.each_podcast do |podcast_storage|
       config = podcast_storage.read_config
       begin
         podcast = Podcast.create!(config)

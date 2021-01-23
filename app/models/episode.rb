@@ -10,12 +10,12 @@ class Episode
   include ErrorHandling
   include AwsUtils
 
-  attr_reader :node, :feed, :podcast
+  attr_reader :node, :feed, :podcast, :fetcher
   attr_reader :feed_entry_parser, :feed_entry_description_parser
 
   def initialize(podcast, fetcher, node, feed)
     @podcast = podcast
-    @fetcher = fetcher
+    @fetcher = fetcher.for_episode(self)
     @node = node
     @feed = feed
     @feed_entry_parser = Feed::EntryParser.new(podcast, node)
@@ -42,7 +42,7 @@ class Episode
   end
 
   memoize def downloadable_html
-    @fetcher.fetch_downloadable_transcript(self)
+    fetcher.fetch_downloadable_transcript
   end
 
   memoize def transcript_editor_html
@@ -53,7 +53,7 @@ class Episode
   end
 
   memoize def transcript_editor_contents
-    @fetcher.fetch_editor_transcript(self)
+    fetcher.fetch_editor_transcript
   end
 
   # Used by Paragraph to find matching timed paragraph
@@ -64,7 +64,7 @@ class Episode
   end
 
   memoize def audio
-    Audio.new(audio_url)
+    Audio.new(fetcher)
   end
 
   # Vocab - for experimental use

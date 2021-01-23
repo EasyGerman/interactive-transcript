@@ -3,14 +3,14 @@ require "mp3info"
 class Audio
   extend Memoist
 
-  attr_reader :url
+  attr_reader :fetcher_for_episode
 
-  def initialize(url)
-    @url = url
+  def initialize(fetcher_for_episode)
+    @fetcher_for_episode = fetcher_for_episode
   end
 
   memoize def content
-    CachedNetwork.fetch(url)
+    fetcher_for_episode.fetch_audio
   end
 
   memoize def mp3_parser

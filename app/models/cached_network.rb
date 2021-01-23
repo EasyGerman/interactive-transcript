@@ -7,7 +7,7 @@ class CachedNetwork
     end
 
     def with_file_cache(identifier)
-      path = Rails.root.join('data', 'network-cache', Digest::SHA1.hexdigest(identifier))
+      path = Rails.root.join('tmp', 'network-cache', Digest::SHA1.hexdigest(identifier))
       return File.read(path) if File.exist?(path)
       contents = yield
       return contents if contents.nil?
