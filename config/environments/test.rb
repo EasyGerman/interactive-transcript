@@ -35,4 +35,9 @@ Rails.application.configure do
 
   # Raises error for missing translations.
   # config.action_view.raise_on_missing_translations = true
+
+  if ENV['LOG_LEVEL']
+    config.logger = Logger.new($stdout)
+    config.log_level = ENV['LOG_LEVEL']
+  end
 end

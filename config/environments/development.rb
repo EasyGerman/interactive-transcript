@@ -47,4 +47,8 @@ Rails.application.configure do
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
   config.hosts << /.*\.ngrok\.io/
+
+  if ENV['LOG_LEVEL']
+    config.log_level = ENV['LOG_LEVEL']
+  end
 end
