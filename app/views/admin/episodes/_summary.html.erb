@@ -1,4 +1,4 @@
 <tr class="episode-summary">
-  <td><%= link_to "Episode: #{episode.title}", admin_episode_path(episode.slug) %></td>
+  <td><%= link_to "Episode: #{episode.title}", admin_episode_path(episode) %></td>
   <td><%= link_to episode.access_key, episode_path(episode.access_key) if episode.access_key %></td>
 </tr>

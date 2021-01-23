@@ -1,7 +1,7 @@
 <h1>Paragraph <%= @paragraph.timestamp %> from <%= @episode.title %></h1>
 
-<div><%= link_to "Back to episode", admin_episode_path(@episode.slug) %></div>
-<div><%= link_to "Next paragraph ❯", admin_episode_paragraph_path(@episode.slug, @paragraph.next_paragraph.slug) %></div>
+<div><%= link_to "Back to episode", admin_episode_path(@episode) %></div>
+<div><%= link_to "Next paragraph ❯", admin_paragraph_path(@paragraph.next_paragraph) %></div>
 
 <% Bench.m("render-paragraph-#{@paragraph.slug}") do %>
 

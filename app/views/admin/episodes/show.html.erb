@@ -6,22 +6,28 @@
 
 <p>
   <% if @episode.transcript_editor_html.present? %>
-    <%= link_to "Transcript with timestamps", timed_script_admin_episode_path(@episode.slug) %>
+    <%= link_to "Transcript with timestamps", admin_episode_timed_script_path(@episode) %>
   <% else %>
     Transcript with timestamps not found.
   <% end %>
 </p>
 
+<h2>Chapters</h2>
 <%= rescue_and_show_errors do %>
-  <% @episode.chapters.each do |chapter| %>
-    <%= render 'admin/chapters/summary', chapter: chapter, episode: @episode %>
+  <% @episode.chapters.each_with_index do |chapter, index| %>
+    <details>
+      <summary>Chapter <%= index + 1 %>: <%= chapter.title %></summary>
+      <%= render 'admin/chapters/summary', chapter: chapter, episode: @episode %>
+    </details>
   <% end %>
 <% end %>
 
-<%= rescue_and_show_errors do %>
-  <div>
-    <%= Time.zone.parse(@episode.node.css('pubDate').text) %>
-    <% url = @episode.feed_entry_description_parser.html_node.at_css('a:contains("HTML")').attr('href') %>
-    <%= URI.open(url).read.html_safe %>
-  </div>
+<% if false %>
+  <%= rescue_and_show_errors do %>
+    <div>
+      <%= Time.zone.parse(@episode.node.css('pubDate').text) %>
+      <% url = @episode.feed_entry_description_parser.html_node.at_css('a:contains("HTML")').attr('href') %>
+      <%= URI.open(url).read.html_safe %>
+    </div>
+  <% end %>
 <% end %>

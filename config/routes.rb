@@ -12,13 +12,14 @@ Rails.application.routes.draw do
 
   namespace :admin do
     root to: 'main#show'
-    resources :episodes do
-      resources :paragraphs
-      member do
-        get :timed_script
+    resources :podcasts do
+      resources :episodes do
+        resources :paragraphs
+        resource :timed_script
+        resources :timed_paragraphs
       end
+      resources :transcripts
     end
-    resources :transcripts
   end
 
   post :translate, to: 'translate#translate'

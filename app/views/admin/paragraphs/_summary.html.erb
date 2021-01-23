@@ -1,6 +1,6 @@
 <span class="paragraph-summary speaker-<%= paragraph.speaker.name.to_s.downcase %> <%= (paragraph.timed_paragraph.present? ? 'with-timings' : 'no-timings') %>">
   <%=
     link_to "#{paragraph.timestamp} #{paragraph.text.first(10)} #{"·" * (paragraph.text.length / 100)}",
-      admin_episode_paragraph_path(episode.slug, paragraph.slug)
+      admin_paragraph_path(paragraph)
   %>
 </span>

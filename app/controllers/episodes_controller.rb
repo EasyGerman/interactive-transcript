@@ -1,4 +1,6 @@
-class EpisodesController < ApplicationController
+class EpisodesController < PodcastControllerBase
+  include PodcastSiteControllerConcern
+
   layout "application2", :only => [ :show_v2 ]
 
   def show

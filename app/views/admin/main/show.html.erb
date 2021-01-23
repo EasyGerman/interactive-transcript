@@ -1,9 +1,8 @@
 <h1>Admin area</h1>
 
-<p>
-  <%= link_to "Episodes", admin_episodes_path %>
-</p>
-
-<p>
-  <%= link_to "Transcripts", admin_transcripts_path %>
-</p>
+<% Podcast.all.each do |podcast| %>
+  <div>
+    <%= link_to podcast.name, admin_podcast_episodes_path(podcast.code) %>
+    (<%= link_to "Transcripts", admin_podcast_transcripts_path(podcast.code) %>)
+  </div>
+<% end %>

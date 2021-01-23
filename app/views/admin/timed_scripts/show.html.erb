@@ -1,0 +1,58 @@
+<h1>Episode: <%= @episode.title %></h1>
+
+<%= link_to "Episode page", admin_episode_path(@episode) %>
+
+<h2>Timed Script</h2>
+
+<% if @episode.transcript_editor_html.present? %>
+  <% timed_script = @episode.timed_script %>
+
+  <%= error_boundary do %>
+  <details>
+    <summary>Iterator output</summary>
+    <div class="side-by-side">
+      <div style="max-width: 30vw; overflow: auto; height: 80vh">
+        <h3>timed_script.para.each</h3>
+        <% timed_script.paras.first(2).each do |para| %>
+          <div>
+            <small><%= para.except(:items).to_json %></small>
+            <table class="codes">
+              <% para[:items].each do |slice| %>
+                <tr>
+                  <td><code><%= slice[0] %></code></td>
+                  <td><code><%= slice[1] %></code></td>
+                  <td><code><%= slice[2] %></code></td>
+                </tr>
+              <% end %>
+            </table>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </details>
+  <% end %>
+
+  <details>
+    <summary>Nokogiri structure</summary>
+    <small>
+      <%= render 'admin/shared/nokogiri_node', node: @episode.timed_script.doc.css('#transcript').first, level: 1 %>
+    </small>
+  </details>
+
+  <h3>Final result</h3>
+
+  <div style="line-height: 1.2em; font-size: small">
+    <% @episode.timed_script.paragraphs.each do |paragraph| %>
+      <a href="<%= admin_podcast_episode_timed_paragraph_path(@episode.podcast.code, @episode.slug, paragraph.signature) %>">
+        <span style="">
+          <span class="timestamp" style="color: #999; background: #EEE">[<%= paragraph.timestamp %>]</span>
+          <span class="speaker" style="color: #999"><%= paragraph.speaker.name %>:</span>
+          <span class="text"><%= paragraph.text.first(40) %></span>
+        </span>
+      </a>
+    <% end %>
+  </div>
+
+<% else %>
+  Transcript with timestamps not found.
+<% end %>
