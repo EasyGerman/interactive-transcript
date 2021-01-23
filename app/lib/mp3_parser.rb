@@ -5,12 +5,21 @@ class Mp3Parser
     @content = content
   end
 
-  memoize def chapters
-    ret = nil
+  memoize def results
+    ret = {}
     Mp3Info.open(StringIO.new(@content)) do |m|
-      ret = m.tag2.CHAP&.map { |s| Chapter.new(s) }
+      ret[:chapters] = m.tag2.CHAP&.map { |s| Chapter.new(s) }
+      ret[:duration] = m.length
     end
-    ret || []
+    ret
+  end
+
+  def chapters
+    results[:chapters] || []
+  end
+
+  def duration
+    results[:duration]
   end
 
   class Chapter

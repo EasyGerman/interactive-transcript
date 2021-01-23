@@ -1,13 +1,14 @@
-Chapter = Struct.new(:title, :paragraphs, :episode, :index)
+Chapter = Struct.new(:parent, :title, :paragraphs, :episode, :index)
 Chapter.class_eval do
   extend Memoist
 
   def timestamp
-    paragraphs.first.timestamp
+    paragraphs.first&.timestamp
   end
 
   memoize def end_timestamp
     if next_chapter
+      return if next_chapter.timestamp.blank?
       next_chapter.timestamp - 4.seconds
     else
       Timestamp.from_seconds(episode.audio.end_time / 1000)
@@ -15,11 +16,13 @@ Chapter.class_eval do
   end
 
   def duration
+    return if timestamp.blank?
+    return if end_timestamp.blank?
     end_timestamp - timestamp
   end
 
   def next_chapter
-    episode_description.chapters[index + 1]
+    parent.chapters[index + 1]
   end
 
   def processed

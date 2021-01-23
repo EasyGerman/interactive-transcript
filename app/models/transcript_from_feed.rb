@@ -16,14 +16,14 @@ class TranscriptFromFeed
 
     nodes.each do |node|
       if node.name == 'h3'
-        chapters << current_chapter = Chapter.new(node.text.strip, [], episode, chapters.size)
+        chapters << current_chapter = Chapter.new(self, node.text.strip, [], episode, chapters.size)
       elsif node.name == 'p'
         if node.children.count == 1 && node.children.first.name == "strong"
-          chapters << current_chapter = Chapter.new(node.text.strip, [], episode, chapters.size)
+          chapters << current_chapter = Chapter.new(self, node.text.strip, [], episode, chapters.size)
           next
         end
         if current_chapter.blank?
-          chapters << current_chapter = Chapter.new(nil, [], episode, chapters.size)
+          chapters << current_chapter = Chapter.new(self, nil, [], episode, chapters.size)
         end
         next if node.text.blank?
         current_chapter.paragraphs << Paragraph.new(node, current_chapter, current_chapter.paragraphs.size)

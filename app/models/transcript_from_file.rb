@@ -42,6 +42,7 @@ class TranscriptFromFile
 
     collector[:chapters].to_enum.with_index.map do |chapter_hash, chapter_index|
       chapter = Chapter.new(
+        self,
         chapter_hash[:title],
         [],
         episode_description,

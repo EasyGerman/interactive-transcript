@@ -13,12 +13,16 @@ class Audio
     CachedNetwork.fetch(url)
   end
 
+  memoize def mp3_parser
+    Mp3Parser.new(content)
+  end
+
   memoize def chapters
-    Mp3Parser.new(content).chapters
+    mp3_parser.chapters
   end
 
   def end_time
-    chapters.last.end_time
+    chapters.last&.end_time || mp3_parser.duration * 1000
   end
 
   def processed_chapters
