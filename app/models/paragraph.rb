@@ -16,6 +16,8 @@ class Paragraph
       @timestamp = Timestamp.new(ts[1..-2])
     end
     @label, @text = node_text.split(@timestamp_string, 2).map(&:strip)
+    # Replace multiple consecutive spaces with one
+    @text.gsub!(/ +/, ' ')
   end
 
   def slug
