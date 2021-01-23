@@ -2,9 +2,12 @@ module ApplicationHelper
 
   def rescue_and_show_errors
     yield
+    nil
   rescue StandardError => error
     render 'admin/shared/exception', error: error
   end
+
+  alias error_boundary rescue_and_show_errors
 
   def bilingual(separator: nil)
     locales = [I18n.locale, I18n.default_locale].uniq
