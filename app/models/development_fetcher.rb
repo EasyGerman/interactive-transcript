@@ -31,8 +31,8 @@ class DevelopmentFetcher
 
   attr_reader :fs_fetcher
 
-  def with_local_cache(path)
-    if File.exists?(path)
+  def with_local_cache(path, force: false)
+    if File.exists?(path) && !force
       if File.size(path) > 0
         Rails.logger.debug "Cache hit: #{path} "
         return File.read(path)
