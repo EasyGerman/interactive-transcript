@@ -11,13 +11,31 @@ class Timestamp
   end
 
   def self.convert_string_to_seconds(string)
+    raise ArgumentError, "expected a string, got #{string.inspect} (#{string.class.name})" if !string.is_a?(String)
     string.split(":").reverse.to_enum.with_index.map { |x, i| x.to_i * (60 ** i) }.sum
+  end
+
+  def self.from_any_object(object)
+    return nil if object.nil?
+    return self if object.is_a?(self)
+    return from_seconds(object) if object.is_a?(Integer)
+    return new(object) if object.is_a?(String)
+    raise ArgumentError, "can't build from #{object.class}"
+  end
+
+  def self.convert_to_seconds(object)
+    return nil if object.nil?
+    return to_seconds if object.is_a?(self)
+    return object if object.is_a?(Integer)
+    return convert_string_to_seconds(object) if object.is_a?(String)
+    raise ArgumentError, "can't convert from #{object.class}"
   end
 
   attr_reader :string
   alias to_s string
 
   def initialize(string)
+    raise ArgumentError, "expected a string, got #{string.inspect} (#{string.class.name})" if !string.is_a?(String)
     if m = CORE_REGEX.match(string)
       @string = [m[:hours], m[:minutes], m[:seconds]].compact.join(":")
     else
@@ -57,4 +75,5 @@ class Timestamp
       seconds: to_seconds,
     )
   end
+
 end

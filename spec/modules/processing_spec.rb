@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "Processing", :data do
+describe "Processing", :data, vcr: false do
 
   podcasts =
     if podcast_specifier = ENV['PODCAST'].presence
@@ -31,8 +31,17 @@ describe "Processing", :data do
       if episode.transcript.present?
         it "processes episode '#{episode.slug}' correctly" do
           actual_yaml = YAML.dump(episode.processed.as_json)
-          expected_yaml = fetcher.fetch_processed_yaml(episode)
-          if actual_yaml != expected_yaml
+          expected_yaml =
+            begin
+              fetcher.fetch_processed_yaml(episode)
+            rescue Errno::ENOENT
+              nil
+            end
+
+          if expected_yaml.blank?
+            fetcher.file_storage.write_file("episodes/#{episode.slug}/processed.yaml", actual_yaml)
+          elsif actual_yaml != expected_yaml
+            fetcher.file_storage.write_file("episodes/#{episode.slug}/processed-actual.yaml", actual_yaml)
             puts
             puts "Expected version:"
             puts expected_yaml.limit_lines(20)
@@ -40,7 +49,8 @@ describe "Processing", :data do
             puts "Actual version:"
             puts actual_yaml.limit_lines(20)
             puts
-            puts Diffy::Diff.new(expected_yaml, actual_yaml).to_s(:color).split("\n").limit_lines(20)
+            puts "Diff:"
+            puts Diffy::Diff.new(expected_yaml, actual_yaml).to_s(:color).limit_lines(20)
             raise "the processed episode is different from the stored version"
           end
         end

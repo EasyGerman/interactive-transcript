@@ -4,7 +4,7 @@ class TimedScript
     extend Memoist
 
     memoize def timestamp
-      Timestamp.new(timestamp_string)
+      Timestamp.new(timestamp_string) if timestamp_string.present?
     end
 
     def text
@@ -15,7 +15,7 @@ class TimedScript
       Digest::MD5.hexdigest("#{timestamp_string}-#{text}")[0..7]
     end
 
-    def segments
+    memoize def segments
       Bench.m("#{self.class.name}##{__method__}") do
 
         timed_segments =
@@ -24,9 +24,15 @@ class TimedScript
           end
 
         timed_segments.map do |time, text|
-          Segment.new(time || timestamp_string, text)
+          Segment.new(Timestamp.from_any_object(time || timestamp_string).to_s, text)
         end
       end
+    end
+
+    def segments_as_plain_text
+      segments.map do |segment|
+        [segment.timestamp_string, segment.text, ''].join('|')
+      end.join("\n")
     end
   end
 

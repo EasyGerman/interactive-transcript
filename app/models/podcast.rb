@@ -7,6 +7,12 @@ class Podcast < ApplicationRecord
     find_by(host: request.host) || (first if Rails.env.development?) || raise(PodcastNotFound.new(request.host))
   end
 
+  def feed
+    Feed.new(self)
+  end
+
+  delegate :episodes, to: :feed
+
   def locale
     lang
   end

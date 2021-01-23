@@ -24,12 +24,13 @@ class TimedScript
         Paragraph.new(
           para[:time],
           Speaker.new(*para[:speaker]),
-          para[:items],
+          para[:items], # slices
         )
       end
     end
   end
 
+  # []{ speaker: Tuple<id, name>, time: string, items: Tuple<text, ts, text> }
   def paras
     TimedScript::Iterator.new(doc).paragraphs
   end

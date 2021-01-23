@@ -1,8 +1,8 @@
 class FsFetcher
 
-  attr_reader :podcast
+  attr_reader :podcast, :file_storage
 
-  delegate :feed_path, :episode_dir_path_for, to: :@file_storage
+  delegate :feed_path, :episode_dir_path_for, to: :file_storage
 
   def initialize(podcast)
     @podcast = podcast
