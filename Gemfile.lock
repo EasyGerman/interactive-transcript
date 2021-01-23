@@ -343,6 +343,7 @@ DEPENDENCIES
   mp3info
   nokogiri
   pg
+  pry
   puma (~> 4.3.5)
   rack-attack
   rails (~> 6.0.2, >= 6.0.3.1)

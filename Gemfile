@@ -55,6 +55,7 @@ group :development, :test do
   gem 'guard-bundler', require: false
   gem 'webmock'
   gem 'vcr'
+  gem 'pry'
 end
 
 group :development do

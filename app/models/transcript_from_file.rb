@@ -2,11 +2,11 @@ class TranscriptFromFile
   extend Memoist
   include ErrorHandling
 
-  attr_reader :html, :episode_description
+  attr_reader :html, :episode
 
-  def initialize(html, episode_description)
-    @html = html
-    @episode_description = episode_description
+  def initialize(html, episode)
+    @html = Corrector.correct_downloadable_transcript_html(html, episode.slug)
+    @episode = episode
   end
 
   memoize def collector
@@ -45,7 +45,7 @@ class TranscriptFromFile
         self,
         chapter_hash[:title],
         [],
-        episode_description,
+        episode,
         chapter_index,
       )
 
