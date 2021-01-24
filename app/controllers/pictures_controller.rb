@@ -1,4 +1,5 @@
-class PicturesController < ApplicationController
+class PicturesController < PodcastControllerBase
+  include PodcastSiteControllerConcern
 
   def show
     access_key = params[:episode_id].presence or raise "access key missing"
