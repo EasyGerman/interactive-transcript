@@ -1,4 +1,6 @@
-class TranslateController < ApplicationController
+class TranslateController < PodcastControllerBase
+  include PodcastSiteControllerConcern
+
   skip_before_action :verify_authenticity_token
 
   def translate
