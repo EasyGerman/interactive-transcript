@@ -1,1 +1,1 @@
-load Rails.root.join('app', 'console', 'init.rb')
+load Rails.root.join('console', 'init.rb')
