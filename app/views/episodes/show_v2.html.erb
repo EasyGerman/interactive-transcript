@@ -18,13 +18,16 @@
   window.transcriptPlayer = <%= JSON.generate(
     vocabHelper: {
       available: current_podcast.vocab_helper_enabled?,
+    },
+    wordHighlighting: {
+      available: current_podcast.word_highlighting_enabled?,
     }
   ).html_safe %>
 </script>
 
 <%= render 'info_modal' %>
 
-<div id="player-page" class="version2">
+<div id="player-page" class="version2<%= " with-paragraph-highlighting" if !current_podcast.word_highlighting_enabled? %>">
   <div id="vocab-helper"><img id="vocab-helper-img" class="is-cover" src="<%= @prepared_episode.cover_url %>" /></div>
 
   <%= render 'v2/content' %>

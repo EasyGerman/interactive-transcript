@@ -84,7 +84,9 @@ function initializeApplication() {
   }
 
   media.addEventListener('timeupdate', timeupdateNormalMode);
-  media.addEventListener('timeupdate', wordHighlighter.handleTimeupdate.bind(null, media));
+  if (window.transcriptPlayer.wordHighlighting.available) {
+    media.addEventListener('timeupdate', wordHighlighter.handleTimeupdate.bind(null, media));
+  }
   media.addEventListener('timeupdate', vocabHelper.ontimeupdate);
 
   $('.timestamp').closest('.paragraph').addClass('timestampedEntry')

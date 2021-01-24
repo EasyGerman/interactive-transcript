@@ -40,6 +40,7 @@ gem 'dry-struct', '~> 1.0.0'
 gem 'redis-mutex'
 gem 'rack-attack'
 gem 'aws-sdk-s3', '~> 1'
+gem 'pry-rails'
 
 group :test do
   gem 'rspec-rails'
@@ -55,7 +56,6 @@ group :development, :test do
   gem 'guard-bundler', require: false
   gem 'webmock'
   gem 'vcr'
-  gem 'pry'
 end
 
 group :development do

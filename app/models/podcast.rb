@@ -41,6 +41,10 @@ class Podcast < ApplicationRecord
     translations_config&.fetch("enabled", false)
   end
 
+  def word_highlighting_enabled?
+    settings["word_highlighting"].present?
+  end
+
   def vocab_helper_aws_bucket
     vocab_helper_config["aws_bucket"]
   end
