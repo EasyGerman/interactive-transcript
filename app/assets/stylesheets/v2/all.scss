@@ -7,11 +7,11 @@ body {
   font-size: 16px;
 }
 header { text-align: center; margin: 4em 0; }
-header > a { color: $green; }
+header > a { color: $podcastPrimaryColor; }
 header > p { margin: 0; }
 
 h1 {
-  color: $green;
+  color: $podcastPrimaryColor;
 }
 
 a { color: #586f7c; }

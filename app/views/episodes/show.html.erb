@@ -1,3 +1,6 @@
+<style>
+:root { --podcast-primary-color: <%= current_podcast.settings.dig("theme", "primary_color") || "#FFA12C"; %> }
+</style>
 <div id="player-page" class="version1">
   <div id="control">
     <div id="buttons">
