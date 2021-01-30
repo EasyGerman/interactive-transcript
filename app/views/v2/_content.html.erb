@@ -22,9 +22,5 @@
     <% @prepared_episode.chapters.each do |chapter| %>
       <%= render 'v2/chapter', chapter: chapter %>
     <% end %>
-
-    <% if current_podcast == 'easygerman' %>
-      <%= render 'v2/feedback' %>
-    <% end %>
   </div>
 </div>

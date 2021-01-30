@@ -9,7 +9,7 @@
   // If javascript is enabled, hide the content before everthing is loaded,
   // to prevent the content from jumping around.
   document.write('<style>#player-page { visibility: hidden }</style>')
-  document.write('<div id="loading-container"><div id="loading"></div><p><a href="<%= episode_path(@access_key) %>/v1">Go to the old version</a></p></div>');
+  document.write('<div id="loading-container"><div id="loading"></div></div>');
   window.translations = <%=
     JSON.generate(collect_translations(
       translation: %i[loading_status failed_status],
@@ -25,8 +25,6 @@
     }
   ).html_safe %>
 </script>
-
-<%= render 'info_modal' %>
 
 <div id="player-page" class="version2<%= " with-paragraph-highlighting" if !current_podcast.word_highlighting_enabled? %>">
   <div id="vocab-helper"><img id="vocab-helper-img" class="is-cover" src="<%= @prepared_episode.cover_url %>" /></div>

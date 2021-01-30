@@ -7,7 +7,6 @@ import translation from './translation';
 import vocabHelper from './vocabHelper';
 import vocabHelperToggle from './vocabHelperToggle';
 import builtinPlayerToggle from './builtinPlayerToggle';
-import feedback from './feedback';
 import progressBar from './progressBar';
 import './infoModal';
 import './fontSettingsModal';
@@ -60,7 +59,6 @@ function initializeApplication() {
   vocabHelperToggle.init();
 
   builtinPlayerToggle.init();
-  feedback.init();
   progressBar.init({ media });
 
   function timeupdateNormalMode(e) {
