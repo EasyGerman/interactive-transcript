@@ -6,7 +6,9 @@
       <% if paragraph.timestamp %>
         <span class="timestamp" data-timestamp="<%= paragraph.timestamp.seconds %>"><%= paragraph.timestamp.text %></span>
       <% end %>
-      <strong class="speaker"><%= paragraph.speaker.name %>:</strong>
+      <% if paragraph.speaker %>
+        <strong class="speaker"><%= paragraph.speaker.name %>:</strong>
+      <% end %>
     </div>
 
     <div class="paragraph-bookmarks"></div>

@@ -12,12 +12,16 @@ class Paragraph
     @chapter = chapter
     @index = index
     @timestamp_string = node_text[%r{\[[\d:]+\]}]
-    if ts = @timestamp_string[Timestamp::REGEX]
-      @timestamp = Timestamp.new(ts[1..-2])
+    if @timestamp_string
+      if ts = @timestamp_string[Timestamp::REGEX]
+        @timestamp = Timestamp.new(ts[1..-2])
+      end
+      @label, @text = node_text.split(@timestamp_string, 2).map(&:strip)
+      # Replace multiple consecutive spaces with one
+      @text.gsub!(/ +/, ' ')
+    else
+      @text = node_text
     end
-    @label, @text = node_text.split(@timestamp_string, 2).map(&:strip)
-    # Replace multiple consecutive spaces with one
-    @text.gsub!(/ +/, ' ')
   end
 
   def slug
@@ -29,6 +33,7 @@ class Paragraph
   end
 
   def speaker
+    return if label.blank?
     Speaker.new(label.sub(':', ''))
   end
 
@@ -88,8 +93,8 @@ class Paragraph
     ::Processed::Paragraph.new(
       translation_id: translation_id,
       slug: slug,
-      speaker: ::Processed::Speaker.new(name: speaker.name),
-      timestamp: timestamp.processed,
+      speaker: (::Processed::Speaker.new(name: speaker.name) if speaker),
+      timestamp: timestamp&.processed,
       segments: segments&.map(&:processed),
       text: text,
     )

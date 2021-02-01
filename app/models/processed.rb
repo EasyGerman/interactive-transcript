@@ -19,8 +19,8 @@ module Processed
   class Paragraph < CustomStruct
     attribute :translation_id, Types::String
     attribute :slug, Types::String
-    attribute :speaker, Speaker
-    attribute :timestamp, Timestamp
+    attribute :speaker, Speaker.optional
+    attribute :timestamp, Timestamp.optional
     attribute :segments, Types::Array.of(Segment).optional
     attribute :text, Types::String
   end
