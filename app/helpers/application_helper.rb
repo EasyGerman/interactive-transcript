@@ -1,10 +1,14 @@
 module ApplicationHelper
 
-  def rescue_and_show_errors
-    yield
-    nil
+  def rescue_and_show_errors(part = 'part')
+    capture do
+      yield
+    end
   rescue StandardError => error
-    render 'admin/shared/exception', error: error
+    Rollbar.error(error)
+    content_tag :span, class: "error" do
+      "Sorry, there is a problem with this #{part}"
+    end
   end
 
   alias error_boundary rescue_and_show_errors

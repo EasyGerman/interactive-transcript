@@ -20,7 +20,9 @@
     <% end %>
 
     <% @prepared_episode.chapters.each do |chapter| %>
-      <%= render 'v2/chapter', chapter: chapter %>
+      <%= error_boundary 'chapter' do %>
+        <%= render 'v2/chapter', chapter: chapter %>
+      <% end %>
     <% end %>
   </div>
 </div>

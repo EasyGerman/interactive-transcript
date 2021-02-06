@@ -43,6 +43,7 @@
         <% end %>
 
         <% chapter.paragraphs.each do |paragraph| %>
+          <%= error_boundary 'paragraph' do %>
           <p class="paragraph" data-translation-id="<%= paragraph.translation_id %>">
 
             <% Bench.m("render-paragraph-#{paragraph.slug}") do %>
@@ -52,7 +53,9 @@
     <span class="timestamp" data-timestamp="<%= paragraph.timestamp.seconds %>"><%= paragraph.timestamp.text %></span>
     <% end %>
 
-    <strong class="speaker"><%= paragraph.speaker.name %>:</strong>
+    <% if paragraph.speaker %>
+      <strong class="speaker"><%= paragraph.speaker.name %>:</strong>
+    <% end %>
   </span>
 
   <% if paragraph.segments %>
@@ -65,7 +68,7 @@
 
             <% end %>
           </p>
-
+          <% end %>
         <% end %>
       </div><!-- /chapter -->
 
