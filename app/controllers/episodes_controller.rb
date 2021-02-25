@@ -4,14 +4,14 @@ class EpisodesController < PodcastControllerBase
   layout "application2", :only => [ :show_v2 ]
 
   def show
-    if current_podcast.code == 'easygreek'
-      show_v2
-    else
+    if current_podcast.code == 'easygerman'
       case cookies[:version]&.to_i
       when 1 then show_v1
       when 2 then show_v2
       else show_v2
       end
+    else
+      show_v2
     end
   end
 

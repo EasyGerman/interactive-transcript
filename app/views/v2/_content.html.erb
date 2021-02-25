@@ -15,9 +15,7 @@
 
     <%= @prepared_episode.notes_html.sub(%r{<p><br></p>\n\Z}, '').html_safe %>
 
-    <% if current_podcast.code == 'easygerman' # TODO %>
-      <h2>Transkript</h2>
-    <% end %>
+    <h2><%= current_podcast.transcript_title %></h2>
 
     <% @prepared_episode.chapters.each do |chapter| %>
       <%= error_boundary 'chapter' do %>

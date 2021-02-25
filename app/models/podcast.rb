@@ -80,4 +80,12 @@ class Podcast < ApplicationRecord
     URI.parse(homepage_url).host
   end
 
+  def transcript_title
+    settings.fetch("transcript_title", "Transcript")
+  end
+
+  def header_tags
+    settings.fetch("header_tags", ["h2", "h3"])
+  end
+
 end

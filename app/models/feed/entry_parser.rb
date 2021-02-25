@@ -9,10 +9,15 @@ class Feed
 
     memoize def slug
       # TODO: remove hardcoded easygreek
-      link_url[%r{^https://www.patreon.com/posts/(.*)$}, 1] ||
-        ('trailer' if link_url == 'https://www.easygreek.fm/trailer') ||
-        episode_number.to_s ||
-        raise("Cannot find slug in #{patreon_post_url}")
+      case podcast.code
+      when 'easycatalan'
+        link_url[%r{easycatalan\.fm/(\d+)$}, 1]
+      else
+        link_url[%r{^https://www.patreon.com/posts/(.*)$}, 1] ||
+          ('trailer' if link_url == 'https://www.easygreek.fm/trailer') ||
+          link_url[%r{/episodes/(\d+)}, 1]
+      end ||
+        raise("Cannot find slug in #{link_url}")
     end
 
     memoize def link_url
@@ -32,7 +37,11 @@ class Feed
     end
 
     def description
-      node.css('description').text.strip
+      if @podcast.code == 'easycatalan'
+        node.xpath('content:encoded').first.text.strip
+      else
+        node.css('description').text.strip
+      end
     end
 
     def audio_url

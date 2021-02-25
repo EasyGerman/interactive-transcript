@@ -11,7 +11,7 @@ namespace :podcasts do
   desc 'Import podcasts from the files to database'
   task :load => :environment do
     Util.log_to_stdout
-    ContentProvider.each_podcast do |podcast_storage|
+    ContentProvider.for_each_podcast do |podcast_storage|
       config = podcast_storage.read_config
       begin
         podcast = Podcast.create!(config)

@@ -4,6 +4,8 @@ class Feed
 
     TranscriptHeaderNotFound = Class.new(StandardError)
 
+    delegate :podcast, to: :episode
+
     def initialize(html, episode)
       @html = Corrector.correct_feed_entry_description(html, episode.slug)
       @episode = episode
@@ -17,8 +19,8 @@ class Feed
           code, _, secret = $1, $2, $3
           secret || code
         end
-      when 'easygreek'
-        if html =~ %r{https://www.dropbox.com/s/(\w+)/easygreekpodcast(.*)_transcript.html\?dl=1} # TODO: localize
+      else
+        if html =~ %r{https://www.dropbox.com/s/(\w+)/#{episode.podcast.code}podcast(.*)_transcript.html\?dl=1} # TODO: localize
           secret, _ = $1, $2
           secret
         end
@@ -36,7 +38,7 @@ class Feed
     end
 
     def transcript_header?(node)
-      node.name == 'h3' && node.text.strip.in?(['Transkript', 'Απομαγνητοφώνηση']) # TODO: localize
+      node.name.in?(podcast.header_tags) && node.text.strip == podcast.transcript_title
     end
 
     memoize def transcript_start_index
@@ -52,7 +54,15 @@ class Feed
 
     # HTML fragment containing the show notes - will be rendered
     memoize def notes_html
-      nodes[0 .. transcript_start_index - 2].map(&:to_html).join("\n").html_safe
+      tmp_nodes = nodes[0 .. transcript_start_index - 2]
+
+      if podcast.code == 'easycatalan'
+        if hr_index = transcript_nodes.index { |node| node.name == 'hr' }
+          tmp_nodes += transcript_nodes[..(hr_index - 1)]
+        end
+      end
+
+      tmp_nodes.map(&:to_html).join("\n").html_safe
     rescue TranscriptHeaderNotFound
       nodes.map(&:to_html).join("\n").html_safe
     end

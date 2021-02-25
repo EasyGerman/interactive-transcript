@@ -1,6 +1,6 @@
 <div class="chapter">
 
-  <% if chapter.title.present? %>
+  <% if chapter.title.present? && chapter.title != current_podcast.transcript_title %>
     <h3><%= chapter.title %></h3>
   <% end %>
 
