@@ -2,6 +2,14 @@ module GoogleTranslate
   extend self
   extend Memoist
 
+  def service_name
+    'Google Translate'
+  end
+
+  def service_code
+    'google'
+  end
+
   LANGUAGES = {
     "af" => { name: "Afrikaans", source: true, target: true },
     "am" => { name: "Amharic", source: true, target: true },
@@ -116,6 +124,18 @@ module GoogleTranslate
 
   DEPRECATED_LANGUAGE_CODES = %w[iw jw]
 
+  SUPPORTED_LANGUAGES = Set.new(LANGUAGES.map { |key, _| key.split('-')[0] }.uniq)
+
+  LANGUAGES_IN_COMMMON_FORMAT = LANGUAGES.map { |key, hash|
+    LanguageSupport.new(
+      service: self,
+      key: key,
+      name: hash[:name],
+      available_as_source: hash[:source],
+      available_as_target: hash[:target],
+    )
+  }
+
   def translate(text, to:, from: nil)
     contents = [text]
     target_language_code = to
@@ -161,6 +181,25 @@ module GoogleTranslate
     response.languages.select(&:support_target).map do |langauge|
       langauge.language_code
     end
+  end
+
+  def language_supported?(lang)
+    normalized_lang(lang).present?
+  end
+
+  def normalized_lang(lang)
+    lang_code, region_code = lang.split('-', 2)
+    lang = [lang_code.downcase, region_code&.upcase].compact.join('-')
+    lang if LANGUAGES.key?(lang)
+  end
+
+  def coerce_lang(lang)
+    normalized_lang(lang) ||
+      raise(Translator::Error.new("Google Translate doesn't support this language: #{lang}"))
+  end
+
+  def internal_key(lang)
+    "#{coerce_lang(lang)}@google"
   end
 
   private

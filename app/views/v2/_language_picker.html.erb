@@ -5,7 +5,7 @@
     select_tag(
       :language,
       options_for_select(
-        Translator::TARGET_LANGUAGES.map { |code, description| [description, code] },
+        Translator.supported_target_languages_for_select(current_podcast.lang),
       ),
       id: "language-picker",
     )

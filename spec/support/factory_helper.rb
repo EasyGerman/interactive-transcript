@@ -1,6 +1,7 @@
 module FactoryHelper
   SAMPLE_LANGUAGES = {
     de: 'german',
+    ca: 'catalan',
     en: 'english',
     es: 'spanish',
     fr: 'french',
@@ -38,6 +39,6 @@ module FactoryHelper
   end
 
   def find_or_create_podcast(code)
-    Podcast.find_by!(code: code) || create_podcast(code: code)
+    Podcast.find_by(code: code) || create_podcast(code: code)
   end
 end
