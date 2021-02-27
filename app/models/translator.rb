@@ -24,7 +24,6 @@ module Translator
   end
 
   def translate_with_cache(podcast, original, to:)
-    # to = coerce_lang(to)
     TranslationCache.with_cache(podcast, original, possible_cache_keys(to)) do |original|
       fetch_translation(original, from: podcast.lang, to: to)
     end
@@ -43,6 +42,7 @@ module Translator
       .flat_map do |service|
         service::LANGUAGES_IN_COMMMON_FORMAT.reject { |item| item.language_code == from_lang }
       end
+      .select(&:enabled?)
       .sort_by(&:display_name)
       .uniq(&:display_name)
   end
@@ -53,6 +53,7 @@ module Translator
       .flat_map do |service|
         service::LANGUAGES_IN_COMMMON_FORMAT.reject { |item| item.language_code == from_lang }
       end
+      .select(&:enabled?)
       .uniq(&:display_name)
       .sort_by(&:display_name)
       .map(&:for_select)

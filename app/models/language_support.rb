@@ -1,5 +1,7 @@
 class LanguageSupport < CustomStruct
 
+  ENABLED_SET = Set.new(ENV.fetch('ENABLED_TRANSLATION_LANGUAGES', 'de,en,fr,it,ja,es,nl,pl,pt,ru,zh,ca,el').split(','))
+
   attribute :service, Types::Any
   attribute :key, Types::String
   attribute :name, Types::String
@@ -31,6 +33,10 @@ class LanguageSupport < CustomStruct
 
   def display_name
     name
+  end
+
+  def enabled?
+    ENABLED_SET.include?('all') || ENABLED_SET.include?(language_code)
   end
 
 end
