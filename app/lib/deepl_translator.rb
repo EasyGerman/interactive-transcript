@@ -1,4 +1,21 @@
 class DeeplTranslator
+  extend Memoist
+
+  class << self
+    def service_name
+      'DeepL'
+    end
+
+    def service_code
+      'deepl'
+    end
+  end
+
+
+  def initialize(credentials:)
+    @credentials = credentials
+  end
+
   LANGUAGES = {
     "DE" => "German",
     "EN" => "English",
@@ -9,7 +26,7 @@ class DeeplTranslator
     "NL" => "Dutch",
     "PL" => "Polish",
     "PT-PT" => "Portuguese",
-    "PT-BR" => "Portuguese (Brazilian)",
+    # "PT-BR" => "Portuguese (Brazilian)",
     "RU" => "Russian",
     "ZH" => "Chinese",
   }
@@ -37,51 +54,40 @@ class DeeplTranslator
     503 => 'Resource currently unavailable. Try again later.',
   }
 
-  class << self
-    def service_name
-      'DeepL'
+  def translate(original, from:, to:)
+    resp = Faraday.get("https://api.deepl.com/v2/translate",
+      auth_key: ENV.fetch('DEEPL_API_KEY'),
+      source_lang: coerce_lang(from),
+      target_lang: coerce_lang(to),
+      text: original,
+      preserve_formatting: 1,
+
+    )
+    if resp.status.to_s[0] != '2'
+      message = "DeepL returned: #{[resp.status, STATUS_CODE_MEANINGS[resp.status], resp.body].reject(&:blank?).join(' - ')}"
+      Rails.logger.error(message)
+      raise Translator::Error, message
     end
+    data = JSON.parse(resp.body)
+    data.fetch('translations').first.fetch('text')
+  end
 
-    def service_code
-      'deepl'
-    end
+  def language_supported?(lang)
+    normalized_lang(lang).present?
+  end
 
-    def translate(original, from:, to:)
-      resp = Faraday.get("https://api.deepl.com/v2/translate",
-        auth_key: ENV.fetch('DEEPL_API_KEY'),
-        source_lang: coerce_lang(from),
-        target_lang: coerce_lang(to),
-        text: original,
-        preserve_formatting: 1,
+  def normalized_lang(lang)
+    lang = lang.upcase
+    lang = "PT-PT" if lang == "PT"
+    lang if LANGUAGES.key?(lang)
+  end
 
-      )
-      if resp.status.to_s[0] != '2'
-        message = "DeepL returned: #{[resp.status, STATUS_CODE_MEANINGS[resp.status], resp.body].reject(&:blank?).join(' - ')}"
-        Rails.logger.error(message)
-        raise Translator::Error, message
-      end
-      data = JSON.parse(resp.body)
-      data.fetch('translations').first.fetch('text')
-    end
+  def coerce_lang(lang)
+    normalized_lang(lang) ||
+      raise(Translator::Error.new("DeepL doesn't support this language: #{lang}"))
+  end
 
-    def language_supported?(lang)
-      normalized_lang(lang).present?
-    end
-
-    def normalized_lang(lang)
-      lang = lang.upcase
-      lang = "PT-PT" if lang == "PT"
-      lang if LANGUAGES.key?(lang)
-    end
-
-    def coerce_lang(lang)
-      normalized_lang(lang) ||
-        raise(Translator::Error.new("DeepL doesn't support this language: #{lang}"))
-    end
-
-    def internal_key(lang)
-      coerce_lang(lang)
-    end
-
+  def internal_key(lang)
+    coerce_lang(lang)
   end
 end

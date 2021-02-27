@@ -1,13 +1,18 @@
-module GoogleTranslate
-  extend self
+class GoogleTranslate
   extend Memoist
 
-  def service_name
-    'Google Translate'
+  class << self
+    def service_name
+      'Google Translate'
+    end
+
+    def service_code
+      'google'
+    end
   end
 
-  def service_code
-    'google'
+  def initialize(credentials:)
+    @credentials = credentials
   end
 
   LANGUAGES = {
@@ -117,8 +122,8 @@ module GoogleTranslate
     "yi" => { name: "Yiddish", source: true, target: true },
     "yo" => { name: "Yoruba", source: true, target: true },
     "zh" => { name: "Chinese", source: true, target: true },
-    "zh-CN" => { name: "Chinese (PRC)", source: true, target: true },
-    "zh-TW" => { name: "Chinese (Taiwan)", source: true, target: true },
+    # "zh-CN" => { name: "Chinese (PRC)", source: true, target: true },
+    # "zh-TW" => { name: "Chinese (Taiwan)", source: true, target: true },
     "zu" => { name: "Zulu", source: true, target: true },
   }
 
@@ -209,14 +214,19 @@ module GoogleTranslate
   end
 
   def project_id
-    JSON.parse(ENV['TRANSLATE_CREDENTIALS']).fetch('project_id')
+    @credentials.fetch('project_id')
   end
 
   def parent
     client.location_path(project: project_id, location: location_id)
   end
 
-  def client
+  memoize def client
+    Google::Cloud::Translate.configure do |config|
+      # config.project_id  = "my-project-id"
+      config.credentials = @credentials
+    end
+
     Google::Cloud::Translate.translation_service
   end
 

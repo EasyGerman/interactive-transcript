@@ -4,9 +4,7 @@
   <%=
     select_tag(
       :language,
-      options_for_select(
-        Translator.supported_target_languages_for_select(current_podcast.lang),
-      ),
+      options_for_select(current_podcast.translator.supported_target_languages_for_select),
       id: "language-picker",
     )
   %>

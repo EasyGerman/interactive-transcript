@@ -88,4 +88,8 @@ class Podcast < ApplicationRecord
     settings.fetch("header_tags", ["h2", "h3"])
   end
 
+  def translator
+    Translator.new(self)
+  end
+
 end

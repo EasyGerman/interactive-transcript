@@ -7,7 +7,7 @@ class TranslateController < PodcastControllerBase
     respond_to do |format|
       format.json do
         Rails.logger.info("Translate: key=#{params[:key]} lang=#{params[:lang]} ip=#{request.ip} ua=#{request.user_agent.inspect}")
-        translated_text = Translator.translate_from_key(current_podcast, params[:key], to: params[:lang])
+        translated_text = current_podcast.translator.translate_from_key(params[:key], to: params[:lang])
 
         render json: { text: translated_text }
       end

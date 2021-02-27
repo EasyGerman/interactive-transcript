@@ -1,29 +1,51 @@
-module Translator
-  extend self
+class Translator
+
+  DEFAULT_LANGUAGES = "en,ja,fr,it,es,nl,pl,pt,ru,zh"
+
+  extend Memoist
+
+  attr_accessor :podcast, :translators, :deepl_translator, :google_translator
+
+  def initialize(podcast)
+    @podcast = podcast
+    @translations_config = podcast.settings["translations"] || {}
+    @services = @translations_config["services"] || {}
+    @translators = []
+
+    @deepl_translator = DeeplTranslator.new(credentials: { "api_key" => ENV.fetch("DEEPL_API_KEY") })
+    @translators << @deepl_translator
+
+    if @services["google"]
+      @google_translator = GoogleTranslate.new(credentials: @services["google"]["credentials"])
+      @translators << @google_translator
+    end
+
+    @enabled_languages = @translations_config.fetch("languages", DEFAULT_LANGUAGES)&.split(",")
+  end
 
   Error = Class.new(StandardError)
 
   def fetch_translation(original, from:, to:)
-    if [from, to].all?(&DeeplTranslator.method(:language_supported?))
+    if [from, to].all?(&deepl_translator.method(:language_supported?))
       [
-        DeeplTranslator.translate(original, from: from, to: to),
-        { cache_key: DeeplTranslator.internal_key(to) }
+        deepl_translator.translate(original, from: from, to: to),
+        { cache_key: deepl_translator.internal_key(to) }
       ]
     else
       [
-        GoogleTranslate.translate(original, from: from, to: to),
-        { cache_key: GoogleTranslate.internal_key(to) }
+        google_translator.translate(original, from: from, to: to),
+        { cache_key: google_translator.internal_key(to) }
       ]
     end
   end
 
-  def translate_from_key(podcast, key, to:)
+  def translate_from_key(key, to:)
     TranslationCache.with_key_cache(podcast, key, possible_cache_keys(to)) do |original|
       fetch_translation(original, from: podcast.lang, to: to)
     end
   end
 
-  def translate_with_cache(podcast, original, to:)
+  def translate_with_cache(original, to:)
     TranslationCache.with_cache(podcast, original, possible_cache_keys(to)) do |original|
       fetch_translation(original, from: podcast.lang, to: to)
     end
@@ -36,24 +58,13 @@ module Translator
     lang
   end
 
-  def supported_target_languages_for(from_lang)
-    from_lang = from_lang.split('-').first
+  def supported_target_languages_for_select
+    from_lang = podcast.lang
     services_that_support_language_as_source(from_lang)
       .flat_map do |service|
-        service::LANGUAGES_IN_COMMMON_FORMAT.reject { |item| item.language_code == from_lang }
+        service.class::LANGUAGES_IN_COMMMON_FORMAT.reject { |item| item.language_code == from_lang }
       end
-      .select(&:enabled?)
-      .sort_by(&:display_name)
-      .uniq(&:display_name)
-  end
-
-  def supported_target_languages_for_select(from_lang)
-    from_lang = from_lang.split('-').first
-    services_that_support_language_as_source(from_lang)
-      .flat_map do |service|
-        service::LANGUAGES_IN_COMMMON_FORMAT.reject { |item| item.language_code == from_lang }
-      end
-      .select(&:enabled?)
+      .select(&method(:language_enabled?))
       .uniq(&:display_name)
       .sort_by(&:display_name)
       .map(&:for_select)
@@ -61,22 +72,26 @@ module Translator
 
   def services_that_support_language_as_source(lang)
     lang = lang.split('-').first
-    [DeeplTranslator, GoogleTranslate].select { |service|
-      service::SUPPORTED_LANGUAGES.include?(lang)
+    translators.select { |service|
+      service.class::SUPPORTED_LANGUAGES.include?(lang)
     }
   end
 
   def service_for(service_code)
     case service_code
-    when 'google' then GoogleTranslate
-    when 'deepl' then DeeplTranslator
-    else raise "Unknown translation service: #{service.inspect}"
+    when 'deepl' then deepl_translator
+    when 'google' then google_translator
+    else raise "Unknown translation service: #{service_code.inspect}"
     end
   end
 
   def possible_cache_keys(lang)
-    [DeeplTranslator, GoogleTranslate].map do |service|
-      service.internal_key(lang) if service.normalized_lang(lang).present?
+    translators.map do |translator|
+      translator.internal_key(lang) if translator.normalized_lang(lang).present?
     end
+  end
+
+  def language_enabled?(language)
+    language.language_code.in?(@enabled_languages) && language.language_code != podcast.lang
   end
 end

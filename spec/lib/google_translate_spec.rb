@@ -1,7 +1,11 @@
 require 'rails_helper'
 
 describe GoogleTranslate do
-  delegate :translate, :supported_languages, to: :described_class
+  delegate :translate, :supported_languages, to: :instance
+
+  let(:instance) {
+    described_class.new(credentials: { "credentials" => ENV.fetch("TRANSLATE_CREDENTIALS") })
+  }
 
   let(:hungarian_text) { 'A klasszikus gitár fából készül, körülbelül egy méter hosszú, ennek nagyjából felét a nyak, felét a test teszi ki' }
   let(:expected_romanian_translation) { 'Chitara clasică este realizată din lemn, lungă de aproximativ un metru, aproximativ jumătate din ea este gâtul și jumătate este corpul.' }
