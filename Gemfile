@@ -41,6 +41,7 @@ gem 'redis-mutex'
 gem 'rack-attack'
 gem 'aws-sdk-s3', '~> 1'
 gem 'pry-rails'
+gem 'google-cloud-translate'
 
 group :test do
   gem 'rspec-rails'

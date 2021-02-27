@@ -54,6 +54,19 @@ RSpec.configure do |config|
   # config.filter_gems_from_backtrace("gem name")
 
   config.include FactoryHelper
+
+  config.around network: true do |example|
+    WebMock.allow_net_connect!
+    VCR.turn_off!
+    example.run
+    VCR.turn_on!
+  end
+
+  config.around vcr: false do |example|
+    VCR.turn_off!
+    example.run
+    VCR.turn_on!
+  end
 end
 
 require 'vcr'

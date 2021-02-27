@@ -54,6 +54,8 @@ RSpec.configure do |config|
   # metadata: `fit`, `fdescribe` and `fcontext`, respectively.
   config.filter_run_when_matching :focus
 
+  config.filter_run_excluding :network
+
   # Allows RSpec to persist some state between runs in order to support
   # the `--only-failures` and `--next-failure` CLI options. We recommend
   # you configure your source control system to ignore this file.
@@ -92,4 +94,8 @@ RSpec.configure do |config|
   # test failures related to randomization by passing the same `--seed` value
   # as the one that triggered the failure.
   Kernel.srand config.seed
+
+  def stub_env(hash)
+    stub_const('ENV', ENV.to_h.merge(hash.stringify_keys))
+  end
 end

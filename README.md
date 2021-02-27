@@ -1,9 +1,9 @@
 # README
 
-This repository contains the source code for the interactive transcript of the incredible [Easy German Podcast](https://www.easygerman.org/podcast). 
+This repository contains the source code for the interactive transcript of the incredible [Easy German Podcast](https://www.easygerman.org/podcast).
 The transcripts are available to the Easy German Members; however, the transcript of the [first episode](https://www.easygerman.org/podcast/episodes/1) is free for all to see. You can see how this interactive transcript works [here](https://play.easygerman.fm/episodes/1).
 
-The interactive transcript highlights the words as they are being played and allows the user to translate the sections using [DeepL translator](https://www.deepl.com/translator). It also shows the Easy German Vocabulary Helper on the side. 
+The interactive transcript highlights the words as they are being played and allows the user to translate the sections using [DeepL translator](https://www.deepl.com/translator). It also shows the Easy German Vocabulary Helper on the side.
 
 ![Interactive Transcript Screenshot Sample](./sample_screenshot.png)
 
@@ -65,6 +65,10 @@ bundle exec rake feed:import_to_files
 ```ruby
 PODCAST=easygerman EPISODES=all bundle exec rspec spec/modules/processing_spec.rb
 ```
+
+By default, tests tagged as `network: true` are excluded.
+These tests use the real network and require valid credentials to be set up in
+`.env.test.local`.
 
 ## Deployment to Heroku
 
