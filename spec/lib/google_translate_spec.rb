@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe GoogleTranslate do
-  delegate :translate, :supported_source_languages, :supported_target_languages, to: :described_class
+  delegate :translate, :supported_languages, to: :described_class
 
   let(:hungarian_text) { 'A klasszikus gitár fából készül, körülbelül egy méter hosszú, ennek nagyjából felét a nyak, felét a test teszi ki' }
   let(:expected_romanian_translation) { 'Chitara clasică este realizată din lemn, lungă de aproximativ un metru, aproximativ jumătate din ea este gâtul și jumătate este corpul.' }
@@ -24,8 +24,15 @@ describe GoogleTranslate do
     end
 
     it 'can get the supported languages' do
-      expect(supported_source_languages).to include('hu', 'ro')
-      expect(supported_target_languages).to include('hu', 'ro')
+      result = supported_languages(cached: false)
+
+      expect(result.map { |lang| lang[:code] }).to include('hu', 'ro', 'ceb', 'pa', 'zh', 'zh-CN', 'zh-TW')
+
+      # It doesn't include deprecated codes
+      expect(result.map { |lang| lang[:code] }).not_to include('iw', 'jw')
+
+      # Uses name from the constant if available
+      expect(result).to include(code: 'ro', name: 'Romanian', source: true, target: true)
     end
   end
 
@@ -63,6 +70,15 @@ describe GoogleTranslate do
 
         expect(translate('Gift', from: 'de', to: 'hu')).to eq('Méreg')
       end
+    end
+
+    it 'can get supported languages (cached)' do
+      expect(supported_languages).to include(
+        code: 'ro',
+        name: 'Romanian',
+        source: true,
+        target: true,
+      )
     end
   end
 
