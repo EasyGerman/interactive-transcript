@@ -16,7 +16,7 @@ en:
   translation:
     translate_button: "Translate"
     translation_language_label: "Translation language:"
-    deepl_notice: "Translations by DeepL.com"
+    translation_service_notice: "Translations by DeepL.com and Google Translate"
     loading_status: "Loading translation"
     failed_status: "Translation failed"
 

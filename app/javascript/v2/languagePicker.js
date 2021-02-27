@@ -7,10 +7,12 @@ $(document).ready(() => {
   languagePicker.lang = localStorage.getItem('language') || 'EN'; // TODO: localize
 
   $picker.val(languagePicker.lang);
+  $('#translation-attribution').text(`Translations by ${$picker.find('option:selected').data('service')}`)
 
   $picker.change((event) => {
     languagePicker.lang = $picker.val();
     localStorage.setItem('language', languagePicker.lang);
+    $('#translation-attribution').text(`Translations by ${$picker.find('option:selected').data('service')}`)
   })
 });
 

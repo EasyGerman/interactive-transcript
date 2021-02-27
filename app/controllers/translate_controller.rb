@@ -7,7 +7,7 @@ class TranslateController < PodcastControllerBase
     respond_to do |format|
       format.json do
         Rails.logger.info("Translate: key=#{params[:key]} lang=#{params[:lang]} ip=#{request.ip} ua=#{request.user_agent.inspect}")
-        translated_text = Translator.translate_from_key(current_podcast.id, params[:key], params[:lang])
+        translated_text = Translator.translate_from_key(current_podcast, params[:key], to: params[:lang])
 
         render json: { text: translated_text }
       end
@@ -15,6 +15,7 @@ class TranslateController < PodcastControllerBase
   end
 
   rescue_from Translator::Error do |error|
+    Rails.logger.error("Translation failed: #{error.class.name}: #{error.message}")
     Rollbar.error(error)
     render json: { error: { message: "Translation failed" } }, status: 500
   end

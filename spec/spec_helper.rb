@@ -98,4 +98,11 @@ RSpec.configure do |config|
   def stub_env(hash)
     stub_const('ENV', ENV.to_h.merge(hash.stringify_keys))
   end
+
+  def capture_error(error_class)
+    yield
+    nil
+  rescue error_class => error
+    error
+  end
 end
