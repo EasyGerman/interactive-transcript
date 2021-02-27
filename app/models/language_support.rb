@@ -22,7 +22,7 @@ class LanguageSupport < CustomStruct
 
   def for_select
     # upcase'ing so that it's compatible with the value stored in localStorage
-    [display_name, language_with_region_code.upcase]
+    [display_name, language_with_region_code.upcase, { "data-service" => service_name }]
   end
 
   def language_with_region_code

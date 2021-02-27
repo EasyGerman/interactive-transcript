@@ -15,20 +15,9 @@
     </div>
 
     <section id="pre-play">
-      <form id="language-picker-form">
-        <%= label(:language, "Translation language:") %>
-        &nbsp;
-        <%=
-          select_tag(
-            :language,
-            options_for_select(
-              Translator::TARGET_LANGUAGES.map { |code, description| [description, code] },
-            ),
-            id: "language-picker",
-          )
-        %>
-        <p>Translations by DeepL.com</p>
-      </form>
+      <% if current_podcast.translations_enabled? %>
+        <%= render 'v2/language_picker' %>
+      <% end %>
     </section>
 
     <%= @prepared_episode.notes_html.sub(%r{<p><br></p>\n\Z}, '').html_safe %>

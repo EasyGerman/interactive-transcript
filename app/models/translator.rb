@@ -53,8 +53,8 @@ module Translator
       .flat_map do |service|
         service::LANGUAGES_IN_COMMMON_FORMAT.reject { |item| item.language_code == from_lang }
       end
-      .sort_by(&:display_name)
       .uniq(&:display_name)
+      .sort_by(&:display_name)
       .map(&:for_select)
   end
 
