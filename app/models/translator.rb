@@ -1,6 +1,7 @@
 class Translator
 
   DEFAULT_LANGUAGES = "en,ja,fr,it,es,nl,pl,pt,ru,zh"
+  VALID_LANGUAGES = (DeeplTranslator::SUPPORTED_LANGUAGES + GoogleTranslate::SUPPORTED_LANGUAGES).map { |lang| lang.split('-', 2).first.downcase }
 
   extend Memoist
 
