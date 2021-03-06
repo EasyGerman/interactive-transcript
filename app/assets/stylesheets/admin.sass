@@ -1,4 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap')
+
 #admin-layout
+  font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif
   padding: .5em
 
   h2
@@ -52,9 +55,22 @@
   table.bordered
     border: solid 1px #DDD
     border-collapse: collapse
-    td, th
+    > tr > td, > tr > th, > thead > tr > td, > thead > tr > th, > tbody > tr > td, > tbody > tr > th
       border: solid 1px #DDD
       padding: 0 .5em
+      text-align: left
+      vertical-align: top
+    details
+      border: none 0
+      padding: 0
+
+  table.compact
+    border-collapse: collapse
+    > tr > td, > tr > th, > thead > tr > td, > thead > tr > th, > tbody > tr > td, > tbody > tr > th
+      padding: 0 .25em
+      text-align: left
+      vertical-align: top
+      line-height: 1em
 
   .diff
     ul
@@ -73,6 +89,7 @@
         background: #9F9
         ins
           text-decoration: none
+
 
 table.codes
   background: #EEE

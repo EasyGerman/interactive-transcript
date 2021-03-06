@@ -71,10 +71,6 @@ class TranslationCache < ApplicationRecord
       end
   end
 
-  def translations
-    raise "TODO: do not use the translations attribute, migrate callers to translations table"
-  end
-
   class CacheKey
 
     class << self

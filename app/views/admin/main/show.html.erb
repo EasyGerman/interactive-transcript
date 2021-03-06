@@ -1,8 +1,79 @@
 <h1>Admin area</h1>
 
+<p>
+  <strong><%= Podcast.count %></strong> podcasts,
+  <strong><%= EpisodeRecord.count %></strong> episodes,
+  <strong><%= TranslationCache.count %></strong> paragraphs,
+  <strong><%= Translation.count %></strong> translations
+</p>
+
 <% Podcast.all.each do |podcast| %>
   <div>
     <%= link_to podcast.name, admin_podcast_episodes_path(podcast.code) %>
     (<%= link_to "Transcripts", admin_podcast_transcripts_path(podcast.code) %>)
   </div>
+<% end %>
+
+
+<h2>Translation stats</h2>
+
+<% (0..3).to_a.each do |month_backward_index| %>
+  <% time_start = month_backward_index.months.ago.beginning_of_month %>
+  <% month = month_backward_index.months.ago.beginning_of_month.strftime("%Y-%m") %>
+  <h3><%= time_start.strftime("%B %Y") %></h3>
+
+  <table class="bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <% %w[deepl google].each do |service| %>
+        <th><%= service %></th>
+      <% end %>
+      <th>Total characters</th>
+      <th>Total paragraphs</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% TranslationStats.podcast_stats.each do |podcast_stats| %>
+      <% if podcast_stats.total_count_for_month(month) > 0 %>
+        <tr>
+          <th><%= podcast_stats.podcast.name %></th>
+          <% %w[deepl google].each do |service| %>
+            <td>
+              <% stats = podcast_stats.service_month_stats(service, month) %>
+              <% if stats %>
+                <details>
+                  <summary><%= service %> <%= stats.total_cost %> €</summary>
+
+                  <table class="compact">
+                    <thead>
+                      <tr class="summary">
+                        <th>Total</th>
+                        <td><%= stats.total_length %></td>
+                        <td><%= stats.total_count %></td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% stats&.lang_stats&.each do |lang_stats| %>
+                        <tr>
+                          <th><%= lang_stats.lang %></th>
+                          <td><%= lang_stats.length %></td>
+                          <td><%= lang_stats.count %></td>
+                        </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+
+                </details>
+              <% end %>
+            </td>
+          <% end %>
+          <td><%= podcast_stats.total_length_for_month(month) %></td>
+          <td><%= podcast_stats.total_count_for_month(month) %></td>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+
+</table>
 <% end %>
