@@ -153,7 +153,7 @@ class GoogleTranslate
       source_language_code: source_language_code,
     )
 
-    response.translations.first.translated_text
+    CGI.unescapeHTML(response.translations.first.translated_text)
   end
 
   def supported_languages(cached: true)

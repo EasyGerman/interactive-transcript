@@ -38,6 +38,10 @@ describe GoogleTranslate do
       # Uses name from the constant if available
       expect(result).to include(code: 'ro', name: 'Romanian', source: true, target: true)
     end
+
+    it 'returns unescaped string' do
+      expect(translate('in einer Folge "Fest & Flauschig"', from: 'de', to: 'en')).to eq('in one episode "Fest & Fluschig"')
+    end
   end
 
   context 'with stubbed client' do
@@ -74,6 +78,15 @@ describe GoogleTranslate do
 
         expect(translate('Gift', from: 'de', to: 'hu')).to eq('Méreg')
       end
+    end
+
+    it 'returns unescaped string' do
+      stub_translate_text contents: ['in einer Folge "Fest & Flauschig"'],
+                          source_language_code: 'de',
+                          target_language_code: 'en',
+                          translated_texts: ['in one episode &quot;Fest &amp; Fluschig&quot;']
+
+      expect(translate('in einer Folge "Fest & Flauschig"', from: 'de', to: 'en')).to eq('in one episode "Fest & Fluschig"')
     end
 
     it 'can get supported languages (cached)' do
