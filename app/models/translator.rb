@@ -89,7 +89,7 @@ class Translator
   def possible_cache_keys(lang)
     translators.map do |translator|
       translator.internal_key(lang) if translator.normalized_lang(lang).present?
-    end
+    end.compact
   end
 
   def language_enabled?(language)

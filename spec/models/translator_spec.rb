@@ -68,7 +68,7 @@ describe Translator do
       expect(deepl_translator).to receive(:translate).with('Gift', from: 'de', to: 'en').once.and_return('Poison')
       expect(translate_with_cache('Gift', to: 'en')).to eq 'Poison'
       expect(translate_with_cache('Gift', to: 'EN')).to eq 'Poison'
-      expect(TranslationCache.lookup(podcast, 'Gift').translations.keys).to eq ["EN"]
+      expect(TranslationCache.lookup_translation(podcast, 'Gift', 'en').translation_service).to eq 'deepl'
       key = TranslationCache.lookup(podcast, 'Gift').key
       expect(translate_from_key(key, to: 'EN')).to eq 'Poison'
     end
@@ -77,14 +77,15 @@ describe Translator do
       expect(google_translator).to receive(:translate).with('Gift', from: 'de', to: 'hu').once.and_return('Méreg')
       expect(translate_with_cache('Gift', to: 'hu')).to eq 'Méreg'
       expect(translate_with_cache('Gift', to: 'HU')).to eq 'Méreg'
-      expect(TranslationCache.lookup(podcast, 'Gift').translations.keys).to eq ["hu@google"]
+      expect(TranslationCache.lookup_translation(podcast, 'Gift', 'hu').translation_service).to eq 'google'
     end
 
     it 'caches translations (de-pt => DeepL)' do
       expect(deepl_translator).to receive(:translate).with('Gift', from: 'de', to: 'pt').once.and_return('Poção')
       expect(translate_with_cache('Gift', to: 'pt')).to eq 'Poção'
       expect(translate_with_cache('Gift', to: 'pt-PT')).to eq 'Poção'
-      expect(TranslationCache.lookup(podcast, 'Gift').translations.keys).to eq ["PT-PT"]
+      expect(TranslationCache.lookup_translation(podcast, 'Gift', 'pt').translation_service).to eq 'deepl'
+      expect(TranslationCache.lookup_translation(podcast, 'Gift', 'pt').region).to eq 'PT'
     end
 
     context "when the podcast language is Catalan" do
@@ -99,7 +100,7 @@ describe Translator do
         expect(google_translator).to receive(:translate).with('Hola', from: 'ca', to: 'EN').once.and_return('Hello')
         expect(translate_with_cache('Hola', to: 'EN')).to eq 'Hello'
         expect(translate_with_cache('Hola', to: 'en')).to eq 'Hello'
-        expect(TranslationCache.lookup(podcast, 'Hola').translations.keys).to eq ["en@google"]
+        expect(TranslationCache.lookup_translation(podcast, 'Hola', 'en').translation_service).to eq 'google'
       end
     end
 
