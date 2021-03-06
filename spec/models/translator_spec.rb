@@ -69,6 +69,7 @@ describe Translator do
       expect(translate_with_cache('Gift', to: 'en')).to eq 'Poison'
       expect(translate_with_cache('Gift', to: 'EN')).to eq 'Poison'
       expect(TranslationCache.lookup_translation(podcast, 'Gift', 'en').translation_service).to eq 'deepl'
+      expect(TranslationCache.lookup_translation(podcast, 'Gift', 'en').translated_at).to be_present
       key = TranslationCache.lookup(podcast, 'Gift').key
       expect(translate_from_key(key, to: 'EN')).to eq 'Poison'
     end

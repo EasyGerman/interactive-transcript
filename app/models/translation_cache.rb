@@ -34,6 +34,7 @@ class TranslationCache < ApplicationRecord
       translation_service: o.service,
       source_length: original.length,
       body: translated_body,
+      translated_at: Time.current,
     )
 
     translated_body
