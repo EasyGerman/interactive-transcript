@@ -26,8 +26,8 @@
   <thead>
     <tr>
       <th></th>
-      <% %w[deepl google].each do |service| %>
-        <th><%= service %></th>
+      <% Translations.services.each do |service| %>
+        <th><%= service.name %></th>
       <% end %>
       <th>Total characters</th>
       <th>Total paragraphs</th>
@@ -38,12 +38,12 @@
       <% if podcast_stats.total_count_for_month(month) > 0 %>
         <tr>
           <th><%= podcast_stats.podcast.name %></th>
-          <% %w[deepl google].each do |service| %>
+          <% Translations.services.each do |service| %>
             <td>
               <% stats = podcast_stats.service_month_stats(service, month) %>
               <% if stats %>
                 <details>
-                  <summary><%= service %> <%= stats.total_cost %> €</summary>
+                  <summary><%= stats.total_cost %> €</summary>
 
                   <table class="compact">
                     <thead>

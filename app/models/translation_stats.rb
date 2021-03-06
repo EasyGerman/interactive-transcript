@@ -7,14 +7,15 @@ class TranslationStats
 
     def podcast_stats
       podcasts_by_id = Podcast.all.index_by(&:id)
+      services_by_code = Translations.services.index_by(&:code)
       @stats = {}
 
       Translation.joins(:translation_cache)
         .group("podcast_id, lang, translation_service, to_char(#{TIMESTAMP_COLUMN}, \'YYYY-MM\')")
         .pluck("podcast_id, lang, translation_service, to_char(#{TIMESTAMP_COLUMN}, \'YYYY-MM\') as month, count(*) as total_count, sum(source_length) AS total_length")
-        .each do |podcast_id, lang, service, month, count, length|
+        .each do |podcast_id, lang, service_code, month, count, length|
           @stats[podcast_id] ||= PodcastStats.new(podcasts_by_id.fetch(podcast_id))
-          @stats[podcast_id].add_stat(month, service, lang, count, length)
+          @stats[podcast_id].add_stat(month, services_by_code[service_code], lang, count, length)
         end
 
       @stats.values
@@ -31,12 +32,12 @@ class TranslationStats
 
     def add_stat(month, service, lang, count, length)
       @stats[month] ||= {}
-      s = @stats[month][service] ||= ServiceMonthStats.new(service, month)
+      s = @stats[month][service.code] ||= ServiceMonthStats.new(service, month)
       s.add_stat(lang, count, length)
     end
 
     def service_month_stats(service, month)
-      @stats.dig(month, service)
+      @stats.dig(month, service.code)
     end
 
     def total_length_for_month(month)
@@ -79,7 +80,7 @@ class TranslationStats
     end
 
     def total_cost
-      (COST_PER_MILLION.fetch(service) * total_length / 1_000_000).round(2)
+      service.cost_for_characters(total_length)
     end
 
   end
