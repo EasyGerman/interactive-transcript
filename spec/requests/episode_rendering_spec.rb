@@ -1,7 +1,7 @@
 require "rails_helper"
 
-RSpec.describe "Episode rendering", type: :request, vcr: true do
-  let!(:podcast) { find_or_create_podcast('easygerman') }
+RSpec.describe "Episode rendering", type: :request, network: true do
+  let!(:podcast) { easygerman }
 
   it "renders episode" do
     podcast.settings['translations'] = { enabled: true }

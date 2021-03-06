@@ -1,6 +1,7 @@
 class Translator
 
   DEFAULT_LANGUAGES = "en,ja,fr,it,es,nl,pl,pt,ru,zh"
+  VALID_LANGUAGES = (DeeplTranslator::SUPPORTED_LANGUAGES + GoogleTranslate::SUPPORTED_LANGUAGES).map { |lang| lang.split('-', 2).first.downcase }
 
   extend Memoist
 
@@ -88,7 +89,7 @@ class Translator
   def possible_cache_keys(lang)
     translators.map do |translator|
       translator.internal_key(lang) if translator.normalized_lang(lang).present?
-    end
+    end.compact
   end
 
   def language_enabled?(language)

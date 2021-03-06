@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_07_170437) do
+ActiveRecord::Schema.define(version: 2021_03_06_072422) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,6 +54,23 @@ ActiveRecord::Schema.define(version: 2020_12_07_170437) do
     t.index ["podcast_id"], name: "index_translation_caches_on_podcast_id"
   end
 
+  create_table "translations", force: :cascade do |t|
+    t.string "key", limit: 40, null: false
+    t.bigint "translation_cache_id", null: false
+    t.string "source_lang", null: false
+    t.string "lang", null: false
+    t.string "region"
+    t.string "translation_service", null: false
+    t.integer "source_length", null: false
+    t.datetime "translated_at"
+    t.string "body", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["key", "lang"], name: "index_translations_on_key_and_lang"
+    t.index ["translated_at"], name: "index_translations_on_translated_at"
+    t.index ["translation_cache_id"], name: "index_translations_on_translation_cache_id"
+  end
+
   create_table "vocab_slide_records", force: :cascade do |t|
     t.bigint "episode_record_id", null: false
     t.string "chapter_key", limit: 10, null: false
@@ -64,5 +81,6 @@ ActiveRecord::Schema.define(version: 2020_12_07_170437) do
 
   add_foreign_key "episode_records", "podcasts"
   add_foreign_key "translation_caches", "podcasts"
+  add_foreign_key "translations", "translation_caches", column: "translation_cache_id"
   add_foreign_key "vocab_slide_records", "episode_records"
 end
