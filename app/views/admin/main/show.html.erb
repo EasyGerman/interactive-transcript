@@ -49,14 +49,14 @@
                     <thead>
                       <tr class="summary">
                         <th>Total</th>
-                        <td><%= stats.total_length %></td>
-                        <td><%= stats.total_count %></td>
+                        <th><%= stats.total_length %></th>
+                        <th><%= stats.total_count %></th>
                       </tr>
                     </thead>
                     <tbody>
                       <% stats&.lang_stats&.each do |lang_stats| %>
                         <tr>
-                          <th><%= lang_stats.lang %></th>
+                          <td><%= Languages[lang_stats.lang].name %></td>
                           <td><%= lang_stats.length %></td>
                           <td><%= lang_stats.count %></td>
                         </tr>
