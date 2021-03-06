@@ -5,6 +5,7 @@ describe Translator do
 
   let(:podcast) {
     find_or_create_podcast('easygerman').tap do |podcast|
+      podcast.lang = 'de'
       podcast.settings["translations"] = translations_config
       podcast.save!
     end

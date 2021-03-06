@@ -30,6 +30,7 @@ module FactoryHelper
           aws_region: "eu-central-1",
           aws_path: "vocab",
         },
+        transcript_title: "Transkript",
       }
     }
 
@@ -40,5 +41,9 @@ module FactoryHelper
 
   def find_or_create_podcast(code)
     Podcast.find_by(code: code) || create_podcast(code: code)
+  end
+
+  def easygerman
+    Podcast.find_by(lang: 'de') || create_podcast(lang: :de)
   end
 end

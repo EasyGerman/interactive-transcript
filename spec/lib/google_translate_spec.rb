@@ -4,7 +4,7 @@ describe GoogleTranslate do
   delegate :translate, :supported_languages, to: :instance
 
   let(:instance) {
-    described_class.new(credentials: { "credentials" => ENV.fetch("TRANSLATE_CREDENTIALS") })
+    described_class.new(credentials: JSON.parse(ENV.fetch("TRANSLATE_CREDENTIALS")))
   }
 
   let(:hungarian_text) { 'A klasszikus gitár fából készül, körülbelül egy méter hosszú, ennek nagyjából felét a nyak, felét a test teszi ki' }
