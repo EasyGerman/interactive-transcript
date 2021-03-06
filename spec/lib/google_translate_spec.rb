@@ -8,7 +8,7 @@ describe GoogleTranslate do
   }
 
   let(:hungarian_text) { 'A klasszikus gitár fából készül, körülbelül egy méter hosszú, ennek nagyjából felét a nyak, felét a test teszi ki' }
-  let(:expected_romanian_translation) { 'Chitara clasică este realizată din lemn, lungă de aproximativ un metru, aproximativ jumătate din ea este gâtul și jumătate este corpul.' }
+  let(:expected_romanian_translation) { 'Chitara clasică este fabricată din lemn, lungă de aproximativ un metru, din care aproximativ jumătate este gâtul și jumătate din corp.' }
 
   context 'with network', network: true do
     context 'without specifying the source language' do

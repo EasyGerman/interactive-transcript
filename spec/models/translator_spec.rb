@@ -17,7 +17,7 @@ describe Translator do
       "languages" => "en,ja,fr,it,es,nl,pl,pt,ru,zh",
       "services" => {
         "deepl" => { "credentials" => { "api_key" => ENV.fetch("DEEPL_API_KEY") } },
-        "google" => { "credentials" => ENV.fetch("TRANSLATE_CREDENTIALS") },
+        "google" => { "credentials" => JSON.parse(ENV.fetch("TRANSLATE_CREDENTIALS")) },
       }
     }
   }
@@ -28,19 +28,19 @@ describe Translator do
 
   context 'with network', network: true do
     it 'translates English to German' do
-      expect(fetch_translation('Gift', from: 'en', to: 'de')).to eq('Geschenk')
+      expect(fetch_translation('Gift', from: 'en', to: 'de')).to eq(['Geschenk', cache_key: 'DE'])
     end
 
     it 'translates German to English' do
-      expect(fetch_translation('Gift', from: 'de', to: 'en')).to eq('Poison')
+      expect(fetch_translation('Gift', from: 'de', to: 'en')).to eq(['Poison', cache_key: 'EN'])
     end
 
     it 'translates English to Hungarian' do
-      expect(fetch_translation('Gift', from: 'en', to: 'hu')).to eq('Ajándék')
+      expect(fetch_translation('Gift', from: 'en', to: 'hu')).to eq(['Ajándék', cache_key: 'hu@google'])
     end
 
     it 'translates German to Hungarian' do
-      expect(fetch_translation('Gift', from: 'de', to: 'hu')).to eq('Méreg')
+      expect(fetch_translation('Gift', from: 'de', to: 'hu')).to eq(['Méreg', cache_key: 'hu@google'])
     end
   end
 

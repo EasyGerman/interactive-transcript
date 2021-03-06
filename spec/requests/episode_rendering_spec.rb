@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Episode rendering", type: :request, vcr: true do
+RSpec.describe "Episode rendering", type: :request, network: true do
   let!(:podcast) { easygerman }
 
   it "renders episode" do
