@@ -43,6 +43,7 @@ gem 'aws-sdk-s3', '~> 1'
 gem 'pry-rails'
 gem 'google-cloud-translate'
 gem 'iso-639'
+gem 'packwerk'
 
 group :test do
   gem 'rspec-rails'
