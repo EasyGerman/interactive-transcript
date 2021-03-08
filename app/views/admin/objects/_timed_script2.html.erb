@@ -1,0 +1,24 @@
+<h3>o.parsed_paragraphs</h3>
+<table>
+  <% o.parsed_paragraphs.each do |parsed_paragraph| %>
+    <tr>
+      <% processed_paragraph = o.process_paragraph(parsed_paragraph) %>
+      <td>
+        <h6>processed_paragraph</h6>
+        <small><%= JSON.generate(processed_paragraph.as_json) %></small>
+      </td>
+      <td style="max-width: 20em">
+        <small><%= processed_paragraph.except(:items).to_json %></small>
+        <table class="codes">
+          <% processed_paragraph[:items].each do |slice| %>
+            <tr>
+              <td><code><%= slice[0] %></code></td>
+              <td><code><%= slice[1] %></code></td>
+              <td><code><%= slice[2] %></code></td>
+            </tr>
+          <% end %>
+        </table>
+      </td>
+    </tr>
+  <% end %>
+</table>

@@ -16,7 +16,7 @@ describe Translation do
   }
 
   let(:translation_cache) { TranslationCache.add_original_nx(podcast, "Hallo!") }
-  let(:podcast) { create_podcast }
+  let(:podcast) { easygerman }
 
   describe "when valid attributes were provided" do
     it { is_expected.to be_valid }

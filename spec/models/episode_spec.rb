@@ -116,6 +116,7 @@ describe Episode do
   describe "#timed_script" do
     subject(:timed_script) { episode.timed_script }
     it { is_expected.to be_a TimedScript }
+    # it { is_expected.to be_a TimedScript2 }
   end
 
   describe "#audio" do

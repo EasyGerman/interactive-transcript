@@ -1,8 +1,6 @@
 require "rails_helper"
 
 describe TranslationCache do
-  let(:podcast) { create_podcast }
-
   it "can store translations" do
     TranslationCache.create!(
       podcast_id: podcast.id,

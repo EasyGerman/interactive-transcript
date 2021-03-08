@@ -46,4 +46,16 @@ module FactoryHelper
   def easygerman
     Podcast.find_by(lang: 'de') || create_podcast(lang: :de)
   end
+
+  def easygreek
+    Podcast.find_by(lang: 'el') || create_podcast(lang: :el)
+  end
+
+  def podcast
+    easygerman
+  end
+
+  def other_podcast
+    easygreek
+  end
 end

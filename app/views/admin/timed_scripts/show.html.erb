@@ -6,6 +6,16 @@
 
 <% if @episode.transcript_editor_html.present? %>
   <% timed_script = @episode.timed_script %>
+  <% timed_script2 = @episode.timed_script2 %>
+
+  <%= error_boundary do %>
+    <details>
+      <summary>Parser output</summary>
+      <div>
+        <pre><%= JSON.pretty_generate @episode.timed_script2.parsed_paragraphs.as_json %></pre>
+      </div>
+    </details>
+  <% end %>
 
   <%= error_boundary do %>
   <details>
@@ -27,6 +37,9 @@
             </table>
           </div>
         <% end %>
+      </div>
+      <div style="max-width: 60vw; overflow: auto; height: 80vh">
+        <%= render_object timed_script2 %>
       </div>
     </div>
   </details>
