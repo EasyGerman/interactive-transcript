@@ -9,11 +9,11 @@ ENV["RAILS_ENV"] = "test"
 # Command line arguments needs to be duplicated because spring modifies it
 packwerk_argv = ARGV.dup
 
-begin
-  load(File.expand_path("spring", __dir__))
-rescue LoadError => e
-  raise unless e.message.include?("spring")
-end
+# begin
+#   load(File.expand_path("spring", __dir__))
+# rescue LoadError => e
+#   raise unless e.message.include?("spring")
+# end
 
 require File.expand_path("../config/environment", __dir__)
 

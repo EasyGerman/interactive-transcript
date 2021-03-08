@@ -29,6 +29,7 @@ module Player
     config.autoload_paths += %W(
       #{config.root}/app/lib
       #{config.root}/app/services
+      #{config.root}/app/components
     )
 
     # Settings in config/environments/* take precedence over those specified here.

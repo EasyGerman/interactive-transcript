@@ -1,0 +1,23 @@
+# This file contains a list of dependencies that are not part of the long term plan for app/components/processor.
+# We should generally work to reduce this list, but not at the expense of actually getting work done.
+#
+# You can regenerate this file using the following command:
+#
+# bundle exec packwerk update-deprecations app/components/processor
+---
+".":
+  "::Feed":
+    violations:
+    - dependency
+    files:
+    - app/components/processor/process_episode.rb
+  "::Podcast":
+    violations:
+    - dependency
+    files:
+    - app/components/processor/process_episode.rb
+  "::VocabSlide":
+    violations:
+    - dependency
+    files:
+    - app/components/processor/process_episode.rb

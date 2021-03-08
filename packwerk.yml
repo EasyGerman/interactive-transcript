@@ -25,6 +25,7 @@ load_paths:
 - app/jobs
 - app/models
 - app/models/concerns
+- app/components
 
 # List of custom associations, if any
 # custom_associations:
