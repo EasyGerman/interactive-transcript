@@ -63,6 +63,12 @@ class Episode
     end
   end
 
+  memoize def timed_script2
+    hide_and_report_errors do
+      TimedScript2.new(transcript_editor_html) if transcript_editor_html
+    end
+  end
+
   memoize def audio
     Audio.new(fetcher)
   end

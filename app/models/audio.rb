@@ -17,6 +17,10 @@ class Audio
     Mp3Parser.new(content)
   end
 
+  memoize def mp3_parser
+    Mp3Parser.new(content)
+  end
+
   memoize def chapters
     mp3_parser.chapters
   end
