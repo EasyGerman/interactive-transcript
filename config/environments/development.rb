@@ -49,6 +49,7 @@ Rails.application.configure do
   config.hosts << /.*\.ngrok\.io/
 
   if ENV['LOG_LEVEL']
+    config.logger = Logger.new(STDOUT)
     config.log_level = ENV['LOG_LEVEL']
   end
 end

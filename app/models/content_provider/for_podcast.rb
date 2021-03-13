@@ -24,7 +24,7 @@ class ContentProvider
     end
 
     def fetch_feed(force: false)
-      with_local_cache(feed_path, force: false) do
+      with_local_cache(feed_path, force: force) do
         RedisMutex.with_lock("feed:#{podcast.code}", block: 30, sleep: 0.5, expire: 60) do
           Rails.cache.fetch("feed:#{podcast.code}", expires_in: 15.seconds) do
             NetworkUtils.get_utf8(podcast.feed_url)

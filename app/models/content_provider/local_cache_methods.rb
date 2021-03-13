@@ -5,8 +5,12 @@ class ContentProvider
 
       if File.exists?(path) && !force
         if File.size(path) > 0
-          Rails.logger.debug "Cache hit: #{path} "
-          return File.read(path)
+          if File.mtime(path) < 1.minute.ago
+            Rails.logger.debug "Cache old: #{path} "
+          else
+            Rails.logger.debug "Cache hit: #{path} "
+            return File.read(path)
+          end
         else
           Rails.logger.debug "Cache miss: #{path} (zero length)"
         end
