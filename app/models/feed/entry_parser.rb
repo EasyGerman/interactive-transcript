@@ -23,7 +23,7 @@ class Feed
     end
 
     memoize def episode_id
-      node.css('acast:episodeId').text.strip
+      node.xpath('acast:episodeId').text.strip.presence
     rescue StandardError => error
       Rails.logger.warn('No episode id found')
       nil
