@@ -29,4 +29,8 @@ class Feed
   def cover_url
     node.css('image > url').text
   end
+
+  def generator
+    node.css('generator').text
+  end
 end

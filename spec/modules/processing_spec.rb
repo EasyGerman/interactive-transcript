@@ -31,6 +31,7 @@ describe "Processing", :data, vcr: false do
       when /^r(\d+)$/ then episodes.sample($1.to_i)
       when 'a', 'all' then episodes
       when /^(\d+)$/ then episodes.select { |e| e.number == $1.to_i }
+      when /^([\d\,]+)$/ then episode_numbers = $1.split(',').map(&:to_i); episodes.select { |e| e.number.in?(episode_numbers) }
       when /^(\d+)..(\d+)$/ then episodes.select { |e| e.number >= $1.to_i && e.number <= $2.to_i }
       else raise "Unrecognized value for EPISODES: #{ENV['EPISODES'].inspect}"
       end
@@ -69,11 +70,7 @@ describe "Processing", :data, vcr: false do
           else
             fetcher_for_episode.write_file(path_to_actual, actual_yaml)
           end
-        # CONFLICT:
-        # if expected_yaml.blank?
-        #   fetcher.file_storage.write_file("episodes/#{episode.slug}/processed.yaml", actual_yaml)
-        # elsif actual_yaml != expected_yaml
-        #   fetcher.file_storage.write_file("episodes/#{episode.slug}/processed-actual.yaml", actual_yaml)
+
           puts
           puts "Expected version:"
           puts expected_yaml.limit_lines(21)

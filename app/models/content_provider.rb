@@ -21,15 +21,15 @@ class ContentProvider
         config = YAML.load_file(config_file_path)
         begin
           podcast = Podcast.create!(config)
-          Rails.logger.info 'Podcast #{podcast.code} imported'
+          Rails.logger.info "Podcast #{podcast.code} imported"
         rescue ActiveRecord::RecordNotUnique
           podcast = Podcast.find_by!(code: config.fetch('code'))
           podcast.attributes = config
           if podcast.changed?
             podcast.save!
-            Rails.logger.info 'Podcast #{podcast.code} updated'
+            Rails.logger.info "Podcast #{podcast.code} updated"
           else
-            Rails.logger.info 'Podcast #{podcast.code} unchanged'
+            Rails.logger.info "Podcast #{podcast.code} unchanged"
           end
         end
       end

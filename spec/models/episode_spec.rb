@@ -15,7 +15,7 @@ describe Episode do
   let(:episode_node) { Nokogiri::XML(rss).css('item').first }
   subject(:episode) { described_class.new(podcast, fetcher, episode_node, feed) }
   let(:podcast) { find_or_create_podcast('easygerman') }
-  let(:feed) { double(:feed, cover_url: "https://example.com/cover.jpg") }
+  let(:feed) { double(:feed, cover_url: "https://example.com/cover.jpg", generator: nil) }
   let(:fetcher) {
     double(
       :fetcher_for_podcast,

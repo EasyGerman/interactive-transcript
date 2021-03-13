@@ -11,21 +11,6 @@ namespace :podcasts do
   desc 'Import podcasts from the files to database'
   task :load => :environment do
     Util.log_to_stdout
-    ContentProvider.for_each_podcast do |podcast_storage|
-      config = podcast_storage.read_config
-      begin
-        podcast = Podcast.create!(config)
-        Rails.logger.info 'Podcast #{podcast.code} imported'
-      rescue ActiveRecord::RecordNotUnique
-        podcast = Podcast.find_by!(code: config.fetch('code'))
-        podcast.attributes = config
-        if podcast.changed?
-          podcast.save!
-          Rails.logger.info 'Podcast #{podcast.code} updated'
-        else
-          Rails.logger.info 'Podcast #{podcast.code} unchanged'
-        end
-      end
-    end
+    ContentProvider.import_podcasts_from_files
   end
 end

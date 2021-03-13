@@ -56,7 +56,7 @@ class Feed
     memoize def notes_html
       tmp_nodes = nodes[0 .. transcript_start_index - 2]
 
-      if podcast.code == 'easycatalan'
+      if podcast.code == 'easycatalan' && episode.slug == 'trailer'
         if hr_index = transcript_nodes.index { |node| node.name == 'hr' }
           tmp_nodes += transcript_nodes[..(hr_index - 1)]
         end

@@ -18,7 +18,7 @@ class Episode
     @fetcher = fetcher.for_episode(self)
     @node = node
     @feed = feed
-    @feed_entry_parser = Feed::EntryParser.new(podcast, node)
+    @feed_entry_parser = Feed::EntryParser.new(podcast, feed, node)
   end
 
   def number
@@ -27,7 +27,7 @@ class Episode
 
   delegate :slug, :title, :audio_url, :published_at, to: :feed_entry_parser
   delegate :access_key, :vocab_url, :downloadable_html_url, :notes_html, :pretty_html, to: :feed_entry_description_parser
-  delegate :chapters, to: :transcript
+  delegate :chapters, to: :transcript, allow_nil: true
 
   memoize def transcript
     if published_at >= Date.parse("2020-10-13 00:00 UTC") && downloadable_html_url.present?
