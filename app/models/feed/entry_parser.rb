@@ -15,7 +15,7 @@ class Feed
         link_url[%r{easycatalan\.fm/(\d+)$}, 1] || link_url[%r{https://shows.acast.com/easycatalan/episodes/(\d+)}, 1]
       else
         link_url[%r{^https://www.patreon.com/posts/(.*)$}, 1] ||
-          ('trailer' if link_url == 'https://www.easygreek.fm/trailer') ||
+          ('trailer' if link_url == 'https://www.easygreek.fm/trailer' || link_url == 'https://shows.acast.com/easyeaspanish/episodes/trailer') ||
           link_url[%r{/episodes/(\d+)}, 1]
       end ||
         episode_id ||
@@ -34,6 +34,7 @@ class Feed
     end
 
     def episode_number
+      return 0 if link_url == 'https://shows.acast.com/easyeaspanish/episodes/trailer'
       if podcast.code == 'easygreek'
         link_url[%r{/episodes/(\d+)}, 1]&.to_i
       else
