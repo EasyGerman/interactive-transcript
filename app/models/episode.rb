@@ -25,7 +25,7 @@ class Episode
     feed_entry_parser.episode_number || (0 if slug == 'trailer') # TODO
   end
 
-  delegate :slug, :title, :audio_url, :published_at, to: :feed_entry_parser
+  delegate :slug, :title, :audio_url, :published_at, :episode_number, to: :feed_entry_parser
   delegate :access_key, :vocab_url, :downloadable_html_url, :notes_html, :pretty_html, to: :feed_entry_description_parser
   delegate :chapters, to: :transcript, allow_nil: true
 

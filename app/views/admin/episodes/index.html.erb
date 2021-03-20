@@ -1,6 +1,14 @@
 <h1>Episodes</h1>
 
-<table>
+<table class="bordered">
+  <thead>
+    <tr>
+      <th>Number</th>
+      <th>Slug</th>
+      <th>Title<br/><small>(link to admin)</small></th>
+      <th>Access Key<br/><small>(link to player)</small></th>
+    </tr>
+  </thead>
   <% @feed.episodes.each do |episode| %>
     <%= render 'admin/episodes/summary', episode: episode %>
   <% end %>

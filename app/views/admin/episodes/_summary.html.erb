@@ -1,6 +1,16 @@
 <%= error_boundary do %>
   <tr class="episode-summary">
-    <td><%= link_to "Episode: #{episode.title}", admin_episode_path(episode) %></td>
+    <td>
+      <%= error_boundary do %>
+        <%= episode.episode_number %>
+      <% end %>
+    </td>
+    <td>
+      <%= error_boundary do %>
+        <%= episode.slug %>
+      <% end %>
+    </td>
+    <td><%= link_to episode.title.truncate(40), admin_episode_path(episode) %></td>
     <td><%= link_to episode.access_key, episode_path(episode.access_key) if episode.access_key %></td>
   </tr>
 <% end %>
