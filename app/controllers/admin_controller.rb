@@ -8,6 +8,7 @@ class AdminController < ApplicationController
   memoize def current_podcast
     Podcast.find_by!(code: params[:podcast_id])
   end
+  helper_method :current_podcast
 
   def load_episode(slug)
     feed = Feed.new(current_podcast)

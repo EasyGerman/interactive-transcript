@@ -1,0 +1,8 @@
+<%= breadcrumbs @podcast %>
+
+<h1><%= @podcast.name %></h1>
+
+<%= link_to "Episodes", admin_podcast_episodes_path(@podcast.code) %>
+
+
+<pre><%= JSON.pretty_generate @podcast.attributes %></pre>

@@ -1,8 +1,4 @@
-<h1>Episode: <%= @episode.title %></h1>
-
-<%= link_to "Episode page", admin_episode_path(@episode) %>
-
-<h2>Timed Script</h2>
+<%= breadcrumbs @episode, :timed_script %>
 
 <% if @episode.transcript_editor_html.present? %>
   <% timed_script = @episode.timed_script %>
