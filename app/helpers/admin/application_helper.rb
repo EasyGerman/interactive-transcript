@@ -25,7 +25,15 @@ module Admin::ApplicationHelper
   end
 
   def player_path(episode)
-    episode_url(episode.access_key, host: episode.podcast.host.sub(/\.fm\Z/, '.local'))
+    episode_url(episode.access_key, host: host_for_env(episode.podcast.host))
+  end
+
+  def host_for_env(host)
+    if Rails.env.development? || Rails.env.test?
+      host.sub(/\.fm\Z/, '.local')
+    else
+      host
+    end
   end
 
   def render_object(o)
