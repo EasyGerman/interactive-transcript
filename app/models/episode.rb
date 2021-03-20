@@ -26,7 +26,7 @@ class Episode
   end
 
   delegate :slug, :title, :audio_url, :published_at, :episode_number, to: :feed_entry_parser
-  delegate :access_key, :vocab_url, :downloadable_html_url, :notes_html, :pretty_html, to: :feed_entry_description_parser
+  delegate :vocab_url, :downloadable_html_url, :notes_html, :pretty_html, to: :feed_entry_description_parser
   delegate :chapters, to: :transcript, allow_nil: true
 
   memoize def transcript
@@ -91,5 +91,21 @@ class Episode
 
   memoize def feed_entry_description_parser
     Feed::EntryDescriptionParser.new(feed_entry_parser.description, self)
+  end
+
+  memoize def identifiers
+    EpisodeIdentifiers.new(
+      entry_link_url: feed_entry_parser.link_url,
+      transcript_player_url: feed_entry_description_parser.transcript_player_url,
+      downloadable_html_url: feed_entry_description_parser.downloadable_html_url,
+    )
+  end
+
+  memoize def short_name
+    identifiers.short_name
+  end
+
+  memoize def access_key
+    identifiers.access_key
   end
 end

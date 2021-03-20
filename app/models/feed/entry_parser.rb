@@ -8,6 +8,7 @@ class Feed
       @node = node
     end
 
+    # DEPRECATED in favor of episode.short_name
     memoize def slug
       # TODO: remove hardcoded easygreek/easycatalan
       case podcast.code
@@ -33,6 +34,7 @@ class Feed
       node.css('link').text
     end
 
+    # DEPRECATED in favor of episode.short_name
     def episode_number
       return 0 if link_url == 'https://shows.acast.com/easyeaspanish/episodes/trailer'
       if podcast.code == 'easygreek'

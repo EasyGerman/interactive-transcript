@@ -3,10 +3,15 @@
 <table class="bordered">
   <thead>
     <tr>
-      <th>Number</th>
-      <th>Slug</th>
+      <th>Short Name</th>
+      <th class="legacy">Number (legacy)</th>
+      <th class="legacy">Slug (legacy)</th>
       <th>Title<br/><small>(link to admin)</small></th>
       <th>Access Key<br/><small>(link to player)</small></th>
+      <th>Episode ID in Feed</th>
+      <th>Link URL</th>
+      <th>Transcript Player URL</th>
+      <th>Downloadable HTML URL</th>
     </tr>
   </thead>
   <% @feed.episodes.each do |episode| %>

@@ -2,15 +2,24 @@
   <tr class="episode-summary">
     <td>
       <%= error_boundary do %>
+        <%= episode.short_name %>
+      <% end %>
+    </td>
+    <td class="legacy">
+      <%= error_boundary do %>
         <%= episode.episode_number %>
       <% end %>
     </td>
-    <td>
+    <td class="legacy">
       <%= error_boundary do %>
         <%= episode.slug %>
       <% end %>
     </td>
     <td><%= link_to episode.title.truncate(40), admin_episode_path(episode) %></td>
     <td><%= link_to episode.access_key, player_path(episode) if episode.access_key %></td>
+    <td><%= episode.feed_entry_parser.episode_id %></td>
+    <td><%= episode.feed_entry_parser.link_url %></td>
+    <td><%= episode.feed_entry_description_parser.transcript_player_url %></td>
+    <td><%= episode.feed_entry_description_parser.downloadable_html_url %></td>
   </tr>
 <% end %>

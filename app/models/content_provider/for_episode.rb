@@ -54,7 +54,7 @@ class ContentProvider
           DropboxAdapter.new(
             editor_transcript_config["dropbox_access_key"],
             editor_transcript_config["dropbox_shared_link"],
-          ).transcript_for(episode.number)
+          ).transcript_for(episode.short_name)
       end
     end
 

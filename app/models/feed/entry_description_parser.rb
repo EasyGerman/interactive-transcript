@@ -11,20 +11,28 @@ class Feed
       @episode = episode
     end
 
-    def access_key
-      # TODO: remove hardcoded podcasts
-      case episode.podcast.code
-      when 'easygerman'
-        if html =~ %r{egp(\w+)_transkript(_(\w{12,}))?.html} # TODO: localize
-          code, _, secret = $1, $2, $3
-          secret || code
-        end
-      else
-        if html =~ %r{https://www.dropbox.com/s/(\w+)/#{episode.podcast.code}podcast(.*)_transcript.html\?dl=1} # TODO: localize
-          secret, _ = $1, $2
-          secret
-        end
-      end
+    # def access_key
+    #   # TODO: remove hardcoded podcasts
+    #   case episode.podcast.code
+    #   when 'easygerman'
+    #     if html =~ %r{egp(\w+)_transkript(_(\w{12,}))?.html} # TODO: localize
+    #       code, _, secret = $1, $2, $3
+    #       secret || code
+    #     end
+    #   else
+    #     if html =~ %r{https://www.dropbox.com/s/(\w+)/#{episode.podcast.code}podcast(.*)_transcript.html\?dl=1} # TODO: localize
+    #       secret, _ = $1, $2
+    #       secret
+    #     end
+    #   end
+    # end
+
+    def transcript_player_url
+      urls.find { |key, value| key.downcase == 'transcript player' }&.[](1)
+    end
+
+    def urls
+      html_node.css('a').map { |element| [element.text, element.attr('href')] }.to_h
     end
 
     def vocab_url
