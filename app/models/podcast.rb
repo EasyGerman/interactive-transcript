@@ -3,10 +3,6 @@ class Podcast < ApplicationRecord
   has_many :episode_records
   has_many :translation_caches
 
-  def self.find_by_request!(request)
-    find_by(host: request.host) || (first if Rails.env.development?) || raise(PodcastNotFound.new(request.host))
-  end
-
   def feed
     Feed.new(self)
   end

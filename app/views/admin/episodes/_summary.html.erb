@@ -11,6 +11,6 @@
       <% end %>
     </td>
     <td><%= link_to episode.title.truncate(40), admin_episode_path(episode) %></td>
-    <td><%= link_to episode.access_key, episode_path(episode.access_key) if episode.access_key %></td>
+    <td><%= link_to episode.access_key, player_path(episode) if episode.access_key %></td>
   </tr>
 <% end %>

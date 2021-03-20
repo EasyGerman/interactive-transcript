@@ -20,6 +20,10 @@ module Admin::ApplicationHelper
     admin_podcast_episode_paragraph_path(paragraph.episode.podcast.code, paragraph.episode.slug, paragraph.slug)
   end
 
+  def player_path(episode)
+    episode_url(episode.access_key, host: episode.podcast.host.sub(/\.fm\Z/, '.local'))
+  end
+
   def render_object(o)
     render partial: "admin/objects/#{o.class.name.underscore}", locals: { o: o }
   end

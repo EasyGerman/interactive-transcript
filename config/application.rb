@@ -30,6 +30,7 @@ module Player
       #{config.root}/app/lib
       #{config.root}/app/services
       #{config.root}/app/components
+      #{config.root}/app/policies
     )
 
     # Settings in config/environments/* take precedence over those specified here.

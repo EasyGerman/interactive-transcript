@@ -106,3 +106,11 @@ RSpec.configure do |config|
     error
   end
 end
+
+$LOAD_PATH << 'app/lib'
+require 'active_support'
+require 'active_support/core_ext'
+require 'dry-struct'
+require 'types'
+require 'custom_struct'
+require 'operation'

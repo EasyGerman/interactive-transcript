@@ -15,11 +15,12 @@ module PodcastSiteControllerConcern
 
     helper_method def current_podcast
       @current_podcast ||=
-        if Rails.env.development? && params[:podcast].present?
-          @current_podcast ||= Podcast.find_by!(code: params[:podcast])
-        else
-          @current_podcast ||= Podcast.find_by_request!(request)
-        end
+        SelectCurrentPodcast.call(
+          host: request.host,
+          code: params[:podcast].presence,
+          env: Rails.env.to_s,
+          podcasts: Podcast.all.to_a,
+        )
     end
 
     def switch_locale(&action)
