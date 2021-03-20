@@ -1,5 +1,8 @@
 <style>
-:root { --podcast-primary-color: <%= current_podcast.settings.dig("theme", "primary_color") || "#FFA12C"; %> }
+:root {
+  --podcast-primary-color: <%= current_podcast.settings.dig("theme", "primary_color") || "#FFA12C" %>;
+  --podcast-translation-color: <%= current_podcast.settings.dig("theme", "translation_color") || "#295266" %>;
+}
 </style>
 <div id="player-page" class="version1">
   <div id="control">

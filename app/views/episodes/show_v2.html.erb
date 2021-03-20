@@ -3,7 +3,10 @@
   #loading-container { margin-top: 100px; text-align: center }
   #loading { display: inline-block; width: 20px; height: 20px; border: solid 2px gray; border-right-color: transparent; border-radius: 50%; animation: spin 1s linear infinite }
   #loading-container p { margin: 2em }
-  :root { --podcast-primary-color: <%= current_podcast.settings.dig("theme", "primary_color") || "#FFA12C"; %> }
+  :root {
+    --podcast-primary-color: <%= current_podcast.settings.dig("theme", "primary_color") || "#FFA12C" %>;
+    --podcast-translation-color: <%= current_podcast.settings.dig("theme", "translation_color") || "#295266" %>;
+  }
 </style>
 <script>
   // If javascript is enabled, hide the content before everthing is loaded,
