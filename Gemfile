@@ -44,6 +44,8 @@ gem 'pry-rails'
 gem 'google-cloud-translate'
 gem 'iso-639'
 gem 'packwerk'
+gem 'devise'
+gem 'activeadmin'
 
 group :test do
   gem 'rspec-rails'
