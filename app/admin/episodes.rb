@@ -1,6 +1,6 @@
 ActiveAdmin.register EpisodeRecord, as: "Episode" do
   menu priority: 2
-  permit_params :access_key, :short_name, :data
+  permit_params :access_key, :short_name
 
   index do
     selectable_column
@@ -11,6 +11,20 @@ ActiveAdmin.register EpisodeRecord, as: "Episode" do
     actions
   end
 
+  show do
+    attributes_table do
+      row :access_key
+      row :data do |episode|
+        div style: "max-height: 50em; overflow: auto" do
+          JSON.generate episode.data
+        end
+      end
+      row :created_at
+      row :updated_at
+    end
+    active_admin_comments
+  end
+
   filter :access_key
   filter :short_name
   filter :podcast
@@ -19,7 +33,6 @@ ActiveAdmin.register EpisodeRecord, as: "Episode" do
     f.inputs do
       f.input :access_key
       f.input :short_name
-      f.input :data
     end
     f.actions
   end

@@ -3,6 +3,46 @@ class Podcast < ApplicationRecord
   has_many :episode_records
   has_many :translation_caches
 
+  validate :validate_settings_json
+
+  class << self
+    def settings_attribute(name, path = nil, json: false, default: nil)
+      path ||= [name.to_s]
+
+      define_method name do
+        settings.dig(*path) || default
+      end
+
+      define_method "#{name}=" do |value|
+        value = JSON.parse(value) if json && value.is_a?(String)
+        iter_box = settings
+        path[0..-2].each_with_index do |path_item, i|
+          iter_box = (iter_box[path_item] ||= {})
+        end
+        iter_box[path.last] = value
+      end
+
+    end
+  end
+
+
+  settings_attribute :membership_url
+  settings_attribute :homepage_url
+  settings_attribute :vocab_helper_enabled, %w[vocab_helper enabled]
+  settings_attribute :transcript_title, default: "Transcript"
+  settings_attribute :translations_enabled, %w[translations enabled]
+  settings_attribute :translations_languages, %w[translations languages]
+  settings_attribute :google_credentials, %w[translations services google credentials], json: true
+  settings_attribute :word_highlighting_enabled, %w[word_highlighting]
+  settings_attribute :editor_transcript_dropbox_access_key, %w[editor_transcript dropbox_access_key]
+  settings_attribute :editor_transcript_dropbox_shared_link, %w[editor_transcript dropbox_shared_link]
+  settings_attribute :header_tags, json: true, default: ["h2", "h3"]
+
+  def validate_settings_json
+    return if settings.is_a?(Hash)
+    errors.add(:settings, "must be a hash")
+  end
+
   def feed
     Feed.new(self)
   end
@@ -11,14 +51,6 @@ class Podcast < ApplicationRecord
 
   def locale
     lang
-  end
-
-  def membership_url
-    settings["membership_url"]
-  end
-
-  def homepage_url
-    settings["membership_url"]
   end
 
   def vocab_helper_config
@@ -74,14 +106,6 @@ class Podcast < ApplicationRecord
   def homepage_url_display
     return if homepage_url.blank?
     URI.parse(homepage_url).host
-  end
-
-  def transcript_title
-    settings.fetch("transcript_title", "Transcript")
-  end
-
-  def header_tags
-    settings.fetch("header_tags", ["h2", "h3"])
   end
 
   def translator
