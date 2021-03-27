@@ -54,7 +54,7 @@ class Feed
       if episode.slug == 'our-podcast-how-31006226'
         nodes.index { |node| node.text.include?("[0:00]") }
       else
-        i = nodes.index(&method(:transcript_header?))
+        i = nodes.rindex(&method(:transcript_header?))
         raise TranscriptHeaderNotFound if i.nil?
         i + 1
       end
