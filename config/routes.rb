@@ -19,6 +19,7 @@ Rails.application.routes.draw do
         resources :paragraphs
         resource :timed_script
         resources :timed_paragraphs
+        resource :description_partitioning
       end
       resources :transcripts
     end

@@ -1,0 +1,14 @@
+<% if level > 3 || node.text? || node.name.in?(%w[a em strong i b span]) %>
+  <%= node.to_html.html_safe %>
+<% else %>
+  <div class="nokogiri-node nokogiri-node-<%= node.name %>">
+    <div class="label"><%= node.name %></div>
+    <div class="contents">
+      <div class="nokogiri-nodes">
+        <% node.children.each do |node| %>
+          <%= render 'admin/shared/nokogiri_node_row', node: node, level: level + 1 %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>

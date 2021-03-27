@@ -1,0 +1,25 @@
+<% transcript_start_index = begin; @episode.feed_entry_description_parser.transcript_start_index; rescue Feed::EntryDescriptionParser::TranscriptHeaderNotFound; nil; end %>
+<div class="nokogiri-nodes">
+  <% @episode.feed_entry_description_parser.nodes.each_with_index do |node, index| %>
+    <% if index == transcript_start_index %>
+      <div class="marker">Transcript start</div>
+    <% end %>
+    <div class="nokogiri-node nokogiri-node-<%= node.name %>">
+      <div class="label"><%= node.name %></div>
+      <div class="raw-contents">
+        <% node.children.each do |node| %>
+          <%= node.to_html %>
+        <% end %>
+      </div>
+      <div class="contents">
+        <div class="nokogiri-nodes">
+          <<%= node.name %> style="padding: 0; margin: 0">
+            <% node.children.each do |node| %>
+              <%= node.to_html.html_safe %>
+            <% end %>
+          </<%= node.name %>>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

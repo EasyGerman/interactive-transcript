@@ -6,13 +6,17 @@
   <%= link_to "Go to Player", episode_path(@episode.access_key) %>
 <% end %>
 
-<p>
+<div>
   <% if @episode.transcript_editor_html.present? %>
     <%= link_to "Transcript with timestamps", admin_episode_timed_script_path(@episode) %>
   <% else %>
     Transcript with timestamps not found.
   <% end %>
-</p>
+</div>
+
+<div>
+  <%= link_to "Description partitioning", admin_podcast_episode_description_partitioning_path(@episode.podcast.code, @episode.slug) %>
+</div>
 
 
 <table class="bordered">

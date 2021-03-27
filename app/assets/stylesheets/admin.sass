@@ -112,3 +112,51 @@ details
 .legacy
     font-size: smaller
     opacity: 0.5
+
+table.nokogiri-nodes
+  border: solid 1px #DDD
+  border-collapse: collapse
+  width: auto
+
+tr.nokogiri-node
+  border: solid 1px #DDD
+
+.nokogiri-node
+  margin: 0.2em
+  display: flex
+  > .label
+    min-width: 3em
+    font-size: small
+    background: #eee
+    padding: 0 0.5em
+    &::before
+      content: "<"
+    &::after
+      content: ">"
+  > .contents
+    padding-left: 0.2em
+  ul, ol, li
+    list-style-position: inside
+
+// .nokogiri-node-br
+//   > .label
+//     font-size: x-small
+//     padding: 0
+//     line-height: 1em
+.nokogiri-nodes
+  .raw-contents
+    font-size: small
+    line-height: 1.2em
+    // overflow: auto
+    flex: 1
+  .contents
+    flex: 1
+
+.nokogiri-node-h2, .nokogiri-node-h2 .label
+  background: #abc
+.nokogiri-node-h3, .nokogiri-node-h3 .label
+  background: #cde
+
+.marker
+  background: #FC6
+  padding: 0 1em
