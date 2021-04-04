@@ -9,7 +9,7 @@ class Admin::EpisodesController < AdminController
   end
 
   def timed_script
-    @timed_script = @episode.timed_script
+    @timed_script = @episode.timed_script1
   end
 
   private

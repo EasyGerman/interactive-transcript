@@ -6,15 +6,22 @@ class Podcast < ApplicationRecord
   validate :validate_settings_json
 
   class << self
-    def settings_attribute(name, path = nil, json: false, default: nil)
+    def settings_attribute(name, path = nil, json: false, default: nil, bool: false)
       path ||= [name.to_s]
 
       define_method name do
         settings.dig(*path) || default
       end
 
+      if bool
+        define_method "#{name}?" do
+          settings.dig(*path) || default
+        end
+      end
+
       define_method "#{name}=" do |value|
         value = JSON.parse(value) if json && value.is_a?(String)
+        value = value.in?(%w[1 on true yes]) if bool && value.is_a?(String)
         iter_box = settings
         path[0..-2].each_with_index do |path_item, i|
           iter_box = (iter_box[path_item] ||= {})
@@ -28,12 +35,13 @@ class Podcast < ApplicationRecord
 
   settings_attribute :membership_url
   settings_attribute :homepage_url
-  settings_attribute :vocab_helper_enabled, %w[vocab_helper enabled]
+  settings_attribute :vocab_helper_enabled, %w[vocab_helper enabled], bool: true
   settings_attribute :transcript_title, default: "Transcript"
-  settings_attribute :translations_enabled, %w[translations enabled]
+  settings_attribute :translations_enabled, %w[translations enabled], bool: true
   settings_attribute :translations_languages, %w[translations languages]
   settings_attribute :google_credentials, %w[translations services google credentials], json: true
-  settings_attribute :word_highlighting_enabled, %w[word_highlighting]
+  settings_attribute :word_highlighting_enabled, %w[word_highlighting enabled], bool: true
+  settings_attribute :word_highlighting_version, %w[word_highlighting version]
   settings_attribute :editor_transcript_dropbox_access_key, %w[editor_transcript dropbox_access_key]
   settings_attribute :editor_transcript_dropbox_shared_link, %w[editor_transcript dropbox_shared_link]
   settings_attribute :header_tags, json: true, default: ["h2", "h3"]
@@ -63,14 +71,6 @@ class Podcast < ApplicationRecord
 
   def translations_config
     settings["translations"]
-  end
-
-  def translations_enabled?
-    translations_config&.fetch("enabled", false)
-  end
-
-  def word_highlighting_enabled?
-    settings["word_highlighting"].present?
   end
 
   def vocab_helper_aws_bucket

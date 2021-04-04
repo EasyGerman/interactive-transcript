@@ -7,7 +7,7 @@
 <% if @episode.transcript_editor_html.present? %>
 
   <div>
-    <% @episode.timed_script.paras.each do |para| %>
+    <% @episode.timed_script1.paras.each do |para| %>
       <p style="padding-bottom: 2em;">
         <%= para.to_json %>
       </p>
@@ -18,7 +18,7 @@
     <%= render 'admin/shared/nokogiri_node', node: @episode.timed_script.doc.css('#transcript').first, level: 1 %>
   </small>
 
-  <% @episode.timed_script.paragraphs.each do |paragraph| %>
+  <% @episode.timed_script1.paragraphs.each do |paragraph| %>
     <p>
       [<%= paragraph.timestamp %>]
       <%= paragraph.text %>

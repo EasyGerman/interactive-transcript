@@ -56,8 +56,17 @@ class Episode
     fetcher.fetch_editor_transcript
   end
 
-  # Used by Paragraph to find matching timed paragraph
   memoize def timed_script
+    hide_and_report_errors do
+      case podcast.word_highlighting_version
+      when 2 then timed_script2
+      else timed_script1
+      end
+    end
+  end
+
+  # Used by Paragraph to find matching timed paragraph
+  memoize def timed_script1
     hide_and_report_errors do
       TimedScript.new(transcript_editor_html) if transcript_editor_html
     end

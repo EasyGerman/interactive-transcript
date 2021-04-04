@@ -55,6 +55,8 @@ class ContentProvider
             editor_transcript_config["dropbox_access_key"],
             editor_transcript_config["dropbox_shared_link"],
           ).transcript_for(episode.short_name)
+
+        file_contents
       end
     end
 

@@ -4,6 +4,7 @@ module ErrorHandling
       begin
         yield
       rescue StandardError => error
+        Rails.logger.error("Error: #{error.class.name}: #{error.message} #{error.backtrace.first}")
         Rollbar.error(error)
         nil
       end
