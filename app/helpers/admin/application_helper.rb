@@ -1,7 +1,8 @@
 module Admin::ApplicationHelper
   def rescue_and_show_errors
-    yield
-    nil
+    capture do
+      yield
+    end
   rescue StandardError => error
     render 'admin/shared/exception', error: error
   end

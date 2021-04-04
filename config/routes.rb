@@ -18,6 +18,7 @@ Rails.application.routes.draw do
       resources :episodes do
         resources :paragraphs
         resource :timed_script
+        resource :timed_script2
         resources :timed_paragraphs
         resource :description_partitioning
       end

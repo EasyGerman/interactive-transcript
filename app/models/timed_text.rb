@@ -35,7 +35,7 @@ class TimedText
     raise ArgumentError, "text must be a string" unless text.is_a?(String)
     if last_element_text?
       if @array.any?
-        @array.last << text
+        @array[-1] = @array[-1] + text
       else
         @array << nil
         @array << text

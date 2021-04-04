@@ -9,6 +9,8 @@
 <div>
   <% if @episode.transcript_editor_html.present? %>
     <%= link_to "Transcript with timestamps", admin_episode_timed_script_path(@episode) %>
+    |
+    <%= link_to "v2", admin_podcast_episode_timed_script2_path(@episode.podcast.code, @episode.slug) %>
   <% else %>
     Transcript with timestamps not found.
   <% end %>

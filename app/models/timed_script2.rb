@@ -43,7 +43,7 @@ class TimedScript2
     TimedScript2::Processor.new(parsed_paragraph: parsed_paragraph).call
   end
 
-  def as_plain_text
+  memoize def as_plain_text
     Debug.p paragraphs: paragraphs
     paragraphs.map(&:segments_as_plain_text).join("\n\n")
   end

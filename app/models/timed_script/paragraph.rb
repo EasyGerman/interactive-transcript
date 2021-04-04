@@ -7,7 +7,7 @@ class TimedScript
       Timestamp.new(timestamp_string) if timestamp_string.present?
     end
 
-    def text
+    memoize def text
       slices.flat_map { |slice| [slice[0], slice[2]] }.join.strip
     end
 
@@ -29,7 +29,7 @@ class TimedScript
       end
     end
 
-    def segments_as_plain_text
+    memoize def segments_as_plain_text
       segments.map do |segment|
         [segment.timestamp_string, segment.text, ''].join('|')
       end.join("\n")
