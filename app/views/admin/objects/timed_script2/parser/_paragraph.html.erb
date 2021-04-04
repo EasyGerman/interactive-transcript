@@ -1,0 +1,10 @@
+<div class="object">
+  <div class="title"><%= o.class.name %></div>
+
+  <div>
+    [<%= render_timestamp o.start_time %>-<%= render_timestamp o.end_time %>] <%= o.speaker&.name %>
+  </div>
+
+  <%= render_object o, :children %>
+
+</div>

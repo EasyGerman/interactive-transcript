@@ -48,8 +48,13 @@ class Paragraph
 
   memoize def segments
     Bench.m('Paragraph.segments') do
-      if timed_paragraph && text == timed_paragraph.text
-        timed_paragraph.segments
+      if timed_paragraph
+        if text == timed_paragraph.text
+          timed_paragraph.segments
+        else
+          Rails.logger.warn "Timed paragraph text doesn't match:\ntext: #{text.inspect}\ntpt.: #{timed_paragraph.text.inspect}"
+          nil
+        end
       end
     end
   end

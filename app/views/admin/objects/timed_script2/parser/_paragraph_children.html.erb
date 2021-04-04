@@ -1,0 +1,24 @@
+<table class="bordered">
+  <tr>
+    <th>start</th>
+    <th>end</th>
+    <th>contents</th>
+  </tr>
+  <% o.children.each do |child| %>
+    <tr>
+      <% if child.is_a?(String) %>
+        <td></td>
+        <td></td>
+        <td><%= render_object child %></td>
+      <% elsif child.children.count == 1 && child.children.first.is_a?(String) %>
+        <td><%= render_timestamp child.start_time %></td>
+        <td><%= render_timestamp child.end_time %></td>
+        <td><%= render_object child.children.first %></td>
+      <% else  %>
+        <td><%= render_timestamp child.start_time %></td>
+        <td><%= render_timestamp child.end_time %></td>
+        <td><%= render_object child, :children %></td>
+      <% end %>
+    </tr>
+  <% end %>
+</table>

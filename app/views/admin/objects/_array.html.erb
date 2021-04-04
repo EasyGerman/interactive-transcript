@@ -1,0 +1,8 @@
+<div class="object">
+  <div class="title"><%= o.class.name %></div>
+  <ol>
+    <% o.each do |item| %>
+      <li><%= render_object item %></li>
+    <% end %>
+  </ol>
+</div>

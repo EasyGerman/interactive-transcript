@@ -31,6 +31,9 @@ class TimedScript2::Processor < Operation
     timed_text = TimedText.new
     process_items_to_stream(timed_text, nodes, time_range)
     Debug.log("timed_text: #{timed_text.array.inspect}")
+
+    timed_text = TimedTextInterpolator.call(input: timed_text)
+
     slices = timed_text.array.in_groups_of(2).map do |timestamp, text|
       ['', timestamp, text]
     end.tap do |result|

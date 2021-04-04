@@ -38,4 +38,12 @@ describe TimedText do
     subject.append_text('hello ')
     expect(subject.array).to eq([12, '', 13, 'hello '])
   end
+
+  example 'transform_each_text_surrounded_by_timestamps' do
+    tt = described_class.from_array([10, "hi", 11, "everybody", 12, " "])
+    tt.transform_each_text_surrounded_by_timestamps do |t1, text, t2|
+      [text + "ya"]
+    end
+    expect(tt.array).to eq([10, "hiya", 11, "everybodyya", 12, " "])
+  end
 end

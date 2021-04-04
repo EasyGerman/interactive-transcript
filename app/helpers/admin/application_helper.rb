@@ -37,8 +37,23 @@ module Admin::ApplicationHelper
     end
   end
 
-  def render_object(o)
-    render partial: "admin/objects/#{o.class.name.underscore}", locals: { o: o }
+  def render_object(o, view = nil, as: nil)
+    type = as || o.class.name.underscore
+    render partial: "admin/objects/#{[type, view].compact.join("_")}", locals: { o: o }
+  end
+
+  def render_txt(txt)
+    render partial: "admin/objects/txt", locals: { txt: txt }
+  end
+
+  def render_json(json)
+    render_txt(JSON.pretty_generate(json))
+  end
+
+  def render_timestamp(o)
+    content_tag :span, class: "timestamp-object" do
+      Timestamp.from_any_object(o).to_s
+    end
   end
 
   def link_to_object(o)

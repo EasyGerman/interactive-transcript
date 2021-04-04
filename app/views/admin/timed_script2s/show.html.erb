@@ -1,8 +1,14 @@
 <%= breadcrumbs @episode, :timed_script %>
 
+
 <% if @episode.transcript_editor_html.present? %>
   <% timed_script2 = @episode.timed_script2 %>
 
+  <%= error_boundary do %>
+    <%= render_object timed_script2, :full %>
+  <% end %>
+
+  <% if false %>
   <div class="side-by-side">
     <div class="column">
       <h3>parsed_paragraphs (json)</h3>
@@ -25,17 +31,6 @@
       <% end %>
     </div>
 
-    <% if false %>
-      <div class="column">
-        <h3>Nokogiri structure</h3>
-        <%= error_boundary do %>
-          <small>
-            <%= render 'admin/shared/nokogiri_node', node: @episode.timed_script.doc.css('#transcript').first, level: 1 %>
-          </small>
-        <% end %>
-      </div>
-    <% end %>
-
     <div class="column">
       <h3>as_plain_text</h3>
       <%= error_boundary do %>
@@ -44,6 +39,7 @@
       <% end %>
     </div>
   </div>
+  <% end %>
 
 <% else %>
   Transcript with timestamps not found.

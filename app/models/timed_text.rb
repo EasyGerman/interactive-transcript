@@ -1,14 +1,22 @@
 ##
 # Alternating timestamps (int) and text (string).
 #
-# Odd index: timestamp
-# Event index: text
+# Even index: timestamp
+# Odd index: text
+#
+# Example:
+#
+#   [13, "Hello ", 14, "everybody!", 15]
 #
 class TimedText
   attr_reader :array
 
-  def initialize
-    @array = []
+  def self.from_array(array)
+    new(array: array)
+  end
+
+  def initialize(array: nil)
+    @array = array || []
   end
 
   def append_timestamp(timestamp, replace_last: false)
@@ -31,7 +39,7 @@ class TimedText
   end
 
   def append_text(text)
-    Debug.log("#{__method__} #{text}")
+    Debug.log("#{__method__} #{text.inspect}")
     raise ArgumentError, "text must be a string" unless text.is_a?(String)
     if last_element_text?
       if @array.any?
@@ -48,6 +56,24 @@ class TimedText
   def last_timestamp
     return if @array.empty?
     last_element_timestamp? ? @array[-1] : @array[-2]
+  end
+
+  def to_array
+    @array
+  end
+
+  def transform_each_text_surrounded_by_timestamps
+    new_array = []
+    array.each_with_index do |item, index|
+      if index % 2 == 1 && index < array.count - 1
+        transformed = yield array[index - 1], item, array[index + 1]
+        new_array.concat(transformed)
+      else
+        new_array << item
+      end
+    end
+    @array = new_array
+    self
   end
 
   private

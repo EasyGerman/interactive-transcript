@@ -1,0 +1,16 @@
+<div class="object">
+  <div class="title"><%= o.class.name %></div>
+
+  <div>
+    [<%= o.timestamp %>] <%= o.speaker&.name %>
+  </div>
+
+  <table class="codes">
+    <% o.segments.each do |segment| %>
+      <tr>
+        <td><%= render_timestamp segment.timestamp %></td>
+        <td><code><%= segment.text %></code></td>
+      </tr>
+    <% end %>
+  </table>
+</div>

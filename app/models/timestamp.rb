@@ -16,6 +16,7 @@ class Timestamp
   end
 
   def self.from_any_object(object)
+    return object if object.is_a?(self)
     return nil if object.nil?
     return self if object.is_a?(self)
     return from_seconds(object) if object.is_a?(Integer)

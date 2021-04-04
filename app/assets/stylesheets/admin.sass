@@ -6,6 +6,7 @@
 
   h2
     margin-top: 2em
+
   h1
     font-size: 32px
   h2
@@ -73,6 +74,11 @@
     background: #DED
     padding: .25em 1em
 
+  table
+    width: auto
+    td, th
+      padding: 1px
+
   table.bordered
     border: solid 1px #DDD
     border-collapse: collapse
@@ -118,15 +124,21 @@
 
 
 table.codes
-  background: #EEE
   td
     line-height: 1em
   code
     font-family: monospace
-    background: #FFF
-    white-space: pre
+    background: #f7f7f7
+    white-space: pre-wrap
     line-height: 1em
-    border: solid 1px #888
+    border: solid 1px #AAA
+    border-top: none 0
+    border-bottom: none 0
+
+.object
+  .title
+    font-size: 11px
+    color: #999
 
 details
   border: solid 1px #DDD
@@ -186,3 +198,26 @@ tr.nokogiri-node
 .marker
   background: #FC6
   padding: 0 1em
+
+
+.txt
+  font-family: Menlo, monospace
+  font-size: 11px
+  line-height: 1em
+  white-space: pre-wrap
+  max-width: 40em
+  max-height: 40em
+  overflow: auto
+
+code.string-object
+  font-family: monospace
+  background: #f7f7f7
+  white-space: pre-wrap
+  line-height: 1em
+  border: solid 1px #AAA
+  border-top: none 0
+  border-bottom: none 0
+
+.timestamp-object
+  color: #088
+  font-family: "Courier New", monospace

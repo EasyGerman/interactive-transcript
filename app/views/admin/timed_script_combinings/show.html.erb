@@ -1,0 +1,30 @@
+<%= breadcrumbs @episode %>
+
+<table class="bordered">
+  <tr>
+    <th>No.</th>
+    <th>Speaker</th>
+    <th>Timestamp</th>
+    <th>Text</th>
+    <th>Levenshtein distance</th>
+    <th>Levenshtein normalized distance</th>
+    <th>Timed script</th>
+  </tr>
+  <% @episode.chapters.flat_map(&:paragraphs).each_with_index do |paragraph, index| %>
+    <tr>
+      <td><%= index + 1 %></td>
+      <td><%= paragraph.speaker&.name %></td>
+      <td><%= paragraph.timestamp %></td>
+      <td><%= paragraph.text %></td>
+
+      <% if paragraph.timed_paragraph %>
+        <td><%= Levenshtein.distance(paragraph.text, paragraph.timed_paragraph.text).round(6) %></td>
+        <td><%= Levenshtein.normalized_distance(paragraph.text, paragraph.timed_paragraph.text).round(6) %></td>
+        <td><pre><%= paragraph.timed_paragraph&.segments_as_plain_text %></pre></td>
+      <% else %>
+        <td colspan=3><span class="error">Timed paragraph not found</span></td>
+      <% end %>
+
+      </tr>
+  <% end %>
+</table>

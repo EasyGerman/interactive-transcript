@@ -11,6 +11,8 @@
     <%= link_to "Transcript with timestamps", admin_episode_timed_script_path(@episode) %>
     |
     <%= link_to "v2", admin_podcast_episode_timed_script2_path(@episode.podcast.code, @episode.slug) %>
+    |
+    <%= link_to "combining", admin_podcast_episode_timed_script_combining_path(@episode.podcast.code, @episode.slug) %>
   <% else %>
     Transcript with timestamps not found.
   <% end %>
