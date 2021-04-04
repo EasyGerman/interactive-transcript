@@ -18,11 +18,22 @@ class TimedScript2
     doc.css('#transcript')
   end
 
+  # Parses the HTML and returns:
+  #
+  # - Array of TimedScript2::Parser::Paragraph
+  #   - speaker { id, name }
+  #   - start_time
+  #   - end_time
+  #   - children
+  #   - previous_paragraph
+  #   - next_paragraph
+  #
   memoize def parsed_paragraphs
     TimedScript2::Parser.new(doc).paragraphs
   end
 
   memoize def paragraphs
+    Debug.p parsed_paragraphs: parsed_paragraphs
     parsed_paragraphs.map do |parsed_paragraph|
       process_paragraph(parsed_paragraph)
     end
@@ -33,6 +44,7 @@ class TimedScript2
   end
 
   def as_plain_text
+    Debug.p paragraphs: paragraphs
     paragraphs.map(&:segments_as_plain_text).join("\n\n")
   end
 

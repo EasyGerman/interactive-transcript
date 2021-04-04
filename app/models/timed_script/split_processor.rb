@@ -5,6 +5,7 @@
 class TimedScript::SplitProcessor
   class << self
     def call(slices, start_time)
+      Debug.log("#{self.name}.#{__method__} #{slices.inspect}, #{start_time.inspect}")
       clean_up_inbetweeners(slices)
         .then(&method(:instantiate_segments))
         .then { |segments| segments[0].time ||= start_time; segments }
@@ -42,9 +43,11 @@ class TimedScript::SplitProcessor
     end
 
     def split_words(items)
-      items.flat_map do |segment|
-        segment.text.split(%r{(?<= )}).map do |word|
-          Segment.new(segment.time, word)
+      Debug.log("#{self.name}.#{__method__} #{items.inspect}") do
+        items.flat_map do |segment|
+          segment.text.split(%r{(?<= )}).map do |word|
+            Segment.new(segment.time, word)
+          end
         end
       end
     end
@@ -59,7 +62,7 @@ class TimedScript::SplitProcessor
     end
 
     def distribute_evenly(segments)
-      numbers = segments.map(&:time).map(&Timestamp.method(:convert_string_to_seconds))
+      numbers = segments.map(&:time).map(&Timestamp.method(:convert_to_seconds))
       new_numbers = distribute_numbers_evenly(numbers.dup)
       segments.each_with_index do |segment, index|
         if new_numbers[index] != numbers[index]
@@ -106,7 +109,7 @@ class TimedScript::SplitProcessor
 
     def initialize(time, text)
       @time = time
-      @text = text
+      @text = text || ""
     end
 
     def [](index)

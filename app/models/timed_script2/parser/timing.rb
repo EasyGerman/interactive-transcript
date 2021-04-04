@@ -1,3 +1,6 @@
+#
+# Represents start/end time for a section of text.
+#
 class TimedScript2::Parser::Timing
   attr_accessor :start_time, :end_time, :children, :parent
 

@@ -1,13 +1,28 @@
+#
+# Processes a single paragraph
+#
 class TimedScript2::Processor < Operation
 
+  # Example input: instance of TimedScript2::Parser::Paragraph in raw structure:
+  #
+  # {:speaker=>{:id=>"1", :name=>"Manuel"},
+  #  :start_time=>22,
+  #  :children=>[" Ja, i", {:start_time=>21,
+  #                         :end_time=>23,
+  #                         :children=>[{:start_time=>22,
+  #                                      :end_time=>nil,
+  #                                      :children=>["ch"]}, ...
+  #
   attribute :parsed_paragraph, ::Types::Instance(TimedScript2::Parser::Paragraph)
 
   def call
     Debug.log("#{self.class.name} #{parsed_paragraph.as_json.inspect}") do
+      time_range = TimeRange.new(parsed_paragraph.start_time, parsed_paragraph.next_paragraph&.start_time)
+      slices = to_slices(parsed_paragraph.children, time_range)
       TimedScript::Paragraph.new(
         Timestamp.from_seconds(parsed_paragraph.start_time).to_s,
         parsed_paragraph.speaker,
-        to_slices(parsed_paragraph.children, TimeRange.new(parsed_paragraph.start_time, parsed_paragraph.next_paragraph&.start_time)),
+        slices,
       )
     end
   end
@@ -25,7 +40,7 @@ class TimedScript2::Processor < Operation
 
   def process_items_to_stream(timed_text, nodes, time_range)
     if time_range.start_time
-      # Debug.log("start => append_or_replace_timestamp #{time_range.start_time}")
+      Debug.log("start => append_or_replace_timestamp #{time_range.start_time}")
       timed_text.append_or_replace_timestamp(time_range.start_time)
     end
     nodes.each do |node|
@@ -41,7 +56,7 @@ class TimedScript2::Processor < Operation
       end
     end
     if time_range.end_time
-      # Debug.log("end => append_timestamp #{time_range.end_time}")
+      Debug.log("end => append_timestamp #{time_range.end_time}")
       timed_text.append_timestamp(time_range.end_time)
     end
   end

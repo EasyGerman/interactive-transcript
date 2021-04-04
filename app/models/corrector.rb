@@ -5,6 +5,11 @@ module Corrector
     case slug
     when '23-das-deutsche-34737307' then html.sub('[59:4]', '[59:44]')
     when '21-katerstimmung-34308952' then html.sub('[46:35 ', '[46:35] ')
+    when '1' then
+      html.sub(
+        '>Γιάννης Σαρακατσάνης</a></li></ul><p><br></p><br><p><strong>Δημήτρης:</strong></p><p>[0:16] Καλώς ήρθατε και από',
+        '>Γιάννης Σαρακατσάνης</a></li></ul><p><br></p><br><h2>Απομαγνητοφώνηση</h2><p><strong>Δημήτρης:</strong></p><p>[0:16] Καλώς ήρθατε και από',
+      )
     else html
     end
   end

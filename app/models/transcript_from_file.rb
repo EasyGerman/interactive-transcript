@@ -36,7 +36,8 @@ class TranscriptFromFile
   end
 
   memoize def chapters
-    Nokogiri::HTML(html).css('.transcript-base').children.each do |child|
+    Nokogiri::HTML(html).css('body').children.each do |child|
+      puts "child: #{child.name} #{child.text.first(100)}"
       parse_nokogiri_element(child)
     end
 
@@ -70,6 +71,7 @@ class TranscriptFromFile
       add_text(element.text)
     when Nokogiri::XML::Element
       case element.name
+      when "h1"
       when "h2", "h3", "h4"
         add_chapter(element.text.strip)
       when "b"
