@@ -50,9 +50,17 @@ module Admin::ApplicationHelper
     render_txt(JSON.pretty_generate(json))
   end
 
-  def render_timestamp(o)
-    content_tag :span, class: "timestamp-object" do
-      Timestamp.from_any_object(o).to_s
+  def render_precise_timestamp(o)
+    return if o.blank?
+
+    if (o.is_a?(Integer) || o.is_a?(Timestamp) || (o.is_a?(String) && o.include?('.'))) && (timestamp = Timestamp.from_any_object(o)).present?
+      content_tag :span, class: "timestamp-object", data: { timestamp: timestamp.to_seconds } do
+        timestamp.to_s
+      end
+    elsif (timestamp = PreciseTimestamp.from(o)).present?
+      content_tag :span, class: "timestamp-object", data: { timestamp: timestamp.to_seconds } do
+        timestamp.to_s
+      end
     end
   end
 

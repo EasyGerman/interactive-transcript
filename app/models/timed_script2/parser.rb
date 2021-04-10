@@ -93,7 +93,7 @@ class TimedScript2::Parser
   end
 
   def add_paragraph_timestamp(node)
-    current_paragraph.start_time = Timestamp.convert_string_to_seconds filter_text(node.text)[/^\s*\[?(.*?)\]?\s*$/, 1] || raise("time not found in: #{node.text.inspect}")
+    current_paragraph.start_time = PreciseTimestamp.convert_to_seconds filter_text(node.text)[/^\s*\[?(.*?)\]?\s*$/, 1] || raise("time not found in: #{node.text.inspect}")
   end
 
   def cursor

@@ -21,7 +21,7 @@ class TimedText
 
   def append_timestamp(timestamp, replace_last: false)
     Debug.log("#{__method__} #{timestamp}")
-    raise ArgumentError, "timestamp must be an integer" unless timestamp.is_a?(Integer)
+    raise ArgumentError, "timestamp must be an integer or float" unless timestamp.is_a?(Integer) || timestamp.is_a?(Float)
     return if timestamp == last_timestamp
 
     if last_element_timestamp?

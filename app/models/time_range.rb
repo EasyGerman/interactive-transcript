@@ -2,8 +2,8 @@ class TimeRange
   attr_accessor :start_time, :end_time
 
   def initialize(start_time, end_time)
-    raise ArgumentError, "start_time must be integer or nil, #{start_time.class.name} given" unless start_time.is_a?(Integer) || start_time.nil?
-    raise ArgumentError, "end_time must be integer or nil, #{end_time.class.name} given" unless end_time.is_a?(Integer) || end_time.nil?
+    raise ArgumentError, "start_time must be integer, float or nil, #{start_time.class.name} given" unless start_time.is_a?(Integer) || start_time.is_a?(Float) || start_time.nil?
+    raise ArgumentError, "end_time must be integer, float or nil, #{end_time.class.name} given" unless end_time.is_a?(Integer) || start_time.is_a?(Float) || end_time.nil?
     @start_time = start_time
     @end_time = end_time
   end

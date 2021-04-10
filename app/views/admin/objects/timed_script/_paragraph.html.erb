@@ -8,7 +8,7 @@
   <table class="codes">
     <% o.segments.each do |segment| %>
       <tr>
-        <td><%= render_timestamp segment.timestamp %></td>
+        <td><%= render_precise_timestamp segment.timestamp %></td>
         <td><code><%= segment.text %></code></td>
       </tr>
     <% end %>

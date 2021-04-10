@@ -20,7 +20,7 @@ class TimedScript2::Processor < Operation
       time_range = TimeRange.new(parsed_paragraph.start_time, parsed_paragraph.next_paragraph&.start_time)
       slices = to_slices(parsed_paragraph.children, time_range)
       TimedScript::Paragraph.new(
-        Timestamp.from_seconds(parsed_paragraph.start_time).to_s,
+        Timestamp.from_seconds(parsed_paragraph.start_time.round).to_s,
         parsed_paragraph.speaker,
         slices,
       )

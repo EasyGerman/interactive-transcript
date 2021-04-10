@@ -19,7 +19,7 @@ class Timestamp
     return object if object.is_a?(self)
     return nil if object.nil?
     return self if object.is_a?(self)
-    return from_seconds(object) if object.is_a?(Integer)
+    return from_seconds(object) if object.is_a?(Integer) || object.is_a?(Float)
     return new(object) if object.is_a?(String)
     raise ArgumentError, "can't build from #{object.class}"
   end
@@ -27,7 +27,7 @@ class Timestamp
   def self.convert_to_seconds(object)
     return nil if object.nil?
     return to_seconds if object.is_a?(self)
-    return object if object.is_a?(Integer)
+    return object if object.is_a?(Integer) || object.is_a?(Float)
     return convert_string_to_seconds(object) if object.is_a?(String)
     raise ArgumentError, "can't convert from #{object.class}"
   end

@@ -56,7 +56,7 @@ describe Timestamp do
 
   describe ".from_seconds" do
     it "works when the minute are zero" do
-      expect(Timestamp.from_seconds(13).to_s).to eq("0:13")
+      expect(Timestamp.from_seconds(13.017).to_s).to eq("0:13")
     end
 
     it "works when the hour is zero" do

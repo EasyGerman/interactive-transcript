@@ -66,7 +66,7 @@ class TimedScript::SplitProcessor
       new_numbers = distribute_numbers_evenly(numbers.dup)
       segments.each_with_index do |segment, index|
         if new_numbers[index] != numbers[index]
-          segment.time = Timestamp.from_seconds(new_numbers[index]).to_s
+          segment.time = Timestamp.from_any_object(new_numbers[index]).to_s
         end
       end
       segments

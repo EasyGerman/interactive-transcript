@@ -1,5 +1,8 @@
 <%= breadcrumbs @episode, :timed_script %>
 
+<figure>
+  <audio controls src="<%= @episode.audio_url %>"></audio>
+</figure>
 
 <% if @episode.transcript_editor_html.present? %>
   <% timed_script2 = @episode.timed_script2 %>

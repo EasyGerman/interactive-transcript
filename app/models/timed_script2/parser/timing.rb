@@ -5,8 +5,8 @@ class TimedScript2::Parser::Timing
   attr_accessor :start_time, :end_time, :children, :parent
 
   def initialize(start_time, end_time)
-    @start_time = Timestamp.convert_string_to_seconds(start_time) if start_time
-    @end_time = Timestamp.convert_string_to_seconds(end_time) if end_time
+    @start_time = PreciseTimestamp.from(start_time)&.to_seconds
+    @end_time = PreciseTimestamp.from(end_time)&.to_seconds
     @children = []
   end
 
@@ -19,7 +19,7 @@ class TimedScript2::Parser::Timing
   end
 
   def to_txt
-    prefix = "T #{Timestamp.from_any_object(start_time)&.to_s}-#{Timestamp.from_any_object(end_time)&.to_s}"
+    prefix = "T #{PreciseTimestamp.from(start_time)&.to_s}-#{PreciseTimestamp.from(end_time)&.to_s}"
     Txt.bullet(
       prefix,
       children.map { |child|
