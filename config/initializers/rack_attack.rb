@@ -1,3 +1,6 @@
+# To test in development, set the cache_store in development.rb to redis, e.g:
+#     config.cache_store = :redis_cache_store, { url: ENV.fetch('REDIS_URL') }
+
 class Rack::Attack
   {
     second: { limit: 1, period: 1.second },
@@ -7,7 +10,7 @@ class Rack::Attack
     week:   { limit: 300, period: 1.week },
   }.each do |key, options|
     throttle("translations/ip24/#{key}", options) do |req|
-      if req.path =~ %r{^/translate.*$} && req.post?
+      if req.path =~ %r{^/translate.*$} && req.post? && req.params["from_cache"] != "true"
         req.ip.split('.').first(3).join('.')
       end
     end
