@@ -14,9 +14,11 @@ const getOrCreateElement = ($paragraph) => {
   return $el;
 }
 
-function showTranslation($paragraph, text) {
+function showTranslation($paragraph, text, lang) {
   let $translation = getOrCreateElement($paragraph);
-  $translation.text(text)
+  $paragraph.find('.paragraph-content').addClass(`flex-lang flex-${$('#language-picker-form').data('source-lang').toLowerCase()}`)
+  $translation.addClass(`flex-lang flex-${lang.toLowerCase()}`);
+  $translation.text(text);
   $paragraph.find('.translateParagraphButton').hide();
 }
 
@@ -27,10 +29,10 @@ window.addEventListener('paragraph-changed', (ev) => {
   const paragraph = ev.detail.paragraph;
   const $paragraph = paragraph.$element;
 
-  fetchTranslation($paragraph, { fromCache: true }).then(function(text) {
+  fetchTranslation($paragraph, { fromCache: true }).then(function({ text, lang }) {
     // If the text is missing, it means that it is not cached.
     if (text) {
-      showTranslation($paragraph, text);
+      showTranslation($paragraph, text, lang);
     }
   }).catch(function() {
     // We can ignore errors when translating automatically
@@ -38,17 +40,18 @@ window.addEventListener('paragraph-changed', (ev) => {
 });
 
 function fetchTranslation($paragraph, options = {}) {
+  const lang = languagePicker.lang;
   return new Promise((resolve, reject) => {
     $.get({
       url: "/translate.json",
       method: 'post',
       data: {
         key: $paragraph.data('translationId'),
-        lang: languagePicker.lang,
+        lang: lang,
         from_cache: options.fromCache // This tells the backend not to call DeepL/Google, but return the translation only if it's cached.
       }
     }).done((resp) => {
-      resolve(resp.text);
+      resolve({ text: resp.text, lang });
     }).catch((err) => {
       let jsonr = err.responseJSON;
       console.error("Error while fetching translation:", jsonr)
@@ -69,8 +72,8 @@ export default {
       $button.addClass('loading');
       $button.text(t.translation.loading_status + "...");
 
-      fetchTranslation($paragraph).then(function(text) {
-        showTranslation($paragraph, text);
+      fetchTranslation($paragraph).then(function({ text, lang }) {
+        showTranslation($paragraph, text, lang);
       }).catch(function({ err, errorMessage }) {
         $button.text(errorMessage);
       });

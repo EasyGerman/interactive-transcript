@@ -1,0 +1,31 @@
+<style>
+  .pair { white-space: nowrap; font-size: 9px; line-height: 9px; }
+</style>
+<% Podcast.where(lang: 'de').find_each do |podcast| %>
+  <% podcast.translation_caches.find_each do |record| %>
+    <% record.translations.each do |lang, translation| %>
+      <% lang = lang.split('@').first.split('-').first.downcase %>
+      <div class="pair" data-source="<%= podcast.lang %>" data-target="<%= lang %>"><span class="ori"><%= record.original %></span><br/><span class="tra"><%= translation %></span></div>
+    <% end %>
+  <% end %>
+<% end %>
+
+
+<script>
+  $(() => {
+    let stats = {};
+    $('.pair').each((i, e) => {
+      let lang1 = e.dataset.source;
+      let lang2 = e.dataset.target;
+      let w1 = e.querySelector('.ori').offsetWidth;
+      let w2 = e.querySelector('.tra').offsetWidth;
+
+      if (!stats[lang1]) stats[lang1] = {};
+      if (!stats[lang1][lang2]) stats[lang1][lang2] = [0, 0];
+      stats[lang1][lang2][0] += w1
+      stats[lang1][lang2][1] += w2
+    })
+
+    console.log(JSON.stringify(stats.de));
+  })
+</script>

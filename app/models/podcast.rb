@@ -1,7 +1,7 @@
 class Podcast < ApplicationRecord
 
   has_many :episode_records
-  has_many :translation_caches
+  has_many :translation_caches, class_name: "TranslationCache"
 
   validate :validate_settings_json
 

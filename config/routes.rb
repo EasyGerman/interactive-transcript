@@ -26,6 +26,7 @@ Rails.application.routes.draw do
       end
       resources :transcripts
     end
+    get 'experiments/:action', controller: 'experiments'
   end
 
   post :translate, to: 'translate#translate'
