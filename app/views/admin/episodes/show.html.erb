@@ -22,6 +22,10 @@
   <%= link_to "Description partitioning", admin_podcast_episode_description_partitioning_path(@episode.podcast.code, @episode.slug) %>
 </div>
 
+<div>
+  <%= link_to "Downloadable transcript", admin_podcast_episode_downloadable_transcript_path(@episode.podcast.code, @episode.slug) %>
+</div>
+
 
 <table class="bordered">
   <tr><th>Title:</th><td><%= error_boundary do %><%= @episode.title %><% end %></td></tr>

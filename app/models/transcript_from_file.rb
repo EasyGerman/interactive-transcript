@@ -36,7 +36,9 @@ class TranscriptFromFile
   end
 
   memoize def chapters
-    Nokogiri::HTML(html).css('body').children.each do |child|
+    doc = Nokogiri::HTML(html)
+
+    (doc.css('.transcript-base').presence || doc.css('body')).children.each do |child|
       puts "child: #{child.name} #{child.text.first(100)}"
       parse_nokogiri_element(child)
     end

@@ -21,6 +21,7 @@ Rails.application.routes.draw do
         resource :timed_script2
         resources :timed_paragraphs
         resource :description_partitioning
+        resource :downloadable_transcript
         resource :timed_script_combining
       end
       resources :transcripts
