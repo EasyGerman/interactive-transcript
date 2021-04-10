@@ -75,6 +75,7 @@ class TimedScript::SplitProcessor
     def strip_spaces(segments)
       segments.first.text.sub!(/^\s+/, '')
       segments.last.text.sub!(/\s+$/, '')
+      segments.each { |segment| segment.text.gsub!(/\s+/, ' ')}
       segments
     end
 

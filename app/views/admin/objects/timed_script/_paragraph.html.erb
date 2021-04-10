@@ -5,6 +5,10 @@
     [<%= o.timestamp %>] <%= o.speaker&.name %>
   </div>
 
+  <div>
+    <%= render_object o.text %>
+  </div>
+
   <table class="codes">
     <% o.segments.each do |segment| %>
       <tr>
@@ -13,4 +17,5 @@
       </tr>
     <% end %>
   </table>
+
 </div>

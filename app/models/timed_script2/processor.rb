@@ -19,10 +19,19 @@ class TimedScript2::Processor < Operation
     Debug.log("#{self.class.name} #{parsed_paragraph.as_json.inspect}") do
       time_range = TimeRange.new(parsed_paragraph.start_time, parsed_paragraph.next_paragraph&.start_time)
       slices = to_slices(parsed_paragraph.children, time_range)
-      TimedScript::Paragraph.new(
+
+      paragraph = TimedScript::Paragraph.new(
         Timestamp.from_seconds(parsed_paragraph.start_time.round).to_s,
         parsed_paragraph.speaker,
         slices,
+      )
+      segments = paragraph.segments
+
+      TimedScript2::Paragraph.new(
+        speaker: parsed_paragraph.speaker,
+        timestamp: segments.first&.timestamp || paragraph.timestamp,
+        slices: slices,
+        segments: segments
       )
     end
   end
@@ -52,8 +61,9 @@ class TimedScript2::Processor < Operation
       else
         sub_time_range = TimeRange.new(node.start_time, node.end_time)
         Debug.log("range: #{time_range}, sub: #{sub_time_range}") do
-          sub_time_range = sub_time_range.constrained_to(time_range)#.constrained_to(TimeRange.new(timed_text.last_timestamp, nil))
-          Debug.log("constrained range: #{sub_time_range}")
+          # Removed because the timestamp on the paragraph tends to be wrong.
+          # sub_time_range = sub_time_range.constrained_to(time_range)#.constrained_to(TimeRange.new(timed_text.last_timestamp, nil))
+          # Debug.log("constrained range: #{sub_time_range}")
           process_items_to_stream(timed_text, node.children, sub_time_range)
         end
       end

@@ -48,6 +48,9 @@ class Timestamp
     self.class.convert_string_to_seconds(string)
   end
 
+  alias to_i to_seconds
+  alias to_f to_seconds
+
   def -(x)
     if x.is_a?(Timestamp)
       # Difference between 2 Timestamps

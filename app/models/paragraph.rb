@@ -18,6 +18,7 @@ class Paragraph
       end
       @label, @text = node_text.split(@timestamp_string, 2).map(&:strip)
       # Replace multiple consecutive spaces with one
+      @text.gsub!(Timestamp::REGEX, '')
       @text.gsub!(/ +/, ' ')
     else
       @text = node_text
@@ -38,7 +39,7 @@ class Paragraph
   end
 
   def match?(other)
-    timestamp.to_s == other.timestamp.to_s &&
+    (timestamp.to_f - other.timestamp.to_f).abs <= 1.5 &&
       Levenshtein.normalized_distance(text, other.text) < 0.3
   end
 
