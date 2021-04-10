@@ -5,7 +5,7 @@
 
 <% Bench.m("render-paragraph-#{@paragraph.slug}") do %>
 
-  <p><%= rescue_and_show_errors { render 'admin/shared/timespan', item: @paragraph } %></p>
+  <p><%= show_errors { render 'admin/shared/timespan', item: @paragraph } %></p>
 
   <p>Speaker: <%= @paragraph.speaker.name %></p>
 

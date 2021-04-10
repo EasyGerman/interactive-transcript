@@ -1,17 +1,17 @@
-<%= error_boundary do %>
+<%= show_errors do %>
   <tr class="episode-summary">
     <td>
-      <%= error_boundary do %>
+      <%= show_errors do %>
         <%= episode.short_name %>
       <% end %>
     </td>
     <td class="legacy">
-      <%= error_boundary do %>
+      <%= show_errors do %>
         <%= episode.episode_number %>
       <% end %>
     </td>
     <td class="legacy">
-      <%= error_boundary do %>
+      <%= show_errors do %>
         <%= episode.slug %>
       <% end %>
     </td>

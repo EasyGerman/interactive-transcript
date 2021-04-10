@@ -1,0 +1,20 @@
+<div class="page-center">
+  <h1><%= current_podcast.name %></h1>
+
+  <% if current_user&.has_access_to?(current_podcast) %>
+    <ul class="episodes">
+      <% current_podcast.episodes.each do |episode| %>
+        <% if episode.access_key.present? %>
+          <li>
+            <%= link_to episode.title, episode_path(episode.access_key) %>
+          </li>
+        <% end %>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>
+      To access the list of episodes, visit your
+      <%= link_to "membership page", current_podcast.membership_url || current_podcast.homepage_url %>
+    </p>
+  <% end %>
+</div>

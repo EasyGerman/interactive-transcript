@@ -2,7 +2,7 @@
 
 <h1>Episode: <%= @episode.title %></h1>
 
-<%= rescue_and_show_errors do %>
+<%= show_errors do %>
   <%= link_to "Go to Player", episode_path(@episode.access_key) %>
 <% end %>
 
@@ -28,19 +28,19 @@
 
 
 <table class="bordered">
-  <tr><th>Title:</th><td><%= error_boundary do %><%= @episode.title %><% end %></td></tr>
-  <tr><th>Short name:</th><td><%= error_boundary do %><%= @episode.short_name %><% end %></td></tr>
-  <tr><th>Access key:</th><td><%= error_boundary do %><%= @episode.access_key %><% end %></td></tr>
-  <tr class="legacy"><th>Number (legacy):</th><td><%= error_boundary do %><%= @episode.episode_number %><% end %></td></tr>
-  <tr class="legacy"><th>Slug (legacy):</th><td><%= error_boundary do %><%= @episode.slug %><% end %></td></tr>
+  <tr><th>Title:</th><td><%= show_errors do %><%= @episode.title %><% end %></td></tr>
+  <tr><th>Short name:</th><td><%= show_errors do %><%= @episode.short_name %><% end %></td></tr>
+  <tr><th>Access key:</th><td><%= show_errors do %><%= @episode.access_key %><% end %></td></tr>
+  <tr class="legacy"><th>Number (legacy):</th><td><%= show_errors do %><%= @episode.episode_number %><% end %></td></tr>
+  <tr class="legacy"><th>Slug (legacy):</th><td><%= show_errors do %><%= @episode.slug %><% end %></td></tr>
   <tr><th>Links</th><td><% @episode.feed_entry_description_parser.urls.each do |label, url| %><div><strong><%= label %>:</strong><br/><code><%= url %></code></div><% end %></td></tr>
   <tr><th>Downloadable HTML URL</th><td><%= @episode.downloadable_html_url %></td></tr>
-  <tr><th>Feed Entry Link:</th><td><%= error_boundary do %><%= @episode.feed_entry_parser.link_url %><% end %></td></tr>
+  <tr><th>Feed Entry Link:</th><td><%= show_errors do %><%= @episode.feed_entry_parser.link_url %><% end %></td></tr>
   <tr><th>Feed Entry Description</th><td class="compact" style="white-space: pre-wrap;"><small><%= @episode.feed_entry_parser.description %></small></td></tr>
 </table>
 
 <h2>Chapters</h2>
-<%= rescue_and_show_errors do %>
+<%= show_errors do %>
   <% @episode.chapters.each_with_index do |chapter, index| %>
     <details>
       <summary>Chapter <%= index + 1 %>: <%= chapter.title %></summary>
@@ -50,7 +50,7 @@
 <% end %>
 
 <% if false %>
-  <%= rescue_and_show_errors do %>
+  <%= show_errors do %>
     <div>
       <%= Time.zone.parse(@episode.node.css('pubDate').text) %>
       <% url = @episode.feed_entry_description_parser.html_node.at_css('a:contains("HTML")').attr('href') %>

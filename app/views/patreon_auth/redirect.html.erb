@@ -1,0 +1,9 @@
+<div class="page-center">
+  <h1>Login with Patreon</h1>
+
+  <% if @error %>
+    <p class="error"><%= @error %></p>
+  <% else %>
+    <p class="success">You have been logged in via Patreon as <strong><%= current_user.name %></strong></p>
+  <% end %>
+</div>

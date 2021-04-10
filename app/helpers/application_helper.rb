@@ -1,6 +1,6 @@
 module ApplicationHelper
 
-  def rescue_and_show_errors(part = 'part')
+  def error_boundary(part = 'part')
     capture do
       yield
     end
@@ -10,8 +10,6 @@ module ApplicationHelper
       "Sorry, there is a problem with this #{part}"
     end
   end
-
-  alias error_boundary rescue_and_show_errors
 
   def bilingual(separator: nil)
     locales = [I18n.locale, I18n.default_locale].uniq

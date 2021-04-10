@@ -1,13 +1,11 @@
 module Admin::ApplicationHelper
-  def rescue_and_show_errors
+  def show_errors
     capture do
       yield
     end
   rescue StandardError => error
     render 'admin/shared/exception', error: error
   end
-
-  alias error_boundary rescue_and_show_errors
 
   def admin_episodes_path(podcast)
     admin_podcast_episodes_path(podcast.code)
@@ -27,14 +25,6 @@ module Admin::ApplicationHelper
 
   def player_path(episode)
     episode_url(episode.access_key, host: host_for_env(episode.podcast.host))
-  end
-
-  def host_for_env(host)
-    if Rails.env.development? || Rails.env.test?
-      host.sub(/\.fm\Z/, '.local')
-    else
-      host
-    end
   end
 
   def render_object(o, view = nil, as: nil)

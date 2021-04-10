@@ -46,6 +46,7 @@ gem 'iso-639'
 gem 'packwerk'
 gem 'devise'
 gem 'activeadmin'
+gem 'patreon'
 
 group :test do
   gem 'rspec-rails'

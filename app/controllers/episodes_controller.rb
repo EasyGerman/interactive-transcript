@@ -18,7 +18,7 @@ class EpisodesController < PodcastControllerBase
   def show_v1
     prepare_data
     cookies[:version] = 1
-    render action: :show, layout: "application" unless performed?
+    render action: :show, layout: "application1" unless performed?
   end
 
   def show_v2

@@ -1,0 +1,19 @@
+<div class="page-center">
+  <h1>User information</h1>
+
+  <% if @error %>
+    <p class="error"><%= @error %></p>
+  <% else %>
+    <p class="success">You are logged in via Patreon as <strong><%= current_user.name %></strong></p>
+
+    <% if current_user.admin? %>
+      <ul class="horizontal-menu">
+        <% Podcast.order(:id).each do |podcast| %>
+          <li><%= link_to podcast.name, root_url(host: host_for_env(podcast.host)) %></li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p>You don't currently have any access.</p>
+    <% end %>
+  <% end %>
+</div>

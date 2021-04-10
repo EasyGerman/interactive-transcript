@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= @title || "Easy German Podcast Scroller" %></title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag 'application', media: 'all' %>
+    <%= javascript_pack_tag 'application' %>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <% if not @public %><meta name="robots" content="noindex"><% end %>
+  </head>
+
+  <body>
+    <% if notice.present? %><p class="notice"><%= notice %></p><% end %>
+    <% if alert.present? %><p class="alert"><%= alert %></p><% end %>
+
+    <%= yield %>
+  </body>
+</html>

@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= @title || "Easy German Podcast Scroller" %></title>
+    <title><%= [@title, @site_title || "Transcript Player"].compact.join(' - ') %></title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag 'application', media: 'all' %>
-    <%= javascript_pack_tag 'application' %>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta charset="UTF-8">
     <% if not @public %><meta name="robots" content="noindex"><% end %>
+
+    <%= render 'shared/rollbar_snippet' %>
+
+    <style>
+      .button-row { display: flex; flex-direction: row; }
+    </style>
   </head>
 
   <body>
@@ -17,5 +21,11 @@
     <% if alert.present? %><p class="alert"><%= alert %></p><% end %>
 
     <%= yield %>
+
+    <%= stylesheet_link_tag 'v2', media: 'all' %>
+    <%= javascript_pack_tag 'v2' %>
+
+    <link rel="stylesheet" href="/semanticui/semantic.min.css">
+    <script src="/semanticui/semantic.min.js"></script>
   </body>
 </html>

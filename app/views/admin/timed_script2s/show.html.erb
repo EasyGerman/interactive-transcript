@@ -7,7 +7,7 @@
 <% if @episode.transcript_editor_html.present? %>
   <% timed_script2 = @episode.timed_script2 %>
 
-  <%= error_boundary do %>
+  <%= show_errors do %>
     <%= render_object timed_script2, :full %>
   <% end %>
 
@@ -15,28 +15,28 @@
   <div class="side-by-side">
     <div class="column">
       <h3>parsed_paragraphs (json)</h3>
-      <%= error_boundary do %>
+      <%= show_errors do %>
         <pre><%= JSON.pretty_generate @episode.timed_script2.parsed_paragraphs.as_json %></pre>
       <% end %>
     </div>
 
     <div class="column">
       <h3>parsed_paragraphs (txt)</h3>
-      <%= error_boundary do %>
+      <%= show_errors do %>
         <pre><%= timed_script2.parsed_paragraphs.flat_map(&:to_txt).join("\n") %></pre>
       <% end %>
     </div>
 
     <div class="column">
       <h3>timed_script2</h3>
-      <%= error_boundary do %>
+      <%= show_errors do %>
         <%= render_object timed_script2 %>
       <% end %>
     </div>
 
     <div class="column">
       <h3>as_plain_text</h3>
-      <%= error_boundary do %>
+      <%= show_errors do %>
         <h3>timed_script2.as_plain_text</h3>
         <pre><%= timed_script2.as_plain_text %></pre>
       <% end %>

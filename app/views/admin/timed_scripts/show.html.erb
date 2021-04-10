@@ -4,7 +4,7 @@
   <% timed_script1 = @episode.timed_script1 %>
   <% timed_script2 = @episode.timed_script2 %>
 
-  <%= error_boundary do %>
+  <%= show_errors do %>
     <details>
       <summary>Parser output</summary>
       <div>
@@ -15,7 +15,7 @@
 
 
 
-  <%= error_boundary do %>
+  <%= show_errors do %>
   <details>
     <summary>Iterator output</summary>
     <div class="side-by-side">
