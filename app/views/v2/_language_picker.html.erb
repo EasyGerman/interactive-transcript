@@ -1,12 +1,20 @@
 <form id="language-picker-form">
-  <%= label(:language, "#{t('translation.translation_language_label')}") %>
-  &nbsp;
-  <%=
-    select_tag(
-      :language,
-      options_for_select(current_podcast.translator.supported_target_languages_for_select),
-      id: "language-picker",
-    )
-  %>
+  <div>
+    <%= label(:language, "#{t('translation.translation_language_label')}") %>
+    &nbsp;
+    <%=
+      select_tag(
+        :language,
+        options_for_select(current_podcast.translator.supported_target_languages_for_select),
+        id: "language-picker",
+      )
+    %>
+  </div>
+
+  <div id="auto-translate-section">
+    <input type="checkbox" id="auto-translate" />
+    <label for="auto-translate">Show translations automatically (when available)</label>
+  </div>
+
   <p id="translation-attribution"><%= t('translation.translation_service_notice') %></p>
 </form>

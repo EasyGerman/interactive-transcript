@@ -40,8 +40,8 @@ class Translator
     end
   end
 
-  def translate_from_key(key, to:)
-    TranslationCache.with_key_cache(podcast, key, possible_cache_keys(to)) do |original|
+  def translate_from_key(key, to:, from_cache: false)
+    TranslationCache.with_key_cache(podcast, key, possible_cache_keys(to), from_cache: from_cache) do |original|
       fetch_translation(original, from: podcast.lang, to: to)
     end
   end

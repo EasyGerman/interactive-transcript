@@ -1,6 +1,7 @@
 export default class Paragraph {
   constructor(element) {
     this.element = element;
+    this.$element = $(element);
     this.timestampElement = element.getElementsByClassName('timestamp')[0];
   }
 
@@ -24,5 +25,9 @@ export default class Paragraph {
 
   get bookmarkElement() {
     return this.element.getElementsByClassName('paragraph-bookmarks')[0];
+  }
+
+  get translationId() {
+    return this.element.dataset.translationId;
   }
 }

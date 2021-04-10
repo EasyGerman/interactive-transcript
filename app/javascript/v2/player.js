@@ -73,6 +73,8 @@ function initializeApplication() {
         $(".current").removeClass("current");
         $elem.addClass("current");
         activeTimestamp = paragraph.startTime;
+        window.dispatchEvent(new CustomEvent('paragraph-changed', { detail: { paragraph } }));
+
       }
     }
     else {

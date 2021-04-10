@@ -52,18 +52,19 @@ class TranslationCache < ApplicationRecord
     nil
   end
 
-  def self.with_key_cache(podcast, key, cache_keys, &block)
-    find_by!(podcast_id: podcast.id, key: key).with_this_cache(cache_keys, &block)
+  def self.with_key_cache(podcast, key, cache_keys, from_cache: false, &block)
+    find_by!(podcast_id: podcast.id, key: key).with_this_cache(cache_keys, from_cache: from_cache, &block)
   end
 
-  def self.with_cache(podcast, original, cache_keys, &block)
-    add_original_nx(podcast, original).with_this_cache(cache_keys, &block)
+  def self.with_cache(podcast, original, cache_keys, from_cache: false, &block)
+    add_original_nx(podcast, original).with_this_cache(cache_keys, from_cache: from_cache, &block)
   end
 
-  def with_this_cache(cache_keys)
+  def with_this_cache(cache_keys, from_cache: false)
     raise ArgumentError, "invalid cache_keys: #{cache_keys.inspect}" if cache_keys.any?(&:nil?)
     get_translation(cache_keys) ||
       begin
+        return if from_cache
         result, meta = yield(original)
         raise "invalid meta returned from yielded block: #{meta.inspect}" if meta[:cache_key].blank?
         add_translation(meta.fetch(:cache_key), result)
