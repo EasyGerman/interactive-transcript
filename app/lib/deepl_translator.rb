@@ -17,17 +17,29 @@ class DeeplTranslator
   end
 
   LANGUAGES = {
+    "BG" => "Bulgarian",
+    "CS" => "Czech",
+    "DA" => "Danish",
     "DE" => "German",
+    "EL" => "Greek",
     "EN" => "English",
+    "ES" => "Spanish",
+    "ET" => "Estonian",
+    "FI" => "Finnish",
     "FR" => "French",
+    "HU" => "Hungarian",
     "IT" => "Italian",
     "JA" => "Japanese",
-    "ES" => "Spanish",
+    "LV" => "Latvian",
     "NL" => "Dutch",
     "PL" => "Polish",
     "PT-PT" => "Portuguese",
     # "PT-BR" => "Portuguese (Brazilian)",
+    "RO" => "Romanian",
     "RU" => "Russian",
+    "SK" => "Slovak",
+    "SL" => "Slovenian",
+    "SV" => "Swedish",
     "ZH" => "Chinese",
   }
 
