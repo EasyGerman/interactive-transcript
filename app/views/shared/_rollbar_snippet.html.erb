@@ -3,9 +3,9 @@
 var _rollbarConfig = {
     accessToken: <%= JSON.generate(token).html_safe %>,
     captureUncaught: true,
-    captureUnhandledRejections: true,
+    captureUnhandledRejections: false, // This is set up separately, so that we log it as a warning instead of an error.
     payload: {
-        environment: <%= JSON.generate(Rails.env.to_s).html_safe %>
+      environment: <%= JSON.generate(Rails.env.to_s).html_safe %>
     }
 };
 // Rollbar Snippet

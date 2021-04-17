@@ -14,6 +14,13 @@ import './bookmarking';
 import './settingsMenu';
 import { findParagraphByTimestamp } from './contentTimestamps';
 
+window.onunhandledrejection = (rejectionEvent) => {
+  const exception = rejectionEvent.reason;
+  console.warn(`Unhandled Rejection:`, exception);
+  if (Rollbar) Rollbar.warn(`Unhandled Rejection: ${exception}`, exception);
+  rejectionEvent.preventDefault();
+}
+
 $(document).ready(() => {
   checkBrowserSuitability().then(initializeApplication);
 });
@@ -30,23 +37,39 @@ function checkBrowserSuitability(callback) {
 function initializeApplication() {
   const media = document.querySelector('audio');
 
+  let playPromise;
   const player = {
     media: media,
-    pause: () => media.pause(),
-    play: () => media.play(),
+    pause: () => {
+      console.log('PAUSE');
+      media.pause();
+    },
+    play: () => {
+      console.log('PLAY');
+      playPromise = media.play();
+      if (playPromise) {
+        playPromise
+          .then(_ => console.log("playback started"))
+          .catch(error => console.log("playback could not start:", error));
+      }
+    },
     playAt: (timestamp) => {
       media.currentTime = timestamp;
-      media.play();
+      this.play();
+    },
+    addTime: (seconds) => {
+      media.currentTime += seconds;
     },
     getCurrentSecond: () => Math.floor(media.currentTime),
     get currentTime() { return media.currentTime },
+    get paused() { return media.paused },
   }
 
   window.player = player;
   window.dispatchEvent(new CustomEvent('initialize', { detail: { media, player } }));
 
   layout.init();
-  playerControls.init(media);
+  playerControls.init(player);
   paragraphMenu.init();
   translation.init();
 
