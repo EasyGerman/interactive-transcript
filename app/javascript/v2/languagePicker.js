@@ -18,7 +18,7 @@ $(document).ready(() => {
 
   const $checkbox = $('#auto-translate');
   languagePicker.autoTranslate = localStorage.getItem('autoTranslate') == 'true';
-  $checkbox.checked = languagePicker.autoTranslate;
+  $checkbox.prop('checked', languagePicker.autoTranslate);
 
   $checkbox.click((event) => {
     languagePicker.autoTranslate = $checkbox.is(':checked');
