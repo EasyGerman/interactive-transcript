@@ -55,7 +55,7 @@ function initializeApplication() {
     },
     playAt: (timestamp) => {
       media.currentTime = timestamp;
-      this.play();
+      player.play();
     },
     addTime: (seconds) => {
       media.currentTime += seconds;
