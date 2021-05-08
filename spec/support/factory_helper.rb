@@ -1,4 +1,6 @@
 module FactoryHelper
+  extend Memoist
+
   SAMPLE_LANGUAGES = {
     de: 'german',
     ca: 'catalan',
@@ -39,23 +41,23 @@ module FactoryHelper
     ::Podcast.create!(attributes)
   end
 
-  def find_or_create_podcast(code)
+  memoize def find_or_create_podcast(code)
     Podcast.find_by(code: code) || create_podcast(code: code)
   end
 
-  def easygerman
+  memoize def easygerman
     Podcast.find_by(lang: 'de') || create_podcast(lang: :de)
   end
 
-  def easygreek
+  memoize def easygreek
     Podcast.find_by(lang: 'el') || create_podcast(lang: :el)
   end
 
-  def podcast
+  memoize def podcast
     easygerman
   end
 
-  def other_podcast
+  memoize def other_podcast
     easygreek
   end
 end

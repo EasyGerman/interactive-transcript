@@ -45,6 +45,8 @@ class Podcast < ApplicationRecord
   settings_attribute :editor_transcript_dropbox_access_key, %w[editor_transcript dropbox_access_key]
   settings_attribute :editor_transcript_dropbox_shared_link, %w[editor_transcript dropbox_shared_link]
   settings_attribute :header_tags, json: true, default: ["h2", "h3"]
+  settings_attribute :patreon_creator_id
+  settings_attribute :patreon_minimum_pledge
 
   def validate_settings_json
     return if settings.is_a?(Hash)
