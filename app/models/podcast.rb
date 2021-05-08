@@ -112,4 +112,8 @@ class Podcast < ApplicationRecord
     Translator.new(self)
   end
 
+  def short_name
+    name.sub(/\AThe /, '').sub(/ Podcast\Z/, '')
+  end
+
 end

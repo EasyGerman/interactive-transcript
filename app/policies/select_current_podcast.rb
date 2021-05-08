@@ -17,7 +17,7 @@ class SelectCurrentPodcast < Operation
 
   def find_in_development
     if env.in?(['development', 'test'])
-      find_by_development_host || find_by_code
+      find_by_development_host || find_by_code || Podcast.order(:id).first
     end
   end
 

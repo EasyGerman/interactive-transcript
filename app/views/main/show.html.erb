@@ -15,6 +15,10 @@
     <p>
       To access the list of episodes, visit your
       <%= link_to "membership page", current_podcast.membership_url || current_podcast.homepage_url %>
+
+    </p>
+    <p>
+      <%= link_to "Log in with Patreon", patreon_start_url %>
     </p>
   <% end %>
 </div>

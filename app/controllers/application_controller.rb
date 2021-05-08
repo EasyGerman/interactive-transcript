@@ -18,4 +18,12 @@ class ApplicationController < ActionController::Base
   end
   helper_method :host_for_env
 
+  def url_for_env(host)
+    if Rails.env.development? || Rails.env.test?
+      "http://#{host.sub(/\.fm\Z/, '.local')}:5600"
+    else
+      "https://#{host}"
+    end
+  end
+
 end
