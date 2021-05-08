@@ -6,8 +6,13 @@ class PatreonAuthController < ApplicationController
 
   skip_before_action :current_podcast, except: [:start]
 
+  SCOPES = %w[
+    identity
+    identity.memberships
+  ]
+
   def start
-    redirect_to "https://www.patreon.com/oauth2/authorize?response_type=code&client_id=#{ENV.fetch('PATREON_CLIENT_ID')}&scope=identity.memberships&redirect_uri=#{PatreonOauthAdapter.redirect_uri}&state=#{current_podcast.id}"
+    redirect_to "https://www.patreon.com/oauth2/authorize?response_type=code&client_id=#{ENV.fetch('PATREON_CLIENT_ID')}&scope=#{SCOPES.join("%20")}&redirect_uri=#{PatreonOauthAdapter.redirect_uri}&state=#{current_podcast.id}"
   end
 
   def info

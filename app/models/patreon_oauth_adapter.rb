@@ -32,10 +32,12 @@ class PatreonOauthAdapter
     token_response = oauth_client.get_tokens(code, redirect_uri)
     Rails.logger.info "token response: #{token_response.inspect}"
     validate_token_response!(token_response)
+    access_token = token_response["access_token"]
 
-    user_reponse = Patreon::API.new(token_response["access_token"]).fetch_user
-    @patreon_user = PatreonUser.find_or_initialize_by(patreon_user_id: user_reponse.data.id)
-    patreon_user.import_user_data_from_patreon_response(user_reponse)
+    user_response = PatreonClient.new(access_token).fetch_identity_with_memberships
+
+    @patreon_user = PatreonUser.find_or_initialize_by(patreon_user_id: user_response.data.id)
+    patreon_user.import_user_data_from_patreon_response(user_response)
 
     import_oauth_token(token_response)
     patreon_user.save!

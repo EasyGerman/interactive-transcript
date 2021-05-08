@@ -1,9 +1,10 @@
 require "rails_helper"
 
 RSpec.describe PatreonUser, vcr: false do
-  # This test requires the file: data/patreon/current_user.json
-  # You can get it by: (substitute xxx -> your access token, you can print it in PatreonAuthController)
-  #   curl "https://www.patreon.com/api/oauth2/api/current_user" -H "Authorization: Bearer xxx" | json_pp > data/patreon/current_user.json
+  # This test requires the file: identity_with_memberships/easygerman.json
+  # Steps to generate this file:
+  #   1. get an access token via PatreonAuthController
+  #   2. execute the request in this test starting with https://www.patreon.com/api/oauth2/v2/identity
 
   before do
     easygerman.patreon_creator_id = "721253"
@@ -55,9 +56,9 @@ RSpec.describe PatreonUser, vcr: false do
       let(:pledges) { [] }
 
       before do
-        stub_request(:get, "https://www.patreon.com/api/oauth2/api/current_user")
+        stub_request(:get, "https://www.patreon.com/api/oauth2/v2/identity?fields%5Bmember%5D=patron_status,currently_entitled_amount_cents&fields%5Buser%5D=full_name,first_name,thumb_url&include=memberships,memberships.campaign,memberships.campaign.creator")
           .with(headers: { 'Authorization' => 'Bearer AccessToken1' })
-          .to_return(status: 200, body: File.read(Rails.root.join('data', 'patreon', 'current_user.json')), headers: {})
+          .to_return(status: 200, body: File.read(Rails.root.join('data', 'patreon', 'identity_with_memberships/easygerman.json')), headers: {})
       end
 
       it "syncs data from Patreon" do

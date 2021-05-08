@@ -4,10 +4,7 @@ class PatreonUser < ApplicationRecord
 
   PLEDGES_STALE_AFTER = 1.day
 
-  ADMIN_USERS = %w[
-    https://www.patreon.com/leventebagi
-    https://www.patreon.com/easygerman
-  ]
+  ADMIN_USERS = ENV.fetch('PATREON_USERS_WITH_FULL_ACCESS', '').strip.split(',').map(&:strip)
 
   class Error < StandardError; end
 
@@ -75,7 +72,7 @@ class PatreonUser < ApplicationRecord
 
   def sync_pledges
     Rails.logger.info "Syncing pledges for PatreonUser #{id}"
-    user_response = Patreon::API.new(fresh_access_token).fetch_user
+    user_response = PatreonClient.new(fresh_access_token).fetch_identity_with_memberships
     import_user_data_from_patreon_response(user_response)
     save!
   end
@@ -84,10 +81,12 @@ class PatreonUser < ApplicationRecord
     known_creator_ids = Podcast.all.map(&:patreon_creator_id)
 
     self.user_data = {
-      pledges: user_response.data.pledges.select { |pledge| pledge.creator.id.in?(known_creator_ids) }.map { |pledge|
+      full_name: user_response.data.full_name,
+      first_name: user_response.data.first_name,
+      pledges: user_response.data.memberships.map { |membership|
         {
-          creator_id: pledge.creator.id,
-          amount_cents: pledge.amount_cents,
+          creator_id: membership.campaign.creator.id,
+          amount_cents: membership.currently_entitled_amount_cents,
         }
       }
     }
