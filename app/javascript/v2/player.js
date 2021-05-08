@@ -26,6 +26,7 @@ $(document).ready(() => {
 });
 
 function checkBrowserSuitability(callback) {
+  if (!document.getElementById('content')) return Promise.reject();
   if (document.getElementById('content').scrollTo) {
     return Promise.resolve();
   }
